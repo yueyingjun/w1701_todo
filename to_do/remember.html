@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>remember</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../node_modules/angular/angular.min.js"></script>
+    <script src="jquery.js"></script>
+    <script src="iscroll.js"></script>
+    <script src="remember.js"></script>
+    <style>
+		body,html{
+			width:100%;
+			height:100%;
+		}
+		*{
+			padding:0;
+			margin:0;
+		}
+		/*body{
+			background:url(3.jpg) no-repeat center;
+			background-size:auto 100%;
+		}*/
+		.container-fluid,.row{
+			height:100%;
+		}
+		.left,.right{
+			height:100%;
+			position: relative;
+			/*top:10%;
+			bottom:10%;*/
+		}
+		.left{
+			background:url(3z.jpg) no-repeat center;
+			background-size:100% 100%;
+			
+		}
+		.right{
+			background:url(3y.jpg) no-repeat center;
+			background-size:100% 100%;
+			
+		}
+		.main{
+			position: absolute;
+			top:18%;
+			bottom:14%;
+		}
+		.left .main{
+			/*background:red;*/
+			right:10%;
+			left:41%;
+			/*overflow: auto;*/
+		}
+		.right .main{
+			/*background:blue;*/
+			left:4%;
+			right:48%;
+		} 
+		.bline{
+			border-bottom:2px dashed rgb(200,200,200);
+			position:relative;
+		}
+		.search-group{
+			/*border-bottom:2px dashed rgb(200,200,200);*/
+			position:relative;
+		}
+		.search-group input{
+			border:none;
+			padding-left:17px;
+		}
+		.search-group input:focus{
+			/*outline: none;*/
+			box-shadow:0 0 0 rgba(0,0,0,0);
+		}
+		.search-group span{
+			position:absolute;
+			left:0px;
+			top:10px;
+			color:rgb(70,70,70);
+		}
+		.add{
+			position: absolute;
+			left:0;
+			bottom:5px;
+			color:rgb(130,90,90);
+		}
+		.done{
+			color:rgb(228,28,63);
+		}
+		.left .list{
+			display: flex;
+			align-items: center;
+		}
+		.left .list input{
+			width:100px;
+			border:none;
+			outline: none;
+			flex:auto;
+			line-height: 40px;
+			color:rgb(255,193,7);
+			text-align:center;
+		}
+		.left .list input:focus{
+			box-shadow:0 0 0 rgba(0,0,0,0);
+		}
+		.left .list span{
+			color:rgb(140,140,140);
+			opacity: 0;
+			transition: opacity 0.5s;
+		}
+		.left .list:hover span{
+			opacity: 1;
+		}
+		.wrap{
+			position:absolute;
+			top:57px;
+			bottom:25px;
+			left:0;
+			right:0;
+			overflow: hidden;
+		}
+		.right .header{
+			display: flex;
+			align-items: center;
+			border-bottom:2px dashed rgb(200,200,200);
+		}
+		.right .header h3{
+			margin:5px;
+			font-size: 20px;
+			flex: auto;
+			text-align:center;
+			color:rgb(140,140,140);
+		}
+		.right .header span{
+			margin-right:10px;
+			color:rgb(140,140,140);
+			font-size: 25px;
+		}
+		.right .list{
+			display: flex;
+			align-items: center;
+			border-bottom:2px dashed rgb(200,200,200);
+		}
+		.right .list input{
+			width:100px;
+			border:none;
+			outline: none;
+			flex:auto;
+			line-height: 40px;
+			color:rgb(100,100,100);
+			padding-left:10px;
+			/*text-align:center;*/
+		}
+		.right .list input:focus{
+			box-shadow:0 0 0 rgba(0,0,0,0);
+		}
+		.right .list span{
+			color:rgb(140,140,140);
+			/*opacity: 0;*/
+			/*transition: opacity 0.5s;*/
+			animation: timeup 1s infinite;
+			font-size: 20px;
+		}
+		.right .list button{
+			margin-right:20px;
+		}
+		/*.right .list:hover span{
+			opacity: 1;
+		}*/
+		@keyframes timeup{
+			0%{opacity: 0;}
+			50%{opacity: 1;}
+			100%{opacity: 0;}
+		}
+    </style>
+</head>
+<body ng-app="myapp">
+   	<div class="container-fluid" ng-controller="todo">
+        <div class="row">
+            <div class="col-xs-4 col-sm-3 left">
+            	<div class="main">
+					<!--搜索-->
+	                <div class="search-group bline">
+                        <input type="text" class="form-control" placeholder="请搜索">
+                        <span class="glyphicon glyphicon-search"></span>
+	                </div>
+					<!--已完成-->
+
+	                <div class="done bline">
+	                   <span class="glyphicon glyphicon-ok"></span> 已完成 <span>10</span>
+	                </div>
+
+	                <!--计划列表-->
+					<div class="wrap" id="wrapper">
+						<div class="listbox">
+
+			                <div class="list bline" ng-repeat="item in data track by item.id">
+			                    <input type="text" ng-model="item.name">
+			                    <span class="glyphicon glyphicon-remove-circle"></span>
+			                </div>
+						</div>
+					</div>
+
+
+	                <!--添加按钮-->
+
+
+	                <div class="add" ng-click="add()">
+	                    <span class="glyphicon glyphicon-plus"></span> 添加存档
+	                </div>
+	                   
+            	</div>
+            </div>
+            <div class="col-xs-8 col-sm-9 right">
+      		    <div class="main">
+					<div class="header">
+	                    <h3>
+	                        新建存档
+	                    </h3>
+	                    <span class="addcon glyphicon glyphicon-edit">
+
+	                    </span>
+	                </div>
+
+	                <!-- 列表 -->
+	                <div class="list">
+	                    <div class="select">
+							<span class="glyphicon glyphicon-hourglass"></span>
+	                    </div>
+	                    <input type="text" value="早期的虫子有鸟吃！！！！">
+
+	                    <button class="btn btn-default btn-xs removeCon" type="submit">删除</button>
+	                </div>
+            	</div>
+            </div>
+        </div>
+   	</div>
+</body>
+</html>

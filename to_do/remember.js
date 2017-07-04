@@ -1,3 +1,5 @@
+
+
 angular.module("myapp",[])
     .controller("todo",["$scope",function($scope){
         $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
@@ -34,3 +36,14 @@ angular.module("myapp",[])
 
 
 }])
+$(function(){
+var myScroll;
+    myScroll = new IScroll('#wrapper', { 
+        // mousewheel:true,
+        scrollbars:true,
+        fadeScrollbars:true, 
+        shrinkScrollbars:'scale',
+        click:true
+
+    });  
+})
