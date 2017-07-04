@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="bootstrap.css">
+
+    <title>Document</title>
+    <style>
+        body{
+            user-select: none;
+        }
+        table{
+            text-align: center;
+        }
+        th{
+            text-align: center;
+        }
+    </style>
+</head>
+<body ng-app="myapp">
+<!--购物车-->
+<form class="form-search">
+    <div class="input-append">
+        <input type="text" class="span2 search-query" ng-model="search">
+        <button type="submit" class="btn">Search</button>
+    </div>
+</form>
+<table class="table table-striped" ng-controller="car">
+    <tr>
+        <th>商品编号</th>
+        <th>商品名称</th>
+        <th>
+            商品单价
+            <span ng-class={"dropup":type==""} ng-click="order()">
+                <span class="caret"></span>
+            </span>
+        </th>
+        <th>商品数量</th>
+        <th>商品总价</th>
+        <th>操作</th>
+    </tr>
+    <!--管道运算，可以通过名字查询-->
+    <tr ng-repeat="item in data | filter:{name:search} | orderBy:type+attr">
+        <td>{{item.id}}</td>
+        <td>{{item.name}}</td>
+        <td>
+            <input type="text" value="{{item.price}}">
+        </td>
+        <td>
+            <!--<input type="text" value="{{item.num}}">-->
+            <div class="input-prepend input-append">
+                <span class="add-on" ng-click="jia(item.id)" style="cursor: pointer">+</span>
+                <input class="span2" id="appendedPrependedInput" type="text" ng-model="item.num">
+                <span class="add-on" ng-click="jian(item.id)" style="cursor: pointer">-</span>
+            </div>
+        </td>
+        <td>
+        {{item.price*item.num}}
+        </td>
+        <td>
+            <button class=" btn btn-danger" ng-click="del(item.id)">删除</button>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6" ng-show="data.length==0">没有商品</td>
+    </tr>
+    <tr>
+        <td>所有商品数量</td>
+        <td>{{itemNum()}}</td>
+        <td>所有商品总价</td>
+        <td>{{itemPrice()}}</td>
+        <td>清空购物车</td>
+        <td><button class="btn btn-danger" ng-click="clear()">清空</button></td>
+    </tr>
+
+</table>
+</body>
+<script src="angular.js"></script>
+<script>
+    angular.module("myapp",[])
+        .controller("car",function ($scope) {
+//            模拟数据库
+            $scope.data=[
+            {
+                id:1,
+                name:"衣服",
+                price:40,
+                num:3
+            },
+            {
+                id:2,
+                name:"裤子",
+                price:140,
+                num:3
+            },
+                {
+                    id:3,
+                    name:"帽子",
+                    price:30,
+                    num:6
+                },
+                {
+                    id:4,
+                    name:"高跟鞋",
+                    price:300,
+                    num:6
+                },
+                {
+                    id:5,
+                    name:"围巾",
+                    price:30,
+                    num:7
+                },
+
+
+            ];
+//            计算商品总数
+            $scope.itemNum=function () {
+                var num=0;
+                for (var i=0;i<$scope.data.length;i++){
+                    var result=parseInt($scope.data[i].num)?parseInt($scope.data[i].num):0;
+                    $scope.data[i].num=result;
+                    num+=$scope.data[i].num;
+                }
+                return num;
+            }
+//            计算商品总价
+            $scope.itemPrice=function () {
+                var price=0;
+                for (var i=0;i<$scope.data.length;i++){
+                    price+=$scope.data[i].price*$scope.data[i].num;
+                }
+                return price;
+            }
+//            删除某商品
+            $scope.del=function (id) {
+                for(var i=0;i<$scope.data.length;i++){
+                    if(id==$scope.data[i].id){
+                        $scope.data.splice(i,1);
+                    }
+                }
+            }
+//            清空购物车
+            $scope.clear=function () {
+                $scope.data=[];
+            }
+//            加数量
+            $scope.jia=function (id) {
+
+                for(var i=0;i<$scope.data.length;i++){
+                    if(id==$scope.data[i].id){
+                        $scope.data[i].num++;
+                    }
+                }
+            }
+//            减数量
+            $scope.jian=function (id) {
+                for(var i=0;i<$scope.data.length;i++){
+                    if(id==$scope.data[i].id) {
+                        if ($scope.data[i].num > 0) {
+                            $scope.data[i].num--;
+                        }
+                    }
+                }
+            }
+//            排序
+//            var attr="";
+//            var type="";
+            $scope.order=function () {
+                $scope.attr="price";
+                if($scope.type==""){
+                    $scope.type="-";
+                }else{
+                    $scope.type="";
+                }
+
+            }
+
+        })
+</script>
+</html>
