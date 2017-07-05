@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>便签</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/Node.css">
+    <script src="node_modules/angular/angular.min.js"></script>
+    <script src="js/Node.js"></script>
+</head>
+<body ng-app="myapp">
+    <div ng-controller="ctrl" class="ctrl">
+        <header class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12">
+                    <p>欢迎使用xx备忘录</p>
+                    <div class="glyphicon glyphicon-remove close"></div>
+                    <form class="form-inline search">
+                        <div class="form-group">
+                            <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </div>
+                                <input type="text" class="form-control" id="exampleInputAmount" placeholder="搜索" ng-model="search" >
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </header>
+        <main class="container-fluid">
+            <div class="row">
+                <!--左侧-->
+                <div class="col-xs-4 col-sm-2 left">
+                    <div class="add" ng-click="add()">
+                        <div class="glyphicon glyphicon-pencil pan">快来让它帮你记忆！</div>
+                    </div>
+                    <ul>
+                        <li ng-repeat="item in data track by item.id ">
+                            <input type="text" ng-model="item.name">
+                            <span class="glyphicon glyphicon-trash" ng-click="del()"></span>
+                        </li>
+                    </ul>
+                </div>
+                <!--右侧-->
+                <div class="col-xs-7 col-sm-9 right">
+                    <div class="header" ng-repeat="item in data track by item.id">
+                        <h3>{{item.name}}</h3>
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </div>
+                    <div class="con">
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
