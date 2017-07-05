@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style:none;
+        }
+
+        html, body {
+            width: 100%;
+            font-family: 微软雅黑;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            background: url(1.jpg) ;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        img{
+            width: 200px;
+            height: 200px;
+        }
+        .title {
+            width: 100%;
+            height: 100px;
+            /*background-color:#ece7e8;*/
+            line-height: 100px;
+            font-size: 20px;
+            /*font-weight: bold;*/
+            padding-left: 30px;
+            background-size: 50%;
+            text-align: center;
+            font-family: "微软雅黑";
+        }
+        h1{
+            font-family: "微软雅黑";
+            line-height: 183px;
+            font-size: 33px;
+            color: #1d0202;
+        }
+        ul {
+            list-style: none;
+        }
+        .inputarea {
+            width: 100%;
+            height: 40px;
+            margin: 46px auto;
+            margin-left: 33%;
+        }
+        #text {
+            width: 400px;
+            height: 40px;
+            float: left;
+            box-sizing: border-box;
+        }
+        #submit {
+           width: 106px;
+            height: 40px;
+            float: left;
+            background-color: #ea0202;
+            cursor: pointer;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            border-radius: 3px;
+        }
+        .show {
+               width: 1200px;
+                margin: 0 auto;
+                background-color:#94472e;
+                flex-grow: 1;
+        }
+        .plan{
+            width: 50%;
+            height: 80%;
+            overflow: auto;
+            background-color:#7b351f;
+            float: left;
+
+        }.done {
+            width: 50%;
+            height: 80%;
+            overflow: auto;
+            background-color: #010710;
+            float: right;
+        }
+
+        .done {
+            background-color: #1756c7;
+        }
+        ul li {
+            overflow: hidden;
+        }
+
+        ul li input {
+            float: left;
+            width: 30px;
+            height: 30px;
+            border-radius: 20px;
+        }
+
+        ul li span {
+            float: left;
+            width: 300px;
+            height: auto;
+            line-height: 30px;
+            color: #fff;
+            padding-left: 30px;
+        }
+
+       ul li time {
+            width: 190px;
+            height: 30px;
+            float: right;
+            background-color: #9C27B0;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+        }
+        .contenttitle {
+            width: 50%;
+            height: 30px;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+           color: #FF5722;
+            line-height: 30px;
+            background-color: #fff9ca;
+
+        }
+    </style>
+</head>
+<body>
+
+<div class="title">
+    <h1>备忘录</h1>
+</div>
+<div class="inputarea">
+    <input type="text" id='text'/>
+    <input type="submit" id='submit' value='提交'/>
+</div>
+<div class='show'>
+    <div class="contenttitle">未完成</div>
+    <div class="contenttitle">已完成</div>
+    <ul class="plan">
+        <li>
+            <input type="checkbox"/>
+            <span>111111111</span>
+            <time>2017-5-3 15:00</time>
+        </li>
+    </ul>
+    <ul class="done">
+        <li>
+            <input type="checkbox"/>
+            <span>111111111</span>
+            <time>2017-5-3 15:00</time>
+        </li>
+    </ul>
+</div>
+<script>
+    var text = document.querySelector("#text");
+    var submit = document.querySelector("#submit");
+    var plan = document.querySelector(".plan");
+    var done = document.querySelector(".done");
+    //
+    function getdata() {
+        return localStorage.todo ? JSON.parse(localStorage.todo) : [];
+    }
+    function savedata(data) {
+        localStorage.todo = JSON.stringify(data);
+    }
+    function rewrite() {
+        var data = getdata();
+        var str1 = '', str2 = '';
+        data.forEach(function (v, i) {
+            if (!v.done) {
+                str1 += `<li id=${i}><input type="checkbox" onfocus="changestate(this)"/><span contenteditable='true'onblur="changecontent(this)">${v.content}</span> <time>${time(v.time)}</time></li>`;
+            }else{
+                str2 += `<li id=${i}><input type="checkbox" onfocus="del(this)"/><span contenteditable='true'>${v.content}</span> <time>${time(v.time)}</time></li>`;
+            }
+        })
+        plan.innerHTML = str1;
+        done.innerHTML = str2;
+    }
+    rewrite();
+    submit.onclick = function () {
+        if (text.value == "") {
+            return;
+        }
+        var val = text.value;
+        text.value = '';
+        var data = getdata();
+        var date = new Date();
+        var time = date.getTime();
+        data.push({content: val, time, done: false});   // done的默认值为false  content 内容
+        savedata(data);
+         rewrite();
+    }
+    function time(t) {
+        var date = new Date();
+        date.setTime(t);   //   获取时间的一个
+        var year = date.getFullYear();
+        var month = setzero(date.getMonth() + 1);
+        var day = setzero(date.getDate());
+        var hours = setzero(date.getHours());
+        var minute = setzero(date.getMinutes());
+        var second = setzero(date.getSeconds());
+        return year + '/' + month + '/' + day + ' ' + hours + ':' + minute + ':' + second;
+    }
+    function setzero(num) {
+        if (num < 10) {
+            return '0' + num;
+        } else {
+            return num;
+        }
+    }
+    function changestate(ele) {
+        var id = ele.parentNode.id;
+        var data=getdata();
+        data[id].done=true;
+        savedata(data);
+        rewrite()
+    }
+   // 删除右侧 内容
+    function del(ele) {
+        var id = ele.parentNode.id;
+        var data=getdata();
+        data.splice(id,1);
+        savedata(data);
+        rewrite()
+    }
+    // 内容改变
+    function changecontent(ele) {
+        var id = ele.parentNode.id;
+        var val=ele.innerHTML;
+        var data=getdata();
+        data[id].content=val;
+        savedata(data)
+        rewrite();
+    }
+</script>
+</body>
+</html>

@@ -72,7 +72,7 @@ angular.module("myapp",[])
             $scope.flag=false;
             var obj={};
             obj.id=maxid($scope.current.son);
-            obj.name="新建足迹"+obj.id;
+            obj.name="子目录"+obj.id;
             $scope.current.son.push(obj);
             localStorage.message=JSON.stringify($scope.data);
         };
