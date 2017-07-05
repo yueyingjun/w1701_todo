@@ -92,6 +92,4 @@ angular.module('myapp',[])
 			$scope.state[$index]='glyphicon glyphicon-ok';
 			
 		}
-		//
-		}
 	})
