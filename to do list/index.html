@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>to do list</title>
+    <link rel="stylesheet" href="dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="angular.js"></script>
+    <script src="todo.js"></script>
+</head>
+<body ng-app="todoapp">
+<div class="container-fluid" ng-controller="todo">
+    <div class="row">
+        <div class="left col-xs-4 col-sm-3">
+            <h3>To do list</h3>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </div>
+                    <input type="text" class="form-control" id="exampleInputAmount" placeholder="搜索">
+                </div>
+            </div>
+            <div class="lists">
+                <ul>
+                    <li>
+                        <a href="">
+                            <span class="glyphicon glyphicon-time"></span>
+                            <span>已计划</span>
+                        </a>
+                    </li>
+                    <div class="finsh">已完成:0项</div>
+                    <li ng-repeat="item in data track by item.id" ng-click="select($index)">
+                        <!--<a href="">-->
+                            <span class="circle" style="background: {{item.color}}"></span>
+                            <span ng-model="item.title">{{item.title}}</span>
+                            <button class="btn btn-default remove" type="submit">删除</button>
+                        <!--</a>-->
+                    </li>
+                    <!--<li>-->
+                        <!--<a href="">-->
+                            <!--<span class="circle"></span>-->
+                            <!--&lt;!&ndash;<div class="circle"></div>&ndash;&gt;-->
+                            <!--<span>列表2</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="">-->
+                            <!--<span class="circle"></span>-->
+                            <!--&lt;!&ndash;<div class="circle"></div>&ndash;&gt;-->
+                            <!--<span>列表3</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                </ul>
+
+
+            </div>
+            <div class="addlist" ng-click="add()">
+                <!--<a href="">-->
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span>添加计划</span>
+                <!--</a>-->
+
+            </div>
+        </div>
+        <div class="right col-xs-8 col-sm-9">
+            <div class="header">
+                <span class="glyphicon glyphicon-search"></span>
+                <input type="text" placeholder="搜索所有提醒">
+            </div>
+            <div class="contant">
+                <!--<h2>提醒</h2>-->
+                <h3>{{data[index].title}}</h3>
+                <div class="finsh">已完成:{{(data[index].todo|filter:{done:'true'}).length}}项</div>
+                <div class="donelist" ng-repeat="v in data[index].todo|filter:{done:'true'}">
+                    {{v.t}}
+                </div>
+                <!--<span>{{}}</span>-->
+                <div class="finsh">未完成:{{(data[index].todo|filter:{done:'false'}).length}}项</div>
+                <div ng-repeat="v in data[index].todo | filter:{done:'false'}">
+                    {{v.t}}
+                </div>
+                <div class="unfinsh">新项目...</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
