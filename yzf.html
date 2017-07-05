@@ -91,21 +91,21 @@
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-search"></span>
                             </div>
-                            <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索">
+                            <input type="text" class="form-control" id="exampleInputAmount" ng-model="name" placeholder="请搜索">
                         </div>
                     </div>
                 </form>
 
                 <!--已完成-->
 
-                <div class="done">
-                   <span class="glyphicon glyphicon-ok"></span> 已完成 <span>10</span>
+                <div class="done" ng-click="clickFinish($show)">
+                   <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{done.length}}</span>
                 </div>
 
                 <!--计划列表-->
 
-                <div class="list" ng-repeat="item in data track by item.id">
-                    <input type="text" ng-model="item.name" ng-change="change(item.id)" id="listsone">
+                <div class="list" ng-repeat="item in data  | filter:{name:name} track by item.id">
+                    <input type="text" ng-model="item.name" ng-change="change(item.id)" ng-focus="focusl(item.id)" id="listsone">
                     <button class="btn btn-default remove "  type="submit" ng-click="del(item.id)">删除</button>
                 </div>
 
@@ -114,34 +114,50 @@
 
 
                 <div class="add" ng-click="add()">
-                    <span class="glyphicon glyphicon-plus"></span> 添加计划
+                    <span class="glyphicon glyphicon-plus">添加计划</span>
                 </div>
 
-
-
-
-
             </div>
-            <div class="col-xs-8 col-sm-9 right">
+
+
+            <!--右边的页面-->
+            <div class="col-xs-8 col-sm-9 right" ng-show="flag==true">
                 <!--右边的头部-->
                 <div class="header">
                     <h3>
-                        计划列表的标题
+                        {{current.name}}
                     </h3>
-                    <span class="addcon glyphicon glyphicon-plus">
+                    <span class="addcon glyphicon glyphicon-plus" ng-click="addr()">
 
                     </span>
                 </div>
 
                 <!--右边的内容-->
 
-                <div class="listcon">
-                    <div class="select">
+                <div class="listcon" ng-repeat="item in current.son track by item.id">
+                    <div class="select" ng-click="finish(item.id)">
 
                     </div>
-                    <input type="text" ng-onchange="change-r()">
+                    <input type="text" ng-model="item.name" class="shijian" ng-change="changer(item.id)">
 
-                    <button class="btn btn-default removeCon" type="submit">删除</button>
+                    <button class="btn btn-default removeCon" type="submit" ng-click="delr(item.id)">删除</button>
+                </div>
+            </div>
+
+            <!--已完成的页面-->
+            <div class="col-xs-8 col-sm-9 right" ng-show="flag==false">
+                <!--右边的头部-->
+                <div class="header">
+                    <h3>
+                        已完成
+                    </h3>
+                </div>
+
+                <!--右边的内容-->
+                <div class="listcon" ng-repeat="item in done">
+                    <input type="text" ng-model="item.name" id="shijian" ng-change="changerFinish(item.id)">
+
+                    <button class="btn btn-default removeCon" type="submit" ng-click="delrFinish(item.id)">删除</button>
                 </div>
             </div>
         </div>
@@ -150,29 +166,47 @@
 </html>
 <script>
     angular.module("myapp",[])
-        .controller("todo",["$scope",function($scope){
+        .controller("todo",["$scope","$filter",function($scope,$filter){
             $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
-            console.log($scope.data)
+            $scope.done=localStorage.done?JSON.parse(localStorage.done):[];
+            //定义右边显示的是第几个
+            $scope.currentIndex=$scope.data.length-1;
+            //根据右边显示的第几个给出右边显示的内容
+            $scope.current=$scope.data[$scope.currentIndex];
             /*添加列表*/
             $scope.add=function(){
+                $scope.flag=true;
                 var obj={};
                 obj.id=maxid();
-                obj.name="新建列表";
+                obj.name="新建列表"+obj.id;
                 obj.son=[];
                 $scope.data.push(obj);
                 localStorage.message=JSON.stringify($scope.data);
+                $scope.currentIndex=getIndex($scope.data,obj.id);
+                $scope.current=$scope.data[$scope.currentIndex];
             }
 
-            function maxid(){
+
+            //获取当前的下标
+            function getIndex(arr,id){
+                //添加的时候循环这个数组 如果传进来的ID==数组中第I个的ID时 返回i
+                for( var i=0;i<arr.length;i++){
+                    if(arr[i].id==id){
+                        return i;
+                    }
+                }
+            }
+
+            function maxid(arr){
+                var arr=arr||$scope.data;
                 var id=0;
                 var tempid=0;
-                if($scope.data.length==0){
+                if(arr.length==0){
                     id=1;
                 }else{
-
-                    for(var i=0;i<$scope.data.length;i++){
-                        if($scope.data[i].id>tempid){
-                            tempid=$scope.data[i].id;
+                    for(var i=0;i<arr.length;i++){
+                        if(arr[i].id>tempid){
+                            tempid=arr[i].id;
                         }
                     }
                     id=tempid+1;
@@ -182,29 +216,124 @@
 
             //列表的名字
             $scope.change=function(a){
-                var con=$('#listsone').val();
+                $scope.flag=true;
                 for(var i=0;i<$scope.data.length;i++){
                    if(a==$scope.data[i].id){
-                       $scope.data[i].name=con;
                        localStorage.message=JSON.stringify($scope.data);
                    }
                 }
             }
 
-            //删除
+
+
+
+            //左边的删除
             $scope.del=function(a){
                 for(var i=0;i<$scope.data.length;i++){
                     if(a==$scope.data[i].id){
                         $scope.data.splice(i,1);
                         localStorage.message=JSON.stringify($scope.data);
+
+                        $scope.currentIndex=getIndex($scope.data,i);
+                        $scope.current=$scope.data[$scope.currentIndex];
                     }
                 }
             }
 
+            //      左边获取焦点 让右边显示对应的
+            $scope.focusl=function(a){
+                $scope.flag=true;
+                $scope.currentIndex=getIndex($scope.data,a);
+//                console.log($scope.currentIndex);
+                $scope.current=$scope.data[$scope.currentIndex];
+//                console.log($scope.current);
+            }
+            //右边的添加
+            $scope.addr=function(){
+                var obj={};
+                obj.id=maxid($scope.current.son);
+                obj.name="事件"+obj.id;
+                //son
+                $scope.current.son.push(obj);
+                localStorage.message=JSON.stringify($scope.data);
+            }
+
+            //右边的删除
+            $scope.delr=function(a){
+                for(var i=0;i<$scope.current.son.length;i++){
+                    if(a==$scope.current.son[i].id){
+                        $scope.current.son.splice(i,1);
+                        localStorage.current=JSON.stringify($scope.current.son);
+                        localStorage.message=JSON.stringify($scope.data);
+                    }
+                }
+            }
+
+            //完成页面的删除
+            $scope.delrFinish=function(a){
+                console.log(a)
+                for(var i=0;i<$scope.done.length;i++){
+                    if(a==$scope.done[i].id){
+                        console.log(i);
+                        localStorage.done=JSON.stringify($scope.done);
+                    }
+                }
+            }
+
+            //修改事件的名字
+            $scope.changer=function(a){
+                for(var i=0;i<$scope.current.son.length;i++){
+                    if(a==$scope.current.son[i].id){
+//                        $scope.current.son[i].name;
+                        localStorage.current=JSON.stringify($scope.current.son);
+                        localStorage.message=JSON.stringify($scope.data);
+                    }
+                }
+            }
+
+            //修改完成列表的名字
+            $scope.changerFinish=function(a){
+                for(var i=0;i<$scope.done.length;i++){
+                    if(a==$scope.done[i].id){
+                        localStorage.done=JSON.stringify($scope.done);
+                    }
+                }
+            }
+
+            //点击圈圈完成
+            $scope.finish=function(a){
+                var index=getIndex($scope.current.son,a);
+                var obj=$scope.current.son[index];
+                console.log(obj);
 
 
+                $scope.done.push(obj);
+                localStorage.done=JSON.stringify($scope.done);
+                console.log($scope.done.length);
+
+                //删除右边的
+                for(var i=0;i<$scope.current.son.length;i++){
+                    if(a==$scope.current.son[i].id){
+                        $scope.current.son.splice(i,1);
+                        localStorage.current=JSON.stringify($scope.current.son);
+                        localStorage.message=JSON.stringify($scope.data);
+                    }
+                }
+
+            }
+
+            //点击已完成
+            $scope.flag=true;
+            $scope.clickFinish=function(){
+                $scope.flag=false;
+            }
 
 
+            $scope.name="";
+            $scope.$watch("name",function (news) {
+                $arr=$filter("filter")($scope.data,{name:news})
+                $scope.current=$arr[0];
+            })
 
         }])
 </script>
