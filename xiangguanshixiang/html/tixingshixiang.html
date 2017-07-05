@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提醒事项</title>
+</head>
+<script src="../js/angular.min.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/tixing.js"></script>
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/tixing.css">
+<body ng-app="myapp">
+    <div class="container-fluid" ng-controller="tixing">
+        <div class="row">
+            <div class="left col-xs-4 col-sm-3">
+                <!--search-->
+                <form class="form-inline search">
+                    <div class="form-group">
+                        <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </div>
+                            <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索" ng-model="search">
+                        </div>
+                    </div>
+                </form>
+                <!--已完成-->
+                <div class="over" ng-click="showover()" >
+                    <span class="glyphicon glyphicon-thumbs-up shou"></span>
+                    <span class="letter">已完成</span>
+                    <span>{{do.length}}</span>
+                    <span>条计划</span>
+                </div>
+                <!--列表-->
+                <div class="list"  ng-repeat="item in data | filter:{name:search} track by item.id  ">
+                    <input class="listinput" type="text" placeholder="我的计划" ng-model="item.name" ng-focus="focus(item.id)" ng-blur="blur()">
+                    <span class="glyphicon glyphicon-trash remove" ng-click="dellist(item.id)"></span>
+                </div>
+                <!--添加-->
+                <div class="add" ng-click="addlist()">
+                    <span class="glyphicon glyphicon-plus"></span> 添加计划
+                </div>
+            </div>
+            <div class="right col-xs-8 col-sm-9" ng-model="current" ng-hide="show">
+                <!--右边的头部-->
+                <div class="header">
+                    <h3>
+                        {{current.name}}
+                    </h3>
+                    <span class="addcon glyphicon glyphicon-plus" ng-click="addopt(current.id)"></span>
+                </div>
+                <!--右边的内容-->
+                <div class="listcon" ng-repeat="item2 in current.son track by item2.id">
+                    <div class="select" ng-click="over(item2.id)">
+
+                    </div>
+                    <input type="text" ng-model="item2.name" ng-blur="blur()">
+                    <button class="btn btn-default removeCon" type="submit" ng-click="delopt(item2.id)">删除</button>
+                </div>
+            </div>
+
+            <div class="right col-xs-8 col-sm-9"   ng-show="show" >
+
+                <!--右边的头部-->
+                <div class="header">
+                    <h3>
+                        已完成
+                    </h3>
+                </div>
+                <!--右边的内容-->
+                <div class="listcon" ng-repeat="item3 in do">
+                    <span class="item3">{{item3.name}}</span>
+                    <span class="sonname">--{{item3.son.name}}</span>
+                    <button class="btn btn-default removeCon" type="submit" ng-click="delover(item3.id)">删除</button>
+                </div>
+            </div>
+
+         </div>
+     </div>
+</body>
+</html>
