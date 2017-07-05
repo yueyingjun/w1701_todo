@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/modul.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body ng-app="myapp">
+<div class="container-fluid" ng-controller="ctrl">
+    <div class="row col-xs-12">
+        <div class="nav col-xs-12">
+            <button class="edit icon">&#xe605;</button>
+            <span>全部便签</span>
+            <button class="new icon" ng-click="add()">&#xe624;</button>
+        </div>
+        <div class="con col-xs-12">
+            <div class="col-xs-4 col-sm-3 left">
+                <div class="ss col-xs-12">
+                    <input type="text" placeholder="快速搜索关键字" ng-model="name">
+                </div>
+                <ul><!-- ng-focus="focus(item.id)" ng-blur="blur()"-->
+                    <li ng-repeat="item in data track by item.id">
+                        <p class="list-time" ng-bind="item.time"> 时间</p>
+                        <p class="list-nav"><span class="icon">&#xe7c3;</span><input ng-model="item.name" ></p>
+                        <!--删除-->
+                        <span class="list-del icon" ng-click="del(item.id)">&#xe647;</span>
+                        <!--下拉-->
+                        <span id='bottom' class="list-more icon">&#xe6c7;</span>
+                        <!--新建-->
+                        <span class="list-new icon" ng-click="sonadd(item.id)">&#xe63c;</span>
+                        <ul>
+                            <li class="list-con" ng-repeat="list in item.son track by list.id">
+                                <p class="con-nav">
+                                    <span class="icon">&#xe6a3;</span>
+                                    <input ng-model="list.name" ng-focus="focus(item.id,list.id)" ng-blur="blur()">
+                                </p>
+                                <span class="con-del icon" ng-click="delson(item.id,list.id)">&#xe621;</span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xs-7 col-sm-8 right">
+                <div class="right-nav">
+                    <input type="text" ng-model="data[currentIndex].son[sonIndex].name">
+                </div>
+                <div class="right-con">
+                    <textarea ng-bind="data[currentIndex].son[sonIndex].content"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
