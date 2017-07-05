@@ -167,6 +167,13 @@
 		.right .list button{
 			margin-right:20px;
 		}
+		.right .list p{
+			margin:0 20px 0 0;
+			cursor: pointer;
+		}
+		.right .list p img{
+			height:30px;
+		}
 		/*.right .list:hover span{
 			opacity: 1;
 		}*/
@@ -199,7 +206,7 @@
 
 			                <div class="list bline" ng-repeat="item in data track by item.id">
 			                    <input type="text" ng-model="item.name" ng-focus="setid(item.id)" ng-blur="save()">
-			                    <span class="glyphicon glyphicon-remove-circle"></span>
+			                    <span ng-click='del(item.id)' class="glyphicon glyphicon-remove-circle"></span>
 			                </div>
 						</div>
 					</div>
@@ -219,19 +226,20 @@
 	                    <h3>
 	                        {{currentitem(currentid).name}}
 	                    </h3>
-	                    <span class="addcon glyphicon glyphicon-edit">
+	                    <span class="addcon glyphicon glyphicon-edit" ng-click='addcon(currentitem(currentid).id)'>
 
 	                    </span>
 	                </div>
 
 	                <!-- 列表 -->
-	                <div class="list">
+	                <div class="list" ng-repeat='v in currentitem(currentid).son'>
 	                    <div class="select">
 							<span class="glyphicon glyphicon-hourglass"></span>
 	                    </div>
-	                    <input type="text" value="早期的虫子有鸟吃！！！！">
+	                    <input type="text" ng-model="v.con">
 
-	                    <button class="btn btn-default btn-xs removeCon" type="submit">删除</button>
+	                    <!-- <button class="btn btn-default btn-xs removeCon" type="submit">删除</button> -->
+	                    <p title="橡皮擦"><img src="remember/xp2.png" alt=""></p>
 	                </div>
             	</div>
             </div>
