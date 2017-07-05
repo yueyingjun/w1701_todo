@@ -8,10 +8,12 @@
             $scope.all=0;
             // 添加
             $scope.add=function () {
+                var time=new Date();
                 var obj={};
                 obj.id=maxid();
                 obj.name="新建列表";
                 obj.son=[];
+                obj.time=time.getTime()
                 $scope.data.push(obj);
                 localStorage.message=JSON.stringify($scope.data);
                 $scope.now=obj.id-1;

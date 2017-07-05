@@ -137,7 +137,7 @@
             <ul class="pars">
                 <li class="par" ng-repeat="item in data track by item.id" class="{{now==$index?'active':''}}" ng-click="fn($index)">
                     <input type="text" class="title-x" ng-model="item.name" ng-keyup="gaibian(item.id)">
-                    <h1 class="time">2017-07-04 21:48:12</h1>
+                    <h1 class="time">{{item.time | date:"yyyy-MM-dd HH:mm:ss"}}</h1>
                     <button type="button" class="btn btn-default del" ng-click="del(item.id)">删除</button>
                 </li>
             </ul>
