@@ -14,6 +14,9 @@ angular.module("myapp",[])
             localStorage.message=JSON.stringify($scope.data);
         }
 
+// 内容显示的原理
+
+
         function maxid(){
             var id=0;
             var tempid=0;
