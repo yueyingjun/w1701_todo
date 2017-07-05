@@ -1,0 +1,131 @@
+html,body{
+    width:100%;height:100%;
+}
+.container-fluid, .container-fluid .row{
+    height:100%;
+}
+.container-fluid .left,.container-fluid .right{
+    height:100%;position: relative;
+    background-image:url('../img/1.png') ;
+    background-position: center;
+    background-size:cover;
+}
+.container-fluid .left{
+    background: #eee;
+}
+.search{
+    margin-top: 10px;
+}
+.done{
+    height:30px;
+    width:100%;
+    line-height: 30px;
+    cursor: pointer;
+    border:1px solid #00a0e9;
+    border-radius: 5px;
+    margin: 20px 0 15px;
+    box-shadow: 0 0 2px 0 #00AFD5;
+    padding:0 10px;
+    position: relative;
+}
+.done:hover{
+    background: #00a0e9;
+    color:#fff;
+}
+.done .sanjiao{
+    position: absolute;
+    right:10px;
+    top:8px;
+}
+input{
+    border:none;
+    background: rgba(0,0,0,0);
+
+}
+input:focus{
+    outline: none;
+}
+.remove{
+    opacity: 0;
+    transition: opacity .5s ease;
+}
+.list{
+    height:40px;
+    width:100%;
+    line-height: 40px;
+    cursor: pointer;
+    border-bottom:1px solid #00a0e9;
+}
+.list input{
+    padding-left:20px;
+    width:76%;
+}
+.list:hover .remove{
+    opacity: 1;
+}
+
+.add{
+    height:30px;
+    width:100%;
+    line-height: 30px;
+    cursor: pointer;
+    border:1px solid #00a0e9;
+    border-radius: 5px;
+    margin: 15px 0;
+    box-shadow: 0 0 2px 0 #00AFD5;
+    text-align: center;
+}
+.add:hover{
+    background: #00a0e9;
+    color:#fff;
+}
+.header{
+    text-align: center;
+    width:80%;
+    margin:40px auto;
+}
+.header h3{
+    color:#fff;
+    height:40px;
+    line-height: 40px;
+}
+.header .addcon{
+    line-height: 30px;
+    color:#666;
+    display: block;
+    text-align: left;
+    width:20%;
+}
+.listcon{
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    padding:5px 0;
+    width:80%;
+    margin:0 auto;
+    height:30px;
+}
+.listcon .input{
+    position: absolute;
+    top:0;
+    left:20px;
+    color:#fff;
+    background: none;
+    border:none;
+    outline: none;
+}
+.listcon .select{
+    width:17px;height:17px;
+    position: absolute;
+    left:0;top:0;
+    display: block;
+}
+
+.listcon .removeCon{
+    position: absolute;
+    right:13px;padding:0 5px;
+    opacity: 0;
+    transition: opacity 0.6s;
+}
+.listcon:hover .removeCon{
+    opacity: 1;
+}

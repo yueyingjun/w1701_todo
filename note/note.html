@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/angular.js"></script>
+    <script src="js/note.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/note.css">
+</head>
+<body ng-app="myapp">
+<div class="container-fluid" ng-controller="todo">
+    <div class="row">
+        <div class="col-xs-4 col-sm-3 left">
+            <!--
+             搜索
+            -->
+            <form class="form-inline search">
+                <div class="form-group">
+                    <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </div>
+                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索">
+                    </div>
+                </div>
+            </form>
+
+            <!--添加按钮-->
+
+
+            <div class="add" ng-click="add()">
+                <span class="glyphicon glyphicon-plus"></span> 添加计划
+            </div>
+            <!--计划列表-->
+
+            <div class="list" ng-repeat="item in data track by item.id">
+                <span class="glyphicon glyphicon-pencil"></span>
+                <input type="text" ng-model="item.name" ng-focus="focus(item.id)" ng-change="change(item.id)">
+                <button class="btn btn-primary btn-sm remove" type="submit" ng-click="dellist(item.id)">删除</button>
+            </div>
+
+            <!--已完成-->
+
+            <div class="done">
+                <span class="glyphicon glyphicon-ok"></span> 已完成 <span>10</span><span class="glyphicon glyphicon-chevron-down sanjiao"></span>
+            </div>
+        </div>
+        <div class="col-xs-8 col-sm-9 right">
+            <!--右边的头部-->
+            <div class="header">
+                <h3>
+                    {{val}}
+                </h3>
+                <span class="addcon glyphicon glyphicon-plus btn btn-default" ng-click="newlist()">
+                点击添加新计划
+                </span>
+            </div>
+
+            <!--右边的内容-->
+
+            <div class="listcon"  ng-repeat="item1 in con track by $index ">
+                <input type=checkbox class="select">
+
+                <input type="text" autofocus ng-model=item1.con class="input" ng-change="changecon($index)">
+
+                <button class="btn btn-default removeCon glyphicon glyphicon-trash" type="submit" ng-click="delcon(item1.cid)"></button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+</body>
+</html>
