@@ -131,7 +131,7 @@
             <ul class="ul-task">
                 <li class="list" ng-repeat="item in todolist track by item.id">
                     <input type="text" ng-model="item.name" ng-change="change(item.id)" ng-click="show(item.id)">
-                    <i ng-click="deleteItem()">×</i>
+                    <i ng-click="deleteItem(item.id)">×</i>
                 </li>
             </ul>
         </div>
@@ -171,10 +171,16 @@
                 $scope.todolist.push(obj);
                 localStorage.message=JSON.stringify($scope.todolist);
             };
-            $scope.deleteItem = function(todo){
-                    $scope.todolist.splice($scope.todolist.indexOf(todo), 1);
-                    localStorage.message=JSON.stringify($scope.todolist);
-            };
+            $scope.num=$scope.todolist.length;
+            $scope.deleteItem=function(id){
+                $scope.num--;
+                for (var i = 0; i < $scope.todolist.length; i++) {
+                    if (id==$scope.todolist[i].id) {
+                        $scope.todolist.splice(i,1);
+                        localStorage.message=JSON.stringify($scope.todolist);
+                    };
+                };
+            }
             function maxid(){
                 var id=0;
                 var tempid=0;
