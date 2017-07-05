@@ -39,7 +39,8 @@
                 <!--计划列表-->
                 <!--track by item.id | filter:{name:search} -->
                 <div class="list" ng-repeat="item in data track by item.id">
-                    <input type="text" ng-model="item.name" ng-keyup="update(item.id)" ng-click="active($index)" class="{{now==$index?'active':''}}">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <input type="text" ng-model="item.name" ng-keyup="update(item.id)" ng-focus="active(item.id)" ng-class="item.id==currentList.id?'active':''">
                     <button class="remove glyphicon glyphicon-remove btn btn-link" type="submit" ng-click="del(item.id)"></button>
                 </div>
 
@@ -57,28 +58,25 @@
 
             <div class="col-xs-8 col-sm-9 right">
                 <!--右边的头部-->
-                <div ng-repeat="item in data track by item.id" ng-show="now==$index">
                     <div class="header">
                         <h3>
-                            {{item.name}}
+                            {{currentList.name}}
                         </h3>
-                        <span class="addcon glyphicon glyphicon-plus" ng-click="addCon(item.id)"></span>
+                        <span class="addcon glyphicon glyphicon-plus" ng-click="addCon(currentList.id)"></span>
 
                     </div>
 
                     <!--右边的内容-->
 
-                    <div class="listcon"  ng-repeat="json in item.son | filter:{status:0} ">
-                        <div class="select" ng-click="complete(item.id,json.cid)">
+                    <div class="listcon"  ng-repeat="json in currentList.son | filter:{status:0} ">
+                        <div class="select" ng-click="complete(currentList.id,json.cid)">
 
                         </div>
-                        <input type="text" ng-model="json.content" ng-keyup="updateCon(item.id,json.cid)">
+                        <input type="text" ng-model="json.content" ng-keyup="updateCon()">
 
-                        <button class="btn btn-default removeCon" type="submit" ng-click="delCon(item.id,json.cid)">删除</button>
+                        <button class="btn btn-default removeCon" type="submit" ng-click="delCon(currentList.id,json.cid)">删除</button>
 
                     </div>
-                </div>
-
 
             </div>
         </div>

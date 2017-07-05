@@ -1,8 +1,12 @@
 angular.module("myapp",[])
     .controller("todo",["$scope",function($scope){
         $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
+        // 当前显示的下标
+        $scope.currentIndex=$scope.data.length-1;
+        // 当前显示的列表
+        $scope.currentList=$scope.data[$scope.currentIndex];
 
-        // 完成计数
+        // 已完成计数
         $scope.comNum=0;
         for(let i=0;i<$scope.data.length;i++){
             for (let j=0;j<$scope.data[i].son.length;j++){
@@ -19,38 +23,42 @@ angular.module("myapp",[])
             obj.id=maxid();
             obj.name="新建列表";
             obj.son=[];
+            $scope.currentIndex=getIndex($scope.data,obj.id);
+            $scope.currentList=$scope.data[$scope.currentIndex];
             $scope.data.push(obj);
             localStorage.message=JSON.stringify($scope.data);
-
         }
 
-
-        $scope.update=function (id) {
-            for (let i=0;i<$scope.data.length;i++){
-                if($scope.data[i].id==id){
-                    // $scope.name=$scope.data[i].name;
-                    let ss=JSON.parse(localStorage.message);
-                    ss[i].name=$scope.data[i].name;
-                    localStorage.message=JSON.stringify(ss);
+        // 得到当前的下标
+        function getIndex(arr,id) {
+            for(let i=0;i<arr.length;i++){
+                if(arr[i].id==id){
+                    return i;
                 }
             }
         }
+
+        // 更新左边列表信息
+        $scope.update=function (id) {
+            localStorage.message=JSON.stringify($scope.data);
+        }
+        // 删除左边列表
         $scope.del=function (id) {
             for (let i=0;i<$scope.data.length;i++){
                 if ($scope.data[i].id==id){
                     $scope.data.splice(i,1);
-                    let ss=JSON.parse(localStorage.message);
-                    ss.splice(i,1);
-                    localStorage.message=JSON.stringify(ss);
+                    localStorage.message=JSON.stringify($scope.data);
                 }
             }
         }
 
-        $scope.active=function (n) {
-            $scope.now=n;
+        // 当前选中的显示在右边视图
+        $scope.active=function (id) {
+            $scope.currentIndex=getIndex($scope.data,id);
+            $scope.currentList=$scope.data[$scope.currentIndex];
         }
 
-
+        // 右边 添加一条内容
         $scope.addCon=function (id) {
             var j=0;
             for (let i=0;i<$scope.data.length;i++){
@@ -58,43 +66,27 @@ angular.module("myapp",[])
                     j=i;
                 }
             }
-            let ss=JSON.parse(localStorage.message);
             let obj={}
             obj.cid=cid(j);
             obj.content="";
             obj.status=0;
-            // console.log(obj)
-            // console.log($scope.data[j])
             $scope.data[j].son.push(obj)
-            ss[j].son.push(obj)
-            localStorage.message=JSON.stringify(ss);
+            localStorage.message=JSON.stringify($scope.data);
         }
 
-        $scope.updateCon=function (pid,cid) {
-            for(let i=0;i<$scope.data.length;i++){
-                if($scope.data[i].id==pid){
-                    for (let j=0;j<$scope.data[i].son.length;j++){
-                        if($scope.data[i].son[j].cid==cid){
-                            let ss=JSON.parse(localStorage.message);
-                            ss[i].son[j].content=$scope.data[i].son[j].content;
-                            localStorage.message=JSON.stringify(ss);
-                        }
-                    }
-                }
-            }
+        // 右边的修改内容
+        $scope.updateCon=function () {
+            localStorage.message=JSON.stringify($scope.data);
         }
 
-
+        // 右边 删除
         $scope.delCon=function (pid,cid) {
-            // console.log(pid,cid)
             for(let i=0;i<$scope.data.length;i++){
                 if($scope.data[i].id==pid){
                     for (let j=0;j<$scope.data[i].son.length;j++){
                         if($scope.data[i].son[j].cid==cid){
                             $scope.data[i].son.splice(j,1)
-                            let ss=JSON.parse(localStorage.message);
-                            ss[i].son.splice(j,1);
-                            localStorage.message=JSON.stringify(ss);
+                            localStorage.message=JSON.stringify($scope.data);
                         }
                     }
                 }
@@ -110,9 +102,7 @@ angular.module("myapp",[])
                         if($scope.data[i].son[j].cid==cid){
                             $scope.data[i].son[j].status=1;
                             $scope.comNum++;
-                            let ss=JSON.parse(localStorage.message);
-                            ss[i].son[j].status=1;
-                            localStorage.message=JSON.stringify(ss);
+                            localStorage.message=JSON.stringify($scope.data);
                         }
                     }
                 }
