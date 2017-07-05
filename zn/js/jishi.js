@@ -29,6 +29,7 @@ angular.module("myapp",[]).controller("jishi",function($scope){
         for(i=0;i<$scope.data.length;i++){
             if($scope.data[i].id==id){
                 $scope.data.splice(i,1);
+                $scope.listnum--;
                 localStorage.message=JSON.stringify($scope.data);
             }
         }
