@@ -1,0 +1,131 @@
+@import url('reset.css');
+html,body{
+    width:100%;height:100%;
+}
+header{
+    width:100%;
+    height:10%;
+    box-sizing:border-box;
+    padding:0 10px;
+    background:#78230C;
+    overflow:hidden;
+}
+header>h3{
+    color:#FFFFFF;
+    margin-top:18px;
+}
+main{
+    height:90%;
+    width:100%;
+}
+div.left{
+    width:20%;
+    height:100%;
+    float:left;
+    box-sizing:border-box;
+    border-right:1px solid #ccc;
+    padding:10px;
+    background:#F9F9F9;
+    position:relative;
+}
+div.alert{
+    margin-top:10px;
+    cursor:pointer;
+}
+button.add{
+    position:absolute;
+    bottom:10px;
+    right:10px;
+}
+div.mot{
+    width:100%;height:auto;
+}
+div.mot>input{
+    outline:thin;
+    border-radius:5px;
+    border:0;
+    width:60%;
+    margin-bottom:10px;
+    background:#F9F9F9;
+    cursor:pointer;
+}
+div.mot>button{
+    width:30%;
+    float:right;
+    display:none;
+    transition:.35s display ease;
+}
+div.mot:hover button{
+    display:block;
+}
+div.right{
+    width:80%;
+    height:100%;
+    float:left;
+    padding:10px;
+    box-sizing:border-box;
+}
+div.header{
+    width:100%;
+    height:auto;
+    overflow:hidden;
+}
+div.header>h1{
+    float:left;
+}
+div.header>span{
+    float:right;
+    font-size:30px;
+    cursor:pointer;
+}
+div.listcon{
+    width:100%;
+    height:40px;
+    margin:5px 0;
+
+}
+div.listcon>button.removeCon{
+    float:right;
+}
+div.listcon>input{
+    float:left;
+    line-height:40px;
+    display:block;
+    height:100%;
+}
+div.listcon>input:first-child{
+    margin-right:30px;
+}
+div.listcon>input:nth-child(2){
+    border-radius:5px;
+    border:0;
+    outline:none;
+}
+div.done{
+    width:100%;
+    overflow:hidden;
+}
+div.done>button{
+    float:right;
+}
+div.done>input{
+    border-radius:5px;
+    border:0;
+    outline:none;
+    width:auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
