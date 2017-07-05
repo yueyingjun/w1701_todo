@@ -108,7 +108,7 @@
 
                 <div class="list" ng-repeat="item in data track by item.id" ng-click="fn($index)">
                     <input type="text" ng-model="item.name" ng-keyup="update(item.id)">
-                    <button class="btn btn-default remove" type="submit">删除</button>
+                    <button class="btn btn-default remove" type="submit" ng-click="del(item.id)">删除</button>
                 </div>
 
 

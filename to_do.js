@@ -33,16 +33,26 @@ angular.module("myapp",[])
         }
 
         $scope.fn=function (n) {
-            console.log(n);
+            // console.log(n);
             $scope.now = n;
-        }
+        };
 
         $scope.update=function (id) {
-            for (let i=0;i<$scope.data.length;i++){
+            for (var i=0;i<$scope.data.length;i++){
                 if($scope.data[i].id==id){
-                    let newmess=JSON.parse(localStorage.message);
+                    var newmess=JSON.parse(localStorage.message);
                     newmess[i].name=$scope.data[i].name;
                     localStorage.message=JSON.stringify(newmess);
+                }
+            }
+        };
+
+        $scope.del=function(id){
+            // alert(id);
+            for (var i=0;i<$scope.data.length;i++){
+                if($scope.data[i].id==id){
+                    $scope.data.splice(i,1);
+                    localStorage.message=JSON.stringify($scope.data);
                 }
             }
         }
