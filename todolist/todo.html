@@ -6,30 +6,32 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script src="node_modules/angular/angular.min.js"></script>
-    <script src="to_do.js"></script>
+    <script src="todo1.js"></script>
     <style>
-        *{
-            margin:0;
-            padding:0;
+        * {
+            margin: 0;
+            padding: 0;
             list-style: none;
             box-sizing: border-box;
         }
-        html,body{
-            width:100%;
-            height:100%;
+
+        html, body {
+            width: 100%;
+            height: 100%;
         }
-        body{
+
+        body {
             display: flex;
-            flex-direction:column;
+            flex-direction: column;
         }
 
         .title {
             width: 100%;
             height: 100%;
-            color:#eee;
+            color: #eee;
             text-align: center;
             /*background: #ccc;*/
             line-height: 100px;
@@ -39,148 +41,212 @@
             background: url("img/back2.jpg") no-repeat;
             background-size: cover;
         }
-        .row{
-            padding-left:0;
-            padding-right:0;
+
+        .row {
+            padding-left: 0;
+            padding-right: 0;
         }
-        .container-fluid, .container-fluid .row{
-            width:100%;
-            height:100%;
+
+        .container-fluid, .container-fluid .row {
+            width: 100%;
+            height: 100%;
             background: #fff;
-            margin-right:0;
-            margin-left:0;
-            padding-left:0;
-            padding-right:0;
+            margin-right: 0;
+            margin-left: 0;
+            padding-left: 0;
+            padding-right: 0;
         }
-        .title-first{
-            width:100%;
-            height:50px;
-            border-bottom: 2px solid #ccc;
-            padding:5px 0;
+
+        .title-first {
+            width: 100%;
+            height: 50px;
+            padding: 5px 0;
             /*text-align: left;*/
-            line-height:38px;
+            line-height: 38px;
+            background: url("img/back2.jpg") no-repeat;
+            background-size: cover;
+            border-top: 1px solid #ccc;
+            border-bottom: 2px solid #ccc;
+
         }
-        #search{
-            margin:0!important;
-            padding:0!important;
+
+        #search {
+            margin: 0 !important;
+            padding: 0 !important;
         }
-        .title-first-left{
-            height:100%;
+
+        .title-first-left {
+            color:#eee;
+            height: 100%;
             text-align: left;
+            font-weight: bold;
+            font-size: 16px;
         }
-        .title-first-right{
-            height:100%;
+
+        .title-first-right {
+            height: 100%;
             text-align: right;
         }
-        input{
-            border:none;
+
+        input {
+            border: none;
             background: none;
             outline: none;
         }
-        input:focus{
+
+        input:focus {
             outline: none;
         }
-        .container-fluid .left,.container-fluid .right{
-            height:100%;position: relative;
+
+        .container-fluid .left, .container-fluid .right {
+            height: 100%;
+            position: relative;
         }
-        .container-fluid .left{
-            background: #eee;
+
+        .container-fluid .left {
+            background: #f5f5f5;
         }
-        .container-fluid .con-right{
-            width:70%;
+
+        .container-fluid .con-right {
+            width: 70%;
         }
-        .remove{
+
+        .remove {
             opacity: 0;
             transition: opacity .5s ease;
         }
-        .list:hover .remove{
+
+        .list:hover .remove {
             opacity: 1;
         }
 
-        .header{
-            height:50px;border-bottom: 1px solid #000;display: flex;
+        .header {
+            color:#666;
+            height: 50px;
+            border-bottom: 1px solid #c69a69;
+            display: flex;
             justify-content: space-between;
-
         }
 
-        .listcon{
+        .ng-binding{
+            font-size: 16px;
+        }
+
+        .listcon {
             border-bottom: 1px solid #ccc;
             position: relative;
-            padding:5px 0;
-        }
-        .listcon input{
-            margin-left:30px;
-        }
-        .listcon .select{
-            width:10px;height:10px;
-            border:1px solid #000;
-            border-radius: 50%;
-            position: absolute;
-            left:0;top:10px;
+            padding: 12px 0;
         }
 
-        .listcon .removeCon{
+        .listcon input {
+            margin-left: 30px;
+        }
+
+        .listcon .select {
+            width: 10px;
+            height: 10px;
+            border: 1px solid #000;
+            border-radius: 50%;
             position: absolute;
-            right:0;padding:0 5px;
+            left: 0;
+            top: 20px;
+        }
+
+        .listcon .removeCon {
+            position: absolute;
+            top: 12px;
+            right: 0;
+            padding: 0 5px;
+        }
+        .tianjia{
+            top:16px;
+        }
+        .list-title{
+            border-bottom: 1px dashed #ccc;
+            color:#666;
+            padding:6px 0;
+        }
+        .done{
+            color:#c69a69;
+            padding: 5px 0;
+            border-bottom: 3px solid #c69a69;
+            margin-bottom: 15px;
+            text-align: center;
         }
     </style>
 </head>
 <body ng-app="myapp">
 <div class="title">TO　DO　LIST</div>
 <div class="container-fluid" ng-controller="todo">
-        <!--添加、搜索-->
-        <div class="title-first" id="mulu">
-            <!--添加-->
-            <div class="col-md-6 col-sm-6 col-xs-12 title-first-left" id="addBtn" ng-click="add()">
-                <span class="glyphicon glyphicon-plus"></span> 添加计划
-            </div>
-            <!--搜索-->
-            <div class="col-md-6 col-sm-6 col-xs-12 title-first-right" id="search">
-                <form class="form-inline search">
-                    <div class="form-group">
-                        <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-search"></span>
-                            </div>
-                            <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索" style="outline: none">
+    <!--添加、搜索-->
+    <div class="title-first" id="mulu">
+        <!--添加-->
+        <div class="col-md-6 col-sm-6 col-xs-12 title-first-left" id="addBtn" ng-click="add()">
+            <span class="glyphicon glyphicon-plus"></span> 添加计划
+        </div>
+        <!--搜索-->
+        <div class="col-md-6 col-sm-6 col-xs-12 title-first-right" id="search">
+            <form class="form-inline search">
+                <div class="form-group">
+                    <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-search"></span>
                         </div>
+                        <input ng-model="search" type="text" class="form-control" id="exampleInputAmount"
+                               placeholder="请搜索" style="outline: none">
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
+        </div>
     </div>
     <!--内容操作-->
     <div class="row">
         <div class="col-xs-4 col-sm-2 left">
             <!--已完成-->
-            <div class="done">
-                <span class="glyphicon glyphicon-ok"></span> 已完成 <span>10</span>
+            <div class="done" ng-click="zhuanhuan()">
+                <span class="glyphicon glyphicon-ok" style="padding-right:5px;"></span> 已完成 <span>{{done.length}}</span>
             </div>
             <!--计划列表-->
-            <div class="list" ng-repeat="item in data track by item.id">
-                <input type="text" ng-model="item.name" ng-blur="change()" clss="name">
-                <button type="button" class=" btn-danger glyphicon glyphicon-trash remove" ng-click="del(item.id)"></button>
+            <div class="list" ng-repeat="item in temp track by item.id">
+                <!--mysql id auto increment   自增
+                任何数据都有唯一的识别码，
+                在angular中，也有唯一识别的代码，{{$$index:111}}
+                如果自己创建了唯一识别的代码：maxid，为了让angular知道，所以用 track by
+                -->
+                <input type="text" ng-model="item.name" ng-focus="focus(item.id,item.name,item.son)" ng-blur="blur()" class="list-title">
+                <button type="button" class=" btn-danger glyphicon glyphicon-trash remove"
+                        ng-click="del(item.id)"></button>
             </div>
         </div>
-        <div class="col-xs-8 col-sm-10 right">
+        <div class="col-xs-8 col-sm-10 right" ng-show="show==true">
             <!--右边的头部-->
-            <div class="header" ng-repeat="item in data">
+            <div class="header">
                 <h3>
-                    {{item.name}}
+                    {{current.name}}
                 </h3>
-                <span class="addcon glyphicon glyphicon-plus">
-
-                </span>
+                <span class="addcon glyphicon glyphicon-plus tianjia" ng-click="addOpt()"></span>
             </div>
-
             <!--右边的内容-->
-            <div class="listcon">
-                <!--<div class="select">-->
-
-                <!--</div>-->
-                <input type="text" ng-model="item.text" style="width:100%;height: 100%;">
-
-                <button class="btn btn-default removeCon" type="submit">删除</button>
+            <div class="listcon" ng-repeat="item in current.son track by item.id">
+                <div class="select" ng-click="success(item.id)"></div>
+                <input type="text" ng-model="item.name" style="width:100%;height: 100%;" ng-blur="blur()">
+                <button class="btn btn-default removeCon" type="submit" ng-click="delCon(item.id)">删除</button>
+            </div>
+        </div>
+        <div class="col-xs-8 col-sm-10 right" ng-show="show==false">
+            <!--右边的头部-->
+            <div class="header">
+                <div class="header">
+                    <h3>已完成事项</h3>
+                </div>
+                <span class="addcon glyphicon glyphicon-plus" ng-click="addOpt()"></span>
+            </div>
+            <!--右边的内容-->
+            <div class="listcon" ng-repeat="item in done track by item.id">
+                <input type="text" ng-model="item.name">
+                <input type="text" ng-model="item.opt">
+                <button class="btn btn-default removeCon" type="submit" ng-click="delDone(item.id)">删除</button>
             </div>
         </div>
     </div>
