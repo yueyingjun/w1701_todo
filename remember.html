@@ -198,12 +198,11 @@
 						<div class="listbox">
 
 			                <div class="list bline" ng-repeat="item in data track by item.id">
-			                    <input type="text" ng-model="item.name">
+			                    <input type="text" ng-model="item.name" ng-focus="setid(item.id)">
 			                    <span class="glyphicon glyphicon-remove-circle"></span>
 			                </div>
 						</div>
 					</div>
-
 
 	                <!--添加按钮-->
 
@@ -218,7 +217,7 @@
       		    <div class="main">
 					<div class="header">
 	                    <h3>
-	                        新建存档
+	                        {{currentitem(currentid).name}}
 	                    </h3>
 	                    <span class="addcon glyphicon glyphicon-edit">
 

@@ -3,7 +3,7 @@
 angular.module("myapp",[])
     .controller("todo",["$scope",function($scope){
         $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
-        console.log($scope.data)
+        // console.log($scope.data)
         /*添加列表*/
         $scope.add=function(){
             var obj={};
@@ -32,7 +32,20 @@ angular.module("myapp",[])
             }
             return id;
         }
-
+        $scope.currentid=0;
+        $scope.setid=function(currentid){
+            $scope.currentid=currentid;
+        }
+        $scope.currentitem=function(currentid){
+            let current=[];
+            $.each($scope.data,function(k,v){
+                if(v.id==currentid){
+                    current=v;
+                    // break;
+                }
+            })
+            return current;
+        }
 
 
 }])
