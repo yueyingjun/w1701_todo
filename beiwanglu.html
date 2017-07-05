@@ -121,7 +121,7 @@
             <!--计划列表-->
 
             <div class="list" ng-repeat="item in data | filter:{name:search} track by item.id">
-                <input type="text" ng-model="item.name" ng-click="index($index)">
+                <input type="text" ng-model="item.name" ng-click="index($index)" ng-blur="blur()">
                 <span>{{item.time}}</span>
                 <button class="button" type="submit" ng-click="del(item.id)">删除</button>
             </div>
