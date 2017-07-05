@@ -1,7 +1,6 @@
 /**
  * Created by lenovo on 2017/7/4.
  */
-window.onload=function(){
     var data=[
         {
             id:1,
@@ -60,4 +59,3 @@ window.onload=function(){
                 $scope.index=i;
             }
         }])
-}
