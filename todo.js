@@ -164,8 +164,11 @@
         s.$watch('search',function () {
             //arr是已经筛选出来的
             var arr=f("filter")(s.data,{name:s.search});
+            if(arr.length!=0){
             var index=getIndex(s.data,arr[0].id);
-                s.arr=s.data[index];
+                s.arr=s.data[index];    
+            }
+            
           })
 
 
