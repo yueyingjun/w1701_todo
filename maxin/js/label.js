@@ -125,6 +125,7 @@ angular.module("box",[])
             }
         }
         $scope.all_do=function () {
+            $scope.all_checked();
             $scope.one.son.forEach(function (value,index) {
                 var obj={};
                 obj.id=getid($scope.do_arr);
@@ -133,7 +134,6 @@ angular.module("box",[])
                 $scope.do_arr.push(obj);
             })
             $scope.one.son=[];
-            $scope.all_checked();
             localStorage.message_do=JSON.stringify($scope.do_arr);
             localStorage.message=JSON.stringify($scope.arr);
         }
