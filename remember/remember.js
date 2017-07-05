@@ -1,7 +1,7 @@
 
 
 angular.module("myapp",[])
-    .controller("todo",["$scope",function($scope){
+    .controller("todo",["$scope","$filter",function($scope,$filter){
         $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
         $scope.finish=localStorage.finish?JSON.parse(localStorage.finish):[];
         // console.log($scope.data);
@@ -17,6 +17,7 @@ angular.module("myapp",[])
             localStorage.message=JSON.stringify($scope.data);
             $scope.currentid=obj.id;
             $scope.display=1;
+            $scope.search='';
         }
 
         function maxid(arr){
@@ -174,7 +175,16 @@ angular.module("myapp",[])
         //查询
         $scope.search='';
         $scope.searching=function(){
-            alert('searching')
+            $scope.result = $filter('filter')($scope.data,{name:$scope.search});
+            console.log($scope.result);
+            $scope.display=1;
+            if($scope.result.length>0){
+                $scope.currentid=$scope.result[0].id;
+                
+            }else{
+                $scope.currentid=0;
+
+            }
         }
 
 }])
