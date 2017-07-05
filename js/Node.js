@@ -4,8 +4,7 @@
 angular.module("myapp",[])
     .controller("ctrl",["$scope","$filter",function($scope,$filter){
         $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
-        $scope.com_Arr=localStorage.done?JSON.parse(localStorage.done):[];
-        $scope.comArrlen=$scope.com_Arr.length;
+        $scope.completeArr=localStorage.done?JSON.parse(localStorage.done):[];
         $scope.flag=true;
         $scope.add=function(){
             var obj={};
@@ -21,7 +20,13 @@ angular.module("myapp",[])
         $scope.del=function () {
             var currentIndex=getIndex($scope.data,this.item.id);
             $scope.data.splice(currentIndex,1);
-            $scope.currentIndex=getIndex($scope.data,$scope.data.length);
+            if($scope.data.length==0){
+                $scope.currentObj=[];
+            }else if(this.item.id+1){
+                $scope.currentIndex=getIndex($scope.data,this.item.id+1);
+            }else{
+                $scope.currentIndex=getIndex($scope.data,$scope.data.length);
+            }
             $scope.currentObj=$scope.data[$scope.currentIndex];
             localStorage.message=JSON.stringify($scope.data);
         }
@@ -33,9 +38,9 @@ angular.module("myapp",[])
         }
         //删除已完成事项
         $scope.delComCon=function () {
-            var comIndex=getIndex($scope.com_Arr,this.item.id);
+            var comIndex=getIndex($scope.completeArr,this.item.id);
             console.log(comIndex);
-            $scope.com_Arr.splice(comIndex,1);
+            $scope.completeArr.splice(comIndex,1);
             localStorage.done=JSON.stringify($scope.completeArr);
         }
 
@@ -65,21 +70,27 @@ angular.module("myapp",[])
             $scope.sonObj={
                     id:maxid($scope.currentSon),
                     name:"新建内容",
-                    listname:$scope.currentSon.name,
                 };
            $scope.currentSon.push($scope.sonObj);
            localStorage.message=JSON.stringify($scope.data);
        }
+
        //完成内容
-        $scope.completeArr=[];
+       //  $scope.completeArr=[];
         $scope.completeCon=function () {
             $scope.arrIndex=getIndex($scope.currentSon,this.item.id);
             $scope.arrSplice=$scope.currentSon.splice($scope.arrIndex,1);
-            $scope.completeArr.push($scope.arrSplice[0]);
+            $scope.comObj={
+                id:maxid($scope.completeArr),
+                name:$scope.arrSplice[0].name,
+            }
+            $scope.completeArr.push($scope.comObj);
             localStorage.message=JSON.stringify($scope.data);
             localStorage.done=JSON.stringify($scope.completeArr);
+            console.log($scope.completeArr);
+            $scope.comArrlen=$scope.completeArr.length;
         }
-        $scope.comArrlen=$scope.com_Arr.length;
+        $scope.comArrlen=$scope.completeArr.length;
         $scope.date = $filter('date')(new Date());
         // 搜索
         $scope.search="";
@@ -119,6 +130,5 @@ angular.module("myapp",[])
                 }
             }
         }
-
     }])
 

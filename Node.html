@@ -60,7 +60,7 @@
                     <div class="header">
                         <h3>已完成事项</h3>
                     </div>
-                    <div class="con" ng-repeat="item in com_Arr track by item.id">
+                    <div class="con" ng-repeat="item in completeArr track by item.id">
                         <span class="conname">{{item.name}}</span>
                         <span class="glyphicon glyphicon-trash del" ng-click="delComCon()"></span>
                     </div>
