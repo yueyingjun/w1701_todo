@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="node_modules/angular/angular.min.js"></script>
+    <script src="to_do/to_do.js"></script>
+</head>
+<style>
+    html,body{
+        width:100%;
+        height:100%;
+    }
+    .container-fluid,.row{
+        height:100%;
+    }
+    .left,.right{
+        height:100%;
+        position:relative;
+    }
+    .left{
+        background: #00a2d4;
+    }
+    .right{
+        background: #ffbbbb;
+    }
+    .add{
+        position:absolute;
+        top:20px;
+        right:50px;
+    }
+    .sear{
+        margin-top:20px;
+    }
+    .remove{
+        background: none;
+        border:0;
+        color: #ffbbbb;
+    }
+
+    .ll{
+        background: none;
+        border: none;
+        color: #fff;
+    }
+    .head{
+        height: 90px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .addr{
+        margin: 20px;
+    }
+    input{
+        background: none;
+        border: none;
+    }
+    input:focus{
+        outline: none;
+    }
+    .conll{
+        border-bottom: 1px solid #00a2d4;
+    }
+    .conll>button{
+        background: none;
+    }
+</style>
+<body ng-app="myapp">
+<div class="container-fluid" ng-controller="next">
+    <div class="row">
+        <div class="col-xs-5 col-sm-4 left">
+            <form class="form-inline sear">
+                <div class="form-group">
+                    <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">search</div>
+                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索">
+                    </div>
+                </div>
+            </form>
+
+            <div class="list" ng-repeat="item in data track by item.id">
+                <input type="text" ng-model="item.name" class="ll">
+                <button class="btn btn-default remove" type="submit" ng-click="del()">删除</button>
+            </div>
+
+
+            <div class="add" ng-click="add()">
+                <span class="glyphicon glyphicon-plus" style="font-size: 20px">添加</span>
+            </div>
+        </div>
+        <div class="col-xs-7 col-sm-8 right">
+            <div class="head">
+                <h1>标题</h1>
+                <span class="glyphicon glyphicon-plus addr"></span>
+            </div>
+            <div class="conll">
+                <span>O</span>
+                <input type="text">
+                <button class="btn btn-default removeCon" type="submit">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
