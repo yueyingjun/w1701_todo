@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/jishi.css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/jishi.js"></script>
+</head>
+<body ng-app="myapp">
+<div class="container-fluid" ng-controller="jishi">
+    <div class="row">
+        <div class="col-xs-4 col-sm-3 left">
+
+            <div class="searchbox">
+                <input type="text" class="search" placeholder="请搜索">
+                <span class="glyphicon glyphicon-search"></span>
+            </div>
+
+            <!--已完成-->
+            <div class="done">
+                <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{listnum}}</span>
+            </div>
+
+            <!--计划列表-->
+            <div class="list" ng-repeat="item in data track by item.id">
+                <input type="text" ng-model="item.name" ng-change="change(item.id)" ng-click="addid(item.id)">
+                <button class="btn btn-default remove" type="submit" ng-click="dellist(item.id)">删除</button>
+            </div>
+
+
+            <!--添加按钮-->
+            <div class="add" ng-click="add()">
+                <span class="glyphicon glyphicon-plus"></span> 添加计划
+            </div>
+
+        </div>
+        <div class="col-xs-8 col-sm-9 right">
+            <!--右边的头部-->
+            <div class="header" ng-repeat="item in data | filter:{id:selectid}">
+                <h3>
+                    {{item.son[0]}}
+                </h3>
+                <span class="addcon glyphicon glyphicon-plus"></span>
+            </div>
+
+            <!--右边的内容-->
+
+            <div class="listcon"  ng-repeat="item in data.son | filter:{id:selectid}">
+                <div class="select">
+
+                </div>
+                <input type="text">
+
+                <button class="btn btn-default removeCon" type="submit">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

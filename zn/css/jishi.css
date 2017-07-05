@@ -1,0 +1,116 @@
+html,body{
+    width:100%;
+    height:100%;
+}
+.container-fluid, .container-fluid .row{
+    height:100%;
+}
+.container-fluid .left,.container-fluid .right{
+    height:100%;
+    position: relative;
+}
+.container-fluid .left{
+    background: #eee;
+}
+.searchbox{
+    width:100%;
+    height:30px;
+    padding:0 20px;
+    margin-top: 10px;
+    position:relative;
+}
+.searchbox .search{
+    width:100%;
+    height:100%;
+    border:1px solid #eee;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.7);
+    background:#fff;
+    text-align: center;
+    line-height:30px;
+    font-size:14px;
+    border-radius: 15px;
+}
+.searchbox span{
+    position:absolute;
+    left:30px;
+    top:8px;
+}
+.done{
+    margin-top: 10px;
+    padding-bottom:10px;
+    border-bottom:1px solid #ccc;
+}
+.done > span:nth-child(1){
+	color:greenyellow;
+}
+.done > span:nth-child(2){
+	color:cornflowerblue;
+}
+.list{
+	width:100%;
+	padding:10px;
+	border-bottom:1px solid royalblue;
+	position:relative;
+}
+.list > button{
+	position:absolute;
+	right:10px;
+	top:5px;
+}
+input{
+    border:none;
+    background: rgba(0,0,0,0);
+
+}
+input:focus{
+    outline: none;
+}
+.remove{
+	background:indianred;
+	color:#fff;
+    opacity: 0;
+    transition: opacity .5s ease;
+}
+.list:hover .remove{
+    opacity: 1;
+}
+
+.add{
+    position: absolute;
+
+    bottom: 10px;cursor: pointer;
+}
+.header{
+    height:50px;
+    border-bottom: 1px solid royalblue;
+    display: flex;
+    justify-content: space-between;
+
+}
+.header > h3{
+	color:royalblue;
+	font-weight: normal;
+}
+.header .addcon{
+    line-height: 50px;
+}
+.listcon{
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    padding:5px 0;
+}
+.listcon input{
+    margin-left:30px;
+}
+.listcon .select{
+    width:10px;height:10px;
+    border:1px solid #000;
+    border-radius: 50%;
+    position: absolute;
+    left:0;top:10px;
+}
+
+.listcon .removeCon{
+    position: absolute;
+    right:0;padding:0 5px;
+}
