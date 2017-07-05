@@ -130,15 +130,17 @@
             </div>
             <ul class="ul-task">
                 <li class="list" ng-repeat="item in todolist track by item.id">
-                    <input type="text" ng-model="item.name">
+                    <input type="text" ng-model="item.name" ng-change="change(item.id)" ng-click="show(item.id)">
                     <i ng-click="deleteItem()">×</i>
                 </li>
             </ul>
         </div>
         <div class="col-xs-8 col-sm-9 right">
-            <ul class="ul-title"  ng-repeat="item in todolist track by item.id">
+            <ul class="ul-title"  ng-repeat="item in todolist | filter:{id:selectid}">
                 <li class="list">
-                    <input type="text" ng-model="item.name">
+                    <span>
+                        {{item.son[0]}}
+                    </span>
                     <i>+</i>
                 </li>
                 <ul class="list-group" style="padding-top:12px;">
@@ -164,6 +166,8 @@
                 obj.id=maxid();
                 obj.name="新建任务";
                 obj.son=[];
+                obj.son[0]=obj.name;
+                $scope.num++;
                 $scope.todolist.push(obj);
                 localStorage.message=JSON.stringify($scope.todolist);
             };
@@ -185,7 +189,19 @@
                     id=tempid+1;
                 }
                 return id;
+            };
+            $scope.selectid=$scope.todolist.length==0?"":1;
+            $scope.show=function(id){   
+               $scope.selectid=id;
             }
+            $scope.change=function(id){
+                for(i=0;i<$scope.todolist.length;i++){
+                    if($scope.todolist[i].id==id){
+                        $scope.todolist[i].son[0]=$scope.todolist[i].name;
+                        localStorage.message=JSON.stringify($scope.todolist);
+                    }
+                }
+            }  
         }])
 </script>
 </body>
