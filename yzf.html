@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src=""></script>
+    <script src="angular.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <style>
+        html,body{
+            width:100%;height:100%;
+        }
+        .container-fluid, .container-fluid .row{
+            height:100%;
+        }
+        .container-fluid .left,.container-fluid .right{
+            height:100%;position: relative;
+        }
+        .container-fluid .left{
+            background: #eee;
+        }
+        .search{
+            margin-top: 10px;
+        }
+        .done{
+            margin-top: 10px;
+        }
+        input{
+            border:none;
+            background: rgba(0,0,0,0);
+        }
+        input:focus{
+            outline: none;
+        }
+        .remove{
+            opacity: 0;
+            transition: opacity .5s ease;
+        }
+        .list:hover .remove{
+            opacity: 1;
+        }
+
+        .add{
+            position: absolute;
+            bottom: 10px;cursor: pointer;
+        }
+        .header{
+            height:50px;border-bottom: 1px solid #000;display: flex;
+            justify-content: space-between;
+        }
+        .header .addcon{
+            line-height: 50px;
+        }
+        .listcon{
+            border-bottom: 1px solid #ccc;
+            position: relative;
+            padding:5px 0;
+        }
+        .listcon input{
+         margin-left:30px;
+        }
+        .listcon .select{
+            width:10px;height:10px;
+            border:1px solid #000;
+            border-radius: 50%;
+            position: absolute;
+            left:0;top:10px;
+        }
+
+        .listcon .removeCon{
+            position: absolute;
+            right:0;padding:0 5px;
+        }
+    </style>
+</head>
+<body ng-app="myapp">
+   <div class="container-fluid" ng-controller="todo">
+        <div class="row">
+            <div class="col-xs-4 col-sm-3 left">
+                <!--
+                 搜索
+                -->
+                <form class="form-inline search">
+                    <div class="form-group">
+                        <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </div>
+                            <input type="text" class="form-control" id="exampleInputAmount" ng-model="name" placeholder="请搜索">
+                        </div>
+                    </div>
+                </form>
+
+                <!--已完成-->
+
+                <div class="done" ng-click="clickFinish($show)">
+                   <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{done.length}}</span>
+                </div>
+
+                <!--计划列表-->
+
+                <div class="list" ng-repeat="item in data  | filter:{name:name} track by item.id">
+                    <input type="text" ng-model="item.name" ng-change="change(item.id)" ng-focus="focusl(item.id)" id="listsone">
+                    <button class="btn btn-default remove "  type="submit" ng-click="del(item.id)">删除</button>
+                </div>
+
+
+                <!--添加按钮-->
+
+
+                <div class="add" ng-click="add()">
+                    <span class="glyphicon glyphicon-plus">添加计划</span>
+                </div>
+
+            </div>
+
+
+            <!--右边的页面-->
+            <div class="col-xs-8 col-sm-9 right" ng-show="flag==true">
+                <!--右边的头部-->
+                <div class="header">
+                    <h3>
+                        {{current.name}}
+                    </h3>
+                    <span class="addcon glyphicon glyphicon-plus" ng-click="addr()">
+
+                    </span>
+                </div>
+
+                <!--右边的内容-->
+
+                <div class="listcon" ng-repeat="item in current.son track by item.id">
+                    <div class="select" ng-click="finish(item.id)">
+
+                    </div>
+                    <input type="text" ng-model="item.name" class="shijian" ng-change="changer(item.id)">
+
+                    <button class="btn btn-default removeCon" type="submit" ng-click="delr(item.id)">删除</button>
+                </div>
+            </div>
+
+            <!--已完成的页面-->
+            <div class="col-xs-8 col-sm-9 right" ng-show="flag==false">
+                <!--右边的头部-->
+                <div class="header">
+                    <h3>
+                        已完成
+                    </h3>
+                </div>
+
+                <!--右边的内容-->
+                <div class="listcon" ng-repeat="item in done">
+                    <input type="text" ng-model="item.name" id="shijian" ng-change="changerFinish(item.id)">
+
+                    <button class="btn btn-default removeCon" type="submit" ng-click="delrFinish(item.id)">删除</button>
+                </div>
+            </div>
+        </div>
+   </div>
+</body>
+</html>
+<script>
+    angular.module("myapp",[])
+        .controller("todo",["$scope","$filter",function($scope,$filter){
+            $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
+            $scope.done=localStorage.done?JSON.parse(localStorage.done):[];
+            //定义右边显示的是第几个
+            $scope.currentIndex=$scope.data.length-1;
+            //根据右边显示的第几个给出右边显示的内容
+            $scope.current=$scope.data[$scope.currentIndex];
+            /*添加列表*/
+            $scope.add=function(){
+                $scope.flag=true;
+                var obj={};
+                obj.id=maxid();
+                obj.name="新建列表"+obj.id;
+                obj.son=[];
+                $scope.data.push(obj);
+                localStorage.message=JSON.stringify($scope.data);
+                $scope.currentIndex=getIndex($scope.data,obj.id);
+                $scope.current=$scope.data[$scope.currentIndex];
+            }
+
+
+            //获取当前的下标
+            function getIndex(arr,id){
+                //添加的时候循环这个数组 如果传进来的ID==数组中第I个的ID时 返回i
+                for( var i=0;i<arr.length;i++){
+                    if(arr[i].id==id){
+                        return i;
+                    }
+                }
+            }
+
+            function maxid(arr){
+                var arr=arr||$scope.data;
+                var id=0;
+                var tempid=0;
+                if(arr.length==0){
+                    id=1;
+                }else{
+                    for(var i=0;i<arr.length;i++){
+                        if(arr[i].id>tempid){
+                            tempid=arr[i].id;
+                        }
+                    }
+                    id=tempid+1;
+                }
+                return id;
+            }
+
+            //列表的名字
+            $scope.change=function(a){
+                $scope.flag=true;
+                for(var i=0;i<$scope.data.length;i++){
+                   if(a==$scope.data[i].id){
+                       localStorage.message=JSON.stringify($scope.data);
+                   }
+                }
+            }
+
+
+
+
+            //左边的删除
+            $scope.del=function(a){
+                for(var i=0;i<$scope.data.length;i++){
+                    if(a==$scope.data[i].id){
+                        $scope.data.splice(i,1);
+                        localStorage.message=JSON.stringify($scope.data);
+
+                        $scope.currentIndex=getIndex($scope.data,i);
+                        $scope.current=$scope.data[$scope.currentIndex];
+                    }
+                }
+            }
+
+            //      左边获取焦点 让右边显示对应的
+            $scope.focusl=function(a){
+                $scope.flag=true;
+                $scope.currentIndex=getIndex($scope.data,a);
+//                console.log($scope.currentIndex);
+                $scope.current=$scope.data[$scope.currentIndex];
+//                console.log($scope.current);
+            }
+            //右边的添加
+            $scope.addr=function(){
+                var obj={};
+                obj.id=maxid($scope.current.son);
+                obj.name="事件"+obj.id;
+                //son
+                $scope.current.son.push(obj);
+                localStorage.message=JSON.stringify($scope.data);
+            }
+
+            //右边的删除
+            $scope.delr=function(a){
+                for(var i=0;i<$scope.current.son.length;i++){
+                    if(a==$scope.current.son[i].id){
+                        $scope.current.son.splice(i,1);
+                        localStorage.current=JSON.stringify($scope.current.son);
+                        localStorage.message=JSON.stringify($scope.data);
+                    }
+                }
+            }
+
+            //完成页面的删除
+            $scope.delrFinish=function(a){
+                console.log(a)
+                for(var i=0;i<$scope.done.length;i++){
+                    if(a==$scope.done[i].id){
+                        console.log(i);
+                        localStorage.done=JSON.stringify($scope.done);
+                    }
+                }
+            }
+
+            //修改事件的名字
+            $scope.changer=function(a){
+                for(var i=0;i<$scope.current.son.length;i++){
+                    if(a==$scope.current.son[i].id){
+//                        $scope.current.son[i].name;
+                        localStorage.current=JSON.stringify($scope.current.son);
+                        localStorage.message=JSON.stringify($scope.data);
+                    }
+                }
+            }
+
+            //修改完成列表的名字
+            $scope.changerFinish=function(a){
+                for(var i=0;i<$scope.done.length;i++){
+                    if(a==$scope.done[i].id){
+                        localStorage.done=JSON.stringify($scope.done);
+                    }
+                }
+            }
+
+            //点击圈圈完成
+            $scope.finish=function(a){
+                var index=getIndex($scope.current.son,a);
+                var obj=$scope.current.son[index];
+                console.log(obj);
+
+
+                $scope.done.push(obj);
+                localStorage.done=JSON.stringify($scope.done);
+                console.log($scope.done.length);
+
+                //删除右边的
+                for(var i=0;i<$scope.current.son.length;i++){
+                    if(a==$scope.current.son[i].id){
+                        $scope.current.son.splice(i,1);
+                        localStorage.current=JSON.stringify($scope.current.son);
+                        localStorage.message=JSON.stringify($scope.data);
+                    }
+                }
+
+            }
+
+            //点击已完成
+            $scope.flag=true;
+            $scope.clickFinish=function(){
+                $scope.flag=false;
+            }
+
+
+            $scope.name="";
+            $scope.$watch("name",function (news) {
+                $arr=$filter("filter")($scope.data,{name:news})
+                $scope.current=$arr[0];
+            })
+
+        }])
+</script>
