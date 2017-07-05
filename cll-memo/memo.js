@@ -14,8 +14,8 @@ angular.module("myapp",[])
         $scope.search=''
         // 搜索
         $scope.$watch("search",function (news) {
-            console.log(news)
-            console.log($filter("filter")($scope.data,news))
+            let arr=$filter("filter")($scope.data,{name:news})
+            $scope.currentList=arr[arr.length-1];
         })
 
 

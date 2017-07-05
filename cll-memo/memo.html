@@ -74,7 +74,7 @@
                         </div>
                         <input type="text" ng-model="json.content" ng-keyup="update()">
 
-                        <button class="btn btn-default removeCon" type="submit" ng-click="delCon(json.id)">删除</button>
+                        <button class="btn btn-default removeCon glyphicon glyphicon-trash" type="submit" ng-click="delCon(json.id)"></button>
 
                     </div>
 
@@ -94,10 +94,10 @@
                 <!--右边的内容-->
 
                 <div class="listcon"  ng-repeat="json in complete track by json.id">
-                    <div>
+                    <span>
                         {{json.title}}
                         <span>{{json.content}}</span>
-                    </div>
+                    </span>
                     <button class="btn btn-default removeCon" type="submit" ng-click="delCom(json.id)">删除</button>
 
                 </div>

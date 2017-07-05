@@ -22,7 +22,18 @@ html,body{
 }
 .done{
     margin-top: 10px;
+    cursor: pointer;
+    height: 50px;
+    padding: 0 9px;
+    line-height: 50px;
 }
+.done:hover{
+    background: #ECE8AC;
+    color: deeppink;
+    border: 1px solid #eee;
+    box-sizing: border-box;
+}
+
 input{
     border:none;
     background: rgba(0,0,0,0);
@@ -36,6 +47,20 @@ input:focus{
     overflow: hidden;
     height: 42px;
 }
+.list:hover{
+    background: #ECE8AC;
+    color: deeppink;
+    border: 1px solid #eee;
+    box-sizing: border-box;
+}
+
+.mouse{
+     background: #ECE8AC;
+     color: deeppink;
+     border: 1px solid #eee;
+     box-sizing: border-box;
+ }
+
 .list input{
     vertical-align: middle;
     height: 100%;
