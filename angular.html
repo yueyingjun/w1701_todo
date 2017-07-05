@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="angular.min.js"></script>
+    <script src="text.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+<style>
+    html,body{
+        width:100%;
+        height:100%;
+    }
+    .container-fluid, .container-fluid .row{
+        height:100%;
+    }
+    .container-fluid .left,.container-fluid .right{
+        height:100%;position: relative;
+    }
+    .container-fluid .left{
+        background: palegreen;
+    }
+    .search,.ok,.list{
+        margin-top:15px;
+        position: relative;
+    }
+    .ok > span:first-child,.add > span{
+        color: hotpink;
+    }
+    .ok > div,.list > span,.listcon .remove{
+        width:25px;
+        height:25px;
+        line-height: 25px;
+        text-align: center;
+        border-radius: 50%;
+        background: hotpink;
+        color:#fff;
+        font-weight: 600;
+        display: inline-block;
+        position: absolute;right:10px;top:0px;
+    }
+    input{
+        border:none;
+        background: rgba(0,0,0,0);
+        padding-left: 20px;
+
+    }
+    input:focus{
+        outline: none;
+    }
+    .list > span{
+        opacity: 0;
+        transition: opacity .5s ease;
+    }
+    .list:hover span{
+        opacity: 1;
+    }
+    .add{
+        position: absolute;
+        bottom: 10px;cursor: pointer;
+        text-align: center;
+    }
+    .right{
+        background: #FEFDBE;
+    }
+    .header{
+        border-bottom: 1px solid #C8F3CA;
+        padding-bottom: 20px;
+
+    }
+    *{
+        font-family: "方正胖娃_GBK";
+    }
+    .listcon{
+        border-bottom: 1px solid #ccc;
+        position: relative;
+        padding:5px 0;
+    }
+    .listcon input{
+        margin-left:30px;
+    }
+    .listcon .select{
+        width:13px;height:13px;
+        border:2px solid hotpink;
+        border-radius: 50%;
+        position: absolute;
+        left:0;top:5px;
+    }
+
+    .listcon .remove{
+        position: absolute;
+        right:0;padding:0 5px;
+    }
+</style>
+<body ng-app="qqapp">
+<div ng-controller="ctrl" class="container-fluid">
+    <div class="row">
+        <div class="left col-xs-4 col-sm-3">
+            <!--搜索-->
+            <div class="input-group col-xs-11 search" >
+                <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                <input style="padding:3px 6px;" type="text" class="form-control input-medium search-query" ng-model="search"  placeholder="search">
+            </div>
+            <!--计划已完成-->
+            <div class="ok">
+                <span class="glyphicon glyphicon-ok"></span> 计划已完成 <div>10</div>
+            </div>
+            <!--计划列表-->
+            <div class="list" ng-repeat="item in data track by item.id ">
+                <input type="text" ng-model="item.title" ng-focus="focus(item.title)" ng-change="change(item.title,item.id)">
+                <span class="glyphicon glyphicon-remove" ng-click="delete(item.id)"></span>
+            </div>
+            <!--添加 -->
+            <div class="add col-xs-11" ng-click="add()">
+                <span class="glyphicon glyphicon-plus"></span> 添加计划
+            </div>
+        </div>
+        <div class="right col-xs-8 col-sm-9">
+            <h2 class="col-xs-11 header">{{title[title.length-1]?title[title.length-1]:title[0] }}</h2>
+            <div class="listcon col-xs-11">
+                <div class="select">
+
+                </div>
+                <input type="text">
+
+                <span class="glyphicon glyphicon-remove remove" ng-click="delete(item.id)"></span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
