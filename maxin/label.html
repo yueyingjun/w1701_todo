@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/label.css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid" ng-app="box">
+        <div class="row" ng-controller="boxs">
+            <div class="top">
+                <div class="title">
+                    <span class="glyphicon glyphicon-tag"></span>
+                    我的便签
+                </div>
+            </div>
+            <div class="left col-xs-4 col-sm-3">
+                <h3>已完成 <span ></span></h3>
+                <ul>
+                   <li ng-repeat="item in do_arr track by $index">
+                       {{item.value}}
+                       <span class="glyphicon glyphicon-trash" ng-click="del_do(item.doid)">
+                       </span>
+                   </li>
+                </ul>
+                <h3>未完成 <span ></span></h3>
+                <ul>
+                    <li  ng-repeat="item in arr track by $index">
+                        <input type="text" ng-model="item.name" ng-focus="display(item.id)" ng-keyup="up()">
+                        <span class="glyphicon glyphicon-trash" ng-click="del(item.id)"></span>
+                    </li>
+                </ul>
+                <div class="add" ng-click="add()">
+                    <span class="glyphicon glyphicon-plus">
+
+                    </span>
+                </div>
+            </div>
+            <div class="right col-xs-8 col-sm-9">
+                    <h3>
+                        <input type="text" ng-model="one.name" ng-keyup="up()">
+                        <span class="glyphicon glyphicon-pencil" ng-click="add_con(one.id)"></span>
+                    </h3>
+                    <ul>
+                        <li ng-repeat="item1 in one.son track by $index" style="list-style: none;border-bottom: 1px solid #eee">
+                            <span title="点击之后默认完成"  class="glyphicon glyphicon-hourglass" ng-click="do(one.id,item1.id)" ></span>
+                            <input type="text" ng-model="item1.value"  ng-keyup="up()">
+                            <span class="glyphicon glyphicon-trash" ng-click="del_con(one.id,item1.id)"></span>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        angular.module("box",["box"])
+         .controller("boxs",function ($scope) {
+             $scope.do_arr=localStorage.message_do?JSON.parse(localStorage.message_do):[];
+             $scope.arr=localStorage.message?JSON.parse(localStorage.message):[];
+             $scope.one="新建便签";
+             $scope.add=function () {
+                 var obj={}
+                 obj.id=getid($scope.arr);
+                 obj.name="新建便签";
+                 obj.son=[];
+                 $scope.arr.push(obj)
+                 localStorage.message=JSON.stringify($scope.arr);
+             }
+             function getid(brr) {
+                 var arr=[];
+                 var id;
+                 brr.forEach(function (value,index) {
+                     arr[index]=value;
+                 })
+                 if(arr.length<=0){
+                     id=1;
+                 }else {
+                     arr.sort((a,b)=>b.id-a.id)
+                     id=arr[0].id+1;
+                 }
+                 return id;
+             }
+             $scope.display=function (id) {
+                 $scope.arr.forEach(function (value,index) {
+                     if(id==value.id){
+                         $scope.one=value;
+                     }
+                 })
+
+             }
+             $scope.add_con=function (id) {
+                 $scope.arr.forEach(function (value,index) {
+                     if(id==value.id){
+                         var obj={}
+                         obj.id=getid(value.son);
+                         obj.value="留言内容";
+                         obj.type="no";
+                         value.son.push(obj)
+                     }
+                 })
+                 localStorage.message=JSON.stringify($scope.arr);
+             }
+             $scope.del=function (id) {
+                 $scope.arr.forEach(function (value,index) {
+                     if(id==value.id){
+                         $scope.arr.splice(index,1)
+                     }
+                 })
+                 localStorage.message=JSON.stringify($scope.arr);
+             }
+             $scope.del_con=function (p_id,id) {
+                 $scope.arr.forEach(function (value,index) {
+                     if(p_id==value.id){
+                         value.son.forEach(function (value1,index1) {
+                             if(value1.id==id) {
+                                 value.son.splice(index1, 1)
+                             }
+                         })
+                     }
+                 })
+                 localStorage.message=JSON.stringify($scope.arr);
+             }
+             $(".left>h3").click(function () {
+                 $(this).next("ul").slideToggle();
+                 $(this).find("span").toggleClass("glyphicon glyphicon-tasks");
+             })
+             $scope.do=function (p_id,id) {
+                 $scope.arr.forEach(function (value,index) {
+                     if(p_id==value.id){
+                         value.son.forEach(function (value1,index1) {
+                             if(value1.id==id) {
+                                 value.son.type = "yes";
+                                 value1.doid=p_id+"_"+id;
+                                 $scope.do_arr.push(value1)
+                                 value.son.splice(index1,1);
+                             }
+                         })
+                     }
+                 })
+                 localStorage.message_do=JSON.stringify($scope.do_arr);
+                 localStorage.message=JSON.stringify($scope.arr);
+             }
+             $scope.del_do=function (doid) {
+                 $scope.do_arr.forEach(function (value,index) {
+                     if(doid==value.doid){
+                         $scope.do_arr.splice(index,1);
+                     }
+                 })
+                 localStorage.message_do=JSON.stringify($scope.do_arr);
+             }
+             $scope.up=function () {
+                 localStorage.message_do=JSON.stringify($scope.do_arr);
+                 localStorage.message=JSON.stringify($scope.arr);
+             }
+
+         })
+    </script>
+</body>
+</html>

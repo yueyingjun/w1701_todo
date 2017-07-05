@@ -1,0 +1,92 @@
+html,body{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+input{
+    background: rgba(0,0,0,0);
+    border: 0;
+    outline: none;
+    width: 90%;
+}
+.container-fluid,.row{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.row>.top{
+    width: 100%;
+    height: 50px;
+    background:#CAE8FF ;
+    color: #fff;
+    font-size: 24px;
+    box-sizing: border-box;
+    position: absolute;
+    padding: 0 20px;
+    line-height: 50px;
+    z-index: 100;
+}
+.row>.left,.row>.right{
+    height: 100%;
+    padding-top:50px ;
+    box-sizing: border-box;
+}
+.row>.left{
+    background:#EDF7FF ;
+}
+.left>h3,.right>h3,.right>ul>li{
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    color: #333;
+    cursor: pointer;
+}
+.left>h3>span,.right>h3>span,.right>ul>li>span:last-child{
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    font-size: 18px;
+    line-height: 30px;
+}
+.left>ul{
+    border-bottom: 1px solid #ccc;
+    padding-bottom:20px;
+}
+.left>ul>li{
+    height: 30px;
+    box-sizing: border-box;
+    line-height: 30px;
+    border-bottom: 1px dashed #ccc;
+   position: relative;
+    cursor: pointer;
+}
+.left>ul>li>span{
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    line-height: 30px;
+    opacity: 0;
+    transition: opacity .5s linear;
+}
+.left>ul>li:hover span{
+    opacity: 1;
+}
+.add{
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    cursor: pointer;
+}
+
