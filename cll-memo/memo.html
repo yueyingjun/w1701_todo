@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../node_modules/angular/angular.min.js"></script>
+    <script src="memo.js"></script>
+    <link rel="stylesheet" href="memo.css">
+</head>
+<body ng-app="myapp">
+   <div class="container-fluid" ng-controller="todo">
+        <div class="row">
+            <div class="col-xs-4 col-sm-3 left">
+                <!--
+                 搜索
+                -->
+                <form class="form-inline search">
+                    <div class="form-group">
+                        <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索" ng-model="search">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!--已完成-->
+
+                <div class="done">
+                   <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{comNum}}</span>
+                </div>
+
+                <!--计划列表-->
+                <!--track by item.id | filter:{name:search} -->
+                <div class="list" ng-repeat="item in data track by item.id">
+                    <input type="text" ng-model="item.name" ng-keyup="update(item.id)" ng-click="active($index)" class="{{now==$index?'active':''}}">
+                    <button class="remove glyphicon glyphicon-remove btn btn-link" type="submit" ng-click="del(item.id)"></button>
+                </div>
+
+
+                <!--添加按钮-->
+
+
+                <div class="add" ng-click="add()">
+                    <span class="glyphicon glyphicon-plus"></span> 添加计划
+                </div>
+
+
+
+            </div>
+
+            <div class="col-xs-8 col-sm-9 right">
+                <!--右边的头部-->
+                <div ng-repeat="item in data track by item.id" ng-show="now==$index">
+                    <div class="header">
+                        <h3>
+                            {{item.name}}
+                        </h3>
+                        <span class="addcon glyphicon glyphicon-plus" ng-click="addCon(item.id)"></span>
+
+                    </div>
+
+                    <!--右边的内容-->
+
+                    <div class="listcon"  ng-repeat="json in item.son | filter:{status:0} ">
+                        <div class="select" ng-click="complete(item.id,json.cid)">
+
+                        </div>
+                        <input type="text" ng-model="json.content" ng-keyup="updateCon(item.id,json.cid)">
+
+                        <button class="btn btn-default removeCon" type="submit" ng-click="delCon(item.id,json.cid)">删除</button>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+   </div>
+</body>
+</html>
