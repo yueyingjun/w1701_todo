@@ -8,10 +8,11 @@ angular.module("myapp",[])
         $scope.add=function(){
             var obj={};
             obj.id=maxid();
-            obj.name="新建存档";
+            obj.name="新建存档"+obj.id;
             obj.son=[];
             $scope.data.push(obj);
             localStorage.message=JSON.stringify($scope.data);
+            $scope.currentid=obj.id;
         }
 
         function maxid(){
@@ -32,7 +33,7 @@ angular.module("myapp",[])
             }
             return id;
         }
-        $scope.currentid=0;
+        $scope.currentid=1;
         $scope.setid=function(currentid){
             $scope.currentid=currentid;
         }
