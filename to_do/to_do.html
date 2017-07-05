@@ -7,8 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src=""></script>
     <script src="../node_modules/angular/angular.min.js"></script>
-    <script src="to_do.js"></script>
+    <!--<script src="to_do.js"></script>-->
+    <script src="../jquery.min.js"></script>
     <style>
         html,body{
             width:100%;height:100%;
@@ -31,7 +33,6 @@
         input{
             border:none;
             background: rgba(0,0,0,0);
-
         }
         input:focus{
             outline: none;
@@ -46,13 +47,11 @@
 
         .add{
             position: absolute;
-
             bottom: 10px;cursor: pointer;
         }
         .header{
             height:50px;border-bottom: 1px solid #000;display: flex;
             justify-content: space-between;
-
         }
         .header .addcon{
             line-height: 50px;
@@ -107,8 +106,8 @@
                 <!--计划列表-->
 
                 <div class="list" ng-repeat="item in data track by item.id">
-                    <input type="text" ng-model="item.name">
-                    <button class="btn btn-default remove" type="submit">删除</button>
+                    <input type="text" ng-model="item.name" ng-change="change(item.id)" id="listsone">
+                    <button class="btn btn-default remove "  type="submit" ng-click="del(item.id)">删除</button>
                 </div>
 
 
@@ -141,7 +140,7 @@
                     <div class="select">
 
                     </div>
-                    <input type="text">
+                    <input type="text" ng-onchange="change-r()">
 
                     <button class="btn btn-default removeCon" type="submit">删除</button>
                 </div>
@@ -150,3 +149,63 @@
    </div>
 </body>
 </html>
+<script>
+    angular.module("myapp",[])
+        .controller("todo",["$scope",function($scope){
+            $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
+            console.log($scope.data)
+            /*添加列表*/
+            $scope.add=function(){
+                var obj={};
+                obj.id=maxid();
+                obj.name="新建列表";
+                obj.son=[];
+                $scope.data.push(obj);
+                localStorage.message=JSON.stringify($scope.data);
+            }
+
+            function maxid(){
+                var id=0;
+                var tempid=0;
+                if($scope.data.length==0){
+                    id=1;
+                }else{
+
+                    for(var i=0;i<$scope.data.length;i++){
+                        if($scope.data[i].id>tempid){
+                            tempid=$scope.data[i].id;
+                        }
+                    }
+                    id=tempid+1;
+                }
+                return id;
+            }
+
+            //列表的名字
+            $scope.change=function(a){
+                var con=$('#listsone').val();
+                for(var i=0;i<$scope.data.length;i++){
+                   if(a==$scope.data[i].id){
+                       $scope.data[i].name=con;
+                       localStorage.message=JSON.stringify($scope.data);
+                   }
+                }
+            }
+
+            //删除
+            $scope.del=function(a){
+                for(var i=0;i<$scope.data.length;i++){
+                    if(a==$scope.data[i].id){
+                        $scope.data.splice(i,1);
+                        localStorage.message=JSON.stringify($scope.data);
+                    }
+                }
+            }
+
+
+
+
+
+
+        }])
+</script>
