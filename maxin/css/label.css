@@ -42,7 +42,7 @@ input{
     color: #333;
     cursor: pointer;
 }
-.left>h3>span,.right>h3>span,.right>ul>li>span:last-child{
+.left>h3>span:last-child,.right>h3>span,.right>ul>li>span:last-child{
     position: absolute;
     right: 10px;
     top: 0;
@@ -63,7 +63,7 @@ input{
    position: relative;
     cursor: pointer;
 }
-.left>ul>li>span{
+.left>ul>li>span:last-child{
     position: absolute;
     right: 10px;
     top: 0;
@@ -73,7 +73,7 @@ input{
     opacity: 0;
     transition: opacity .5s linear;
 }
-.left>ul>li:hover span{
+.left>ul>li:hover span:last-child{
     opacity: 1;
 }
 .add{

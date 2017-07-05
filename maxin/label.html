@@ -18,9 +18,16 @@
                 </div>
             </div>
             <div class="left col-xs-4 col-sm-3">
+                <div class="input-group " style="margin-top: 20px" >
+                    <input type="text" class="form-control" placeholder="Search for..." ng-model="aa">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                </div>
                 <h3>已完成 <span ></span></h3>
                 <ul>
-                   <li ng-repeat="item in do_arr track by $index">
+                   <li ng-repeat="item in do_arr |filter: aa " style="list-style: none">
+                       <span class="glyphicon glyphicon-ok"></span>
                        {{item.value}}
                        <span class="glyphicon glyphicon-trash" ng-click="del_do(item.doid)">
                        </span>
@@ -28,7 +35,7 @@
                 </ul>
                 <h3>未完成 <span ></span></h3>
                 <ul>
-                    <li  ng-repeat="item in arr track by $index">
+                    <li  ng-repeat="item in arr track by $index  ">
                         <input type="text" ng-model="item.name" ng-focus="display(item.id)" ng-keyup="up()">
                         <span class="glyphicon glyphicon-trash" ng-click="del(item.id)"></span>
                     </li>
@@ -63,7 +70,7 @@
              $scope.add=function () {
                  var obj={}
                  obj.id=getid($scope.arr);
-                 obj.name="新建便签";
+                 obj.name=getid($scope.arr)+"新建便签";
                  obj.son=[];
                  $scope.arr.push(obj)
                  localStorage.message=JSON.stringify($scope.arr);
@@ -95,7 +102,7 @@
                      if(id==value.id){
                          var obj={}
                          obj.id=getid(value.son);
-                         obj.value="留言内容";
+                         obj.value=getid(value.son)+"留言内容";
                          obj.type="no";
                          value.son.push(obj)
                      }
