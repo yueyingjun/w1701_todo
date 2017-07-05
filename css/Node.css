@@ -77,4 +77,32 @@ main,main .row{
 }
 .right .header{
    border-bottom: 1px solid #eee;
+    position: relative;
+}
+.right .header span{
+   position:absolute;
+    right:10px;
+    top:10px;
+}
+.right .con{
+    padding:5px 0;
+    position: relative;
+}
+.right .con input.coninput{
+    border:0;
+    outline: none;
+    width:80%;
+    margin-left: 10px;
+}
+.right .con span.del{
+    position: absolute;
+    right: 10px;
+    top:0;
+    margin-top: 10px;
+    font-size: 12px;
+    color:#ccc;
+}
+.right .con span.conname{
+    font-size: 12px;
+    color:#999;
 }
