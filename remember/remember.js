@@ -47,6 +47,9 @@ angular.module("myapp",[])
             })
             return current;
         }
+        $scope.save=function(){
+            localStorage.message=JSON.stringify($scope.data);
+        }
 
 
 }])

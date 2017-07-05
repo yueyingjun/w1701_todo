@@ -198,7 +198,7 @@
 						<div class="listbox">
 
 			                <div class="list bline" ng-repeat="item in data track by item.id">
-			                    <input type="text" ng-model="item.name" ng-focus="setid(item.id)">
+			                    <input type="text" ng-model="item.name" ng-focus="setid(item.id)" ng-blur="save()">
 			                    <span class="glyphicon glyphicon-remove-circle"></span>
 			                </div>
 						</div>
