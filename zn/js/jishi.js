@@ -8,6 +8,7 @@ angular.module("myapp",[]).controller("jishi",function($scope){
         obj.son=[];
         obj.son[0]=obj.name;
         $scope.data.push(obj);
+        $scope.selectid=obj.id;
         $scope.listnum++;
         localStorage.message=JSON.stringify($scope.data);
     }
@@ -33,16 +34,22 @@ angular.module("myapp",[]).controller("jishi",function($scope){
         }
     }
     function maxid(){
+    	var id=0;
         var tempid=0;
         if($scope.data.length==0){
-            tempid=1;
+                id=1;
         }else{
-            var array=$scope.data.sort(function (a,b) {
-                return b-a;
-            })
-            tempid=array[0].id+1;
+
+              for(var i=0;i<$scope.data.length;i++){
+                if($scope.data[i].id>tempid){
+                    tempid=$scope.data[i].id
+
+                }
+              }
+
+              id=tempid+1;
         }
-        return tempid;
+        return id;
     }
 
 })
