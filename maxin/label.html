@@ -61,7 +61,7 @@
                         <li ng-repeat="item1 in one.son | filter:{value:search_con} track by $index" style="list-style: none;border-bottom: 1px solid #eee">
                             <span title="点击之后默认完成" ng-class="{true: 'glyphicon glyphicon-send', false: 'glyphicon  glyphicon-record'}[checked=='取消全选']" ng-click="do(one.id,item1.id)" style="margin-right: 10px"></span>
                             <input type="text" ng-model="item1.value"  ng-keyup="up()">
-                            <span class="glyphicon glyphicon-trash" ng-click="del_con(one.id,item1.id)"></span>
+                            <span class="glyphicon glyphicon-trash" ng-click="del_con(item1.id)"></span>
                         </li>
                     </ul>
                     <div class="all">

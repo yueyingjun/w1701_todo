@@ -67,7 +67,7 @@ angular.module("box",[])
 
             localStorage.message=JSON.stringify($scope.arr);
         }
-        $scope.del_con=function (p_id,id) {
+        $scope.del_con=function (id) {
             $scope.arr.forEach(function (value,index) {
                 if(p_id==value.id){
                     value.son.forEach(function (value1,index1) {
