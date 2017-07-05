@@ -2,34 +2,37 @@
  * Created by chen on 2017/7/5.
  */
 angular.module("myapp",[])
-    .controller("ctrl",["$scope","$filter",function($scope,$filter){
-        $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
-        $scope.completeArr=localStorage.done?JSON.parse(localStorage.done):[];
-        $scope.flag=true;
-        $scope.add=function(){
-            var obj={};
-            obj.id=maxid($scope.data);
-            obj.name="未标签";
-            obj.son=[];
+    .controller("ctrl",["$scope","$filter",function($scope,$filter) {
+        $scope.data = localStorage.message ? JSON.parse(localStorage.message) : [];
+        $scope.completeArr = localStorage.done ? JSON.parse(localStorage.done) : [];
+        $scope.flag = true;
+        $scope.add = function () {
+            var obj = {};
+            obj.id = maxid($scope.data);
+            obj.name = "未标签";
+            obj.son = [];
             $scope.data.push(obj);
-            localStorage.message=JSON.stringify($scope.data);
-            $scope.currentIndex=getIndex($scope.data,obj.id);
-            $scope.currentObj=$scope.data[$scope.currentIndex];
+            localStorage.message = JSON.stringify($scope.data);
+            $scope.currentIndex = getIndex($scope.data, obj.id);
+            $scope.currentObj = $scope.data[$scope.currentIndex];
         }
         //删除 列表
-        $scope.del=function () {
-            var currentIndex=getIndex($scope.data,this.item.id);
-            $scope.data.splice(currentIndex,1);
-            if($scope.data.length==0){
-                $scope.currentObj=[];
+        $scope.del = function () {
+            var currentIndex = getIndex($scope.data, this.item.id);
+            $scope.data.splice(currentIndex, 1);
+            if ($scope.data.length == 0) {
+                $scope.currentObj = [];
             }else if(this.item.id+1){
-                $scope.currentIndex=getIndex($scope.data,this.item.id+1);
-            }else{
-                $scope.currentIndex=getIndex($scope.data,$scope.data.length);
+                $scope.currentIndex = getIndex($scope.data, $scope.data.length+1);
+                $scope.currentObj = $scope.data[$scope.currentIndex];
+            }else {
+                // $scope.currentIndex = getIndex($scope.data, $scope.data.length);
+                $scope.currentObj = $scope.data[0];
             }
-            $scope.currentObj=$scope.data[$scope.currentIndex];
-            localStorage.message=JSON.stringify($scope.data);
+
+            localStorage.message = JSON.stringify($scope.data);
         }
+
         //删除内容
         $scope.delCon=function () {
             var sonIndex=getIndex($scope.currentSon,this.item.id);
@@ -97,7 +100,8 @@ angular.module("myapp",[])
         $scope.$watch("search",function () {
             $scope.searchArr=$filter("filter","search")($scope.data,{name:$scope.search});
             $scope.searchlen=$scope.searchArr.length;
-            $scope.currentIndex=getIndex($scope.data,$scope.searchlen);
+            console.log($scope.searchlen);
+            $scope.currentIndex=getIndex($scope.data,$scope.searchlen+1);
             $scope.currentObj=$scope.data[$scope.currentIndex];
         });
         $scope.showcom=function () {
