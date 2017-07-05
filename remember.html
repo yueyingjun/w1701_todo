@@ -100,7 +100,7 @@
 			outline: none;
 			flex:auto;
 			line-height: 40px;
-			color:rgb(255,193,7);
+			color:rgb(65,165,165);
 			text-align:center;
 		}
 		.left .list input:focus{
@@ -182,6 +182,36 @@
 			50%{opacity: 1;}
 			100%{opacity: 0;}
 		}
+		.wrap2{
+			position:absolute;
+			top:36px;
+			bottom:25px;
+			left:0;
+			right:0;
+			overflow: hidden;
+		}
+		.wrap3{
+			position:absolute;
+			top:114px;
+			bottom:25px;
+			left:0;
+			right:0;
+			overflow: hidden;
+		}
+		.list h3{
+			margin:5px;
+			font-size: 18px;
+			/*text-align:center;*/
+			color:rgb(140,140,140);
+			padding:0 30px;
+		}
+		.list p.con{
+			margin:5px;
+			font-size: 12px;
+			flex: auto;
+			text-align:center;
+			color:rgb(140,140,140);
+		}
     </style>
 </head>
 <body ng-app="myapp">
@@ -191,20 +221,20 @@
             	<div class="main">
 					<!--搜索-->
 	                <div class="search-group bline">
-                        <input type="text" class="form-control" placeholder="请搜索">
+                        <input type="text" class="form-control" placeholder="请搜索" ng-model='search' ng-change="searching()">
                         <span class="glyphicon glyphicon-search"></span>
 	                </div>
 					<!--已完成-->
 
-	                <div class="done bline">
-	                   <span class="glyphicon glyphicon-ok"></span> 已完成 <span>10</span>
+	                <div class="done bline" ng-click="showfinish()">
+	                   <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{finish.length}}</span>
 	                </div>
 
 	                <!--计划列表-->
 					<div class="wrap" id="wrapper">
 						<div class="listbox">
 
-			                <div class="list bline" ng-repeat="item in data track by item.id">
+			                <div class="list bline" ng-repeat="item in data | filter:{name:search} track by item.id ">
 			                    <input type="text" ng-model="item.name" ng-focus="setid(item.id)" ng-blur="save()">
 			                    <span ng-click='del(item.id)' class="glyphicon glyphicon-remove-circle"></span>
 			                </div>
@@ -221,7 +251,8 @@
             	</div>
             </div>
             <div class="col-xs-8 col-sm-9 right">
-      		    <div class="main">
+            	<!-- 计划任务 -->
+      		    <div class="main" ng-show='display'>
 					<div class="header">
 	                    <h3>
 	                        {{currentitem(currentid).name}}
@@ -232,15 +263,39 @@
 	                </div>
 
 	                <!-- 列表 -->
-	                <div class="list" ng-repeat='v in currentitem(currentid).son'>
-	                    <div class="select">
-							<span class="glyphicon glyphicon-hourglass"></span>
-	                    </div>
-	                    <input type="text" ng-model="v.con">
+	                <div class="wrap2" id="wrapper2">
+						<div class="listboxr">
+			                <div class="list" ng-repeat='v in currentitem(currentid).son'>
+			                    <div class="select" ng-click="finished(currentitem(currentid).id,v.id)">
+									<span class="glyphicon glyphicon-hourglass"></span>
+			                    </div>
+			                    <input type="text" ng-model="v.con" ng-blur='save()'>
 
-	                    <!-- <button class="btn btn-default btn-xs removeCon" type="submit">删除</button> -->
-	                    <p title="橡皮擦"><img src="remember/xp2.png" alt=""></p>
+			                    <!-- <button class="btn btn-default btn-xs removeCon" type="submit">删除</button> -->
+			                    <p title="橡皮擦" ng-click="delcon(currentitem(currentid).id,v.id)"><img src="remember/xp2.png" alt=""></p>
+			                </div>
+			            </div>
+			        </div>
+            	</div>
+				<!-- 已完成展示 -->
+				<div class="main" ng-show='!display'>
+					<div class="header">
+	                    <h3>
+	                        已完成计划任务{{finish.length}}项
+	                        <img src="remember/jz3_06.png" style="height:100px" alt="">
+	                    </h3>
 	                </div>
+
+	                <!-- 列表 -->
+	                <div class="wrap3" id="wrapper3">
+						<div class="listboxr">
+			                <div class="list" ng-repeat='x in finish'>
+			                    <h3>{{x.title}}</h3>
+			                    <p class="con" >{{x.con[0]['con']}}</p>
+			                    <p title="删除" ng-click="delfinish(x.id)"><img src="remember/hs.png" alt=""></p>
+			                </div>
+			            </div>
+			        </div>
             	</div>
             </div>
         </div>

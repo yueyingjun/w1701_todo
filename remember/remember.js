@@ -3,7 +3,10 @@
 angular.module("myapp",[])
     .controller("todo",["$scope",function($scope){
         $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
-        // console.log($scope.data)
+        $scope.finish=localStorage.finish?JSON.parse(localStorage.finish):[];
+        // console.log($scope.data);
+        // console.log($scope.finish);
+        // console.log($scope.finish.length);
         /*添加列表*/
         $scope.add=function(){
             var obj={};
@@ -13,6 +16,7 @@ angular.module("myapp",[])
             $scope.data.push(obj);
             localStorage.message=JSON.stringify($scope.data);
             $scope.currentid=obj.id;
+            $scope.display=1;
         }
 
         function maxid(arr){
@@ -33,9 +37,10 @@ angular.module("myapp",[])
             }
             return id;
         }
-        $scope.currentid=$scope.data[0].id;
+        $scope.currentid=$scope.data[0]?$scope.data[0].id:0;
         $scope.setid=function(currentid){
             $scope.currentid=currentid;
+            $scope.display=1;
         }
         $scope.currentitem=function(currentid){
             let current=[];
@@ -70,6 +75,11 @@ angular.module("myapp",[])
         }
         // 右边
         $scope.addcon=function(id){
+            if(id){
+
+            }else{
+                return;
+            }
             let index;
             $.each($scope.data,function(k,v){
                 if(v.id==id){
@@ -85,7 +95,87 @@ angular.module("myapp",[])
             localStorage.message=JSON.stringify($scope.data);
             // $scope.currentid=obj.id;
         }
+        $scope.delcon=function(pid,id){
+            let index;
+            $.each($scope.data,function(k,v){
+                if(v.id==pid){
+                    index=k;
+                    // break;
+                }
+            })
+            
+            // $scope.data[index].son
+            if(confirm('是否删除该信息？？？')){
+                // alert(1)
+                for(let i=0;i<$scope.data[index].son.length;i++){
+                    if($scope.data[index].son[i].id==id){
+                        $scope.data[index].son.splice(i,1);
+                        
+                    }
+                }
 
+            localStorage.message=JSON.stringify($scope.data);
+            }else{
+                // alert(2)
+
+            }
+        }
+        // 完成任务
+        $scope.finished=function(pid,id){
+        console.log($scope.finish);
+
+            let finishobj={};
+            finishobj.id=maxid($scope.finish);
+            finishobj.title=[];
+            finishobj.con=[];
+            let index;
+            $.each($scope.data,function(k,v){
+                if(v.id==pid){
+                    index=k;
+                    finishobj.title=v.name;
+                    // break;
+                }
+            })
+            // $scope.data[index].son
+            for(let i=0;i<$scope.data[index].son.length;i++){
+                if($scope.data[index].son[i].id==id){
+                    finishobj.con=$scope.data[index].son.splice(i,1);
+                    
+                }
+            }
+            // 存档
+            $scope.finish.push(finishobj);
+            localStorage.finish=JSON.stringify($scope.finish);
+            localStorage.message=JSON.stringify($scope.data);
+           
+        }
+        // 已完成展示
+        $scope.display=0;
+        $scope.showfinish=function(){
+            $scope.display=!$scope.display;
+        }
+        $scope.delfinish=function(id){
+            if(confirm('是否删除该纪录？？？')){
+                // alert(1)
+                for(let i=0;i<$scope.finish.length;i++){
+                    if($scope.finish[i].id==id){
+                        $scope.finish.splice(i,1);
+                        
+                    }
+                }
+
+            localStorage.finish=JSON.stringify($scope.finish);
+            }else{
+                // alert(2)
+
+            }
+        }
+
+        //查询
+        $scope.search='';
+        $scope.searching=function(){
+            alert('searching')
+        }
 
 }])
 $(function(){
@@ -98,4 +188,22 @@ var myScroll;
         click:true
 
     });  
+var myScroll2;
+    myScroll2 = new IScroll('#wrapper2', { 
+        // mousewheel:true,
+        scrollbars:true,
+        fadeScrollbars:true, 
+        shrinkScrollbars:'scale',
+        click:true
+
+    }); 
+var myScroll3;
+    myScroll3 = new IScroll('#wrapper3', { 
+        // mousewheel:true,
+        scrollbars:true,
+        fadeScrollbars:true, 
+        shrinkScrollbars:'scale',
+        click:true
+
+    }); 
 })
