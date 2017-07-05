@@ -14,11 +14,31 @@
     .container-fluid, .container-fluid .row{
         height:100%;
     }
+    .container-fluid .top{
+        height: 40px;
+
+        background: #eee;
+        border-bottom: 1px solid #ccc;
+    }
+    .container-fluid .top h3{
+        font-size: 20px;
+        color: #333;
+        height: 40px;
+        margin: 0;
+        line-height: 40px;
+    }
     .container-fluid .left,.container-fluid .right{
         height:100%;position: relative;
     }
     .container-fluid .left{
         background: #eee;
+    }
+    .container-fluid .right{
+        padding: 0;
+        background: #FFEB9C;
+    }
+    .container-fluid .right div{
+        padding:0 15px;
     }
     .search{
         margin-top: 10px;
@@ -29,7 +49,6 @@
     input{
         border:none;
         background: rgba(0,0,0,0);
-
     }
     input:focus{
         outline: none;
@@ -44,19 +63,12 @@
         right:10px;
         top:0;
     }
-    /*.remove{*/
-        /*opacity: 0;*/
-        /*transition: opacity .5s ease;*/
-    /*}*/
-    /*.list:hover .remove{*/
-        /*opacity: 1;*/
-    /*}*/
-
     .add{
         cursor: pointer;
         margin-top: 10px;
     }
     .header{
+        background: #998D5D;
         height:50px;border-bottom: 1px solid #000;display: flex;
         justify-content: space-between;
 
@@ -67,19 +79,15 @@
     .listcon{
         border-bottom: 1px solid #ccc;
         position: relative;
-        padding:5px 0;
-    }
-    .listcon input{
-        margin-left:30px;
+        margin-top: 10px;
     }
     .listcon .select{
-        width:10px;height:10px;
-        border:1px solid #000;
-        border-radius: 50%;
-        position: absolute;
-        left:0;top:10px;
+        margin-left:5px;
     }
+    .listcon input:nth-child(2){
+        margin-left:5px;
 
+    }
     .listcon .removeCon{
         position: absolute;
         right:0;padding:0 5px;
@@ -88,10 +96,10 @@
 <body ng-app="myapp">
 <div class="container-fluid" ng-controller="todo">
     <div class="row">
+        <div class="col-xs-12 top">
+            <h3>备忘录</h3>
+        </div>
         <div class="col-xs-4 col-sm-3 left">
-            <!--
-             搜索
-            -->
             <form class="form-inline search">
                 <div class="form-group">
                     <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
@@ -111,7 +119,6 @@
             <div class="done">
                 <span class="glyphicon glyphicon-ok"></span> 已完成 <span>10</span>
             </div>
-
             <!--计划列表-->
 
             <div ng-repeat="item in data track by item.id"  class="list" ng-click="fn($index)">
@@ -120,11 +127,10 @@
             </div>
             <!--添加按钮-->
 
-
         </div>
         <div class="col-xs-8 col-sm-9 right" ng-repeat="item in data track by item.id" ng-show="now==$index">
             <!--右边的头部-->
-            <div class="header" >
+            <div class="header">
                 <h3>
                     {{item.name}}
                 </h3>
@@ -134,9 +140,7 @@
             <!--右边的内容-->
 
             <div class="listcon"  ng-repeat="list in item.son track by list.sid">
-                <!--<div class="select">-->
-                    <input type="checkbox" class="select">
-                <!--</div>-->
+                <input type="checkbox" class="select">
                 <input type="text" ng-model="list.lon" ng-keyup="updateCon(item.id,list.sid)">
                 <button class="btn btn-default removeCon" type="submit">删除</button>
             </div>
