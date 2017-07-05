@@ -97,9 +97,9 @@ angular.module("box",[])
             localStorage.message_do=JSON.stringify($scope.do_arr);
             localStorage.message=JSON.stringify($scope.arr);
         }
-        $scope.del_do=function (doid) {
+        $scope.del_do=function (id) {
             $scope.do_arr.forEach(function (value,index) {
-                if(doid==value.doid){
+                if(id==value.id){
                     $scope.do_arr.splice(index,1);
                 }
             })

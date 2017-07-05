@@ -30,7 +30,7 @@
                    <li ng-repeat="item in do_arr track by item.id " style="list-style: none">
                        <span class="glyphicon glyphicon-ok"></span>
                        {{item.list}}------{{item.value}}
-                       <span class="glyphicon glyphicon-trash" ng-click="del_do(item.doid)">
+                       <span class="glyphicon glyphicon-trash" ng-click="del_do(item.id)">
                        </span>
                    </li>
                 </ul>
