@@ -45,7 +45,5 @@ angular.module("myapp",[]).controller("jishi",function($scope){
         return tempid;
     }
 
-
-
-    })
+})
 

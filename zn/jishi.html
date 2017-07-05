@@ -21,34 +21,27 @@
                 <span class="glyphicon glyphicon-search"></span>
             </div>
 
-            <!--已完成-->
             <div class="done">
                 <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{listnum}}</span>
             </div>
 
-            <!--计划列表-->
             <div class="list" ng-repeat="item in data track by item.id">
                 <input type="text" ng-model="item.name" ng-change="change(item.id)" ng-click="addid(item.id)">
                 <button class="btn btn-default remove" type="submit" ng-click="dellist(item.id)">删除</button>
             </div>
 
-
-            <!--添加按钮-->
             <div class="add" ng-click="add()">
                 <span class="glyphicon glyphicon-plus"></span> 添加计划
             </div>
 
         </div>
         <div class="col-xs-8 col-sm-9 right">
-            <!--右边的头部-->
             <div class="header" ng-repeat="item in data | filter:{id:selectid}">
                 <h3>
                     {{item.son[0]}}
                 </h3>
                 <span class="addcon glyphicon glyphicon-plus"></span>
             </div>
-
-            <!--右边的内容-->
 
             <div class="listcon"  ng-repeat="item in data.son | filter:{id:selectid}">
                 <div class="select">
