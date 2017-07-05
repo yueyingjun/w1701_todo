@@ -20,6 +20,7 @@ angular.module("qqapp",[])
             localStorage.mess=JSON.stringify($scope.data)
         }
         $scope.$watch('search',function () {
+            $scope.flag=true;
             //arr是已经筛选出来的
             var arr=$filter("filter")($scope.data,{title:$scope.search});
             console.log(arr);
