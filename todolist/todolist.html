@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="angular.min.js"></script>
+    <link rel="stylesheet" href="bootstrap.css"/>
+    <style>
+        html,body{
+            width:100%;
+            height: 100%;
+        }
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        ul,li{
+            list-style: none;
+        }
+        .container-fluid,.row{
+            height: 100%;
+        }
+        .left{
+            border-right:1px solid #e7c3c3;
+        }
+        .left,.right{
+            height: 100%;
+        }
+        .input-group{
+            width: 100%;
+            padding-top: 10px;
+            margin: 0 auto;
+        }
+        .rank-line{
+            width:100%;
+            padding: 10px 0 10px 10px;
+            font-size: 16px;
+            background-color: #FFEDE7;
+            color: #F76333;
+            margin:20px 0;
+            line-height: 30px;
+            position: relative;
+        }
+        .rank-line i,.list i{
+            float: right;
+            color: #819298;
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .list{
+            height: 40px;
+            line-height: 40px;
+            cursor: pointer;
+            padding-left: 10px;
+        }
+        .ul-task .list:hover{
+            background:#e7e7e7;
+        }
+        input{
+            border:none;
+            background: rgba(0,0,0,0);
+        }
+        input:focus{
+            outline: none;
+        }
+        .ul-title{
+            margin-top: 20px;
+        }
+        .ul-title .list{
+            height: 50px;
+            line-height: 50px;
+            border-bottom: 1px solid #e7e7e7;
+            font-size: 20px;
+        }
+        .checkboxFive {
+            width: 25px;
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .checkboxFive label {
+            cursor: pointer;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            top: 0;
+            left: 0;
+            background: #eee;
+            border:1px solid #ddd;
+        }
+        .checkboxFive label:after {
+            opacity: 0.2;
+            content: '';
+            position: absolute;
+            width: 9px;
+            height: 5px;
+            background: transparent;
+            top: 6px;
+            left: 7px;
+            border: 3px solid #333;
+            border-top: none;
+            border-right: none;
+            transform: rotate(-45deg);
+        }
+        .checkboxFive label:hover::after {
+            opacity: 0.5;
+        }
+        .checkboxFive input[type=checkbox]:checked + label:after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body ng-app="myapp">
+<div class="container-fluid" ng-controller="ctrl">
+    <div  class="row">
+        <div class="col-xs-4 col-sm-3 left">
+            <div class="input-group">
+                <input type="text" id="keyword" class="form-control" placeholder="请输入关键字"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-default">
+                        <span>搜索</span>
+                    </button>
+                </span>
+            </div>
+            <div class="rank-line">
+                <span>任务</span>
+                <i ng-click="add()">+</i>
+            </div>
+            <ul class="ul-task">
+                <li class="list" ng-repeat="item in todolist track by item.id">
+                    <input type="text" ng-model="item.name">
+                    <i ng-click="deleteItem()">×</i>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-8 col-sm-9 right">
+            <ul class="ul-title"  ng-repeat="item in todolist track by item.id">
+                <li class="list">
+                    <input type="text" ng-model="item.name">
+                    <i>+</i>
+                </li>
+                <ul class="list-group" style="padding-top:12px;">
+                    <li class="list-group-item">
+                        <div class="checkboxFive">
+                            <input type="checkbox" value="1" id="checkboxFiveInput" name="" />
+                            <label for="checkboxFiveInput"></label>
+                        </div>
+                        <input type="text">
+                    </li>
+                </ul>
+                <button type="button" class="btn btn-info">保存</button>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    angular.module("myapp",[])
+        .controller("ctrl",["$scope", function ($scope) {
+            $scope.todolist=localStorage.message?JSON.parse(localStorage.message):[];
+            $scope.add=function(){
+                var obj={};
+                obj.id=maxid();
+                obj.name="新建任务";
+                obj.son=[];
+                $scope.todolist.push(obj);
+                localStorage.message=JSON.stringify($scope.todolist);
+            };
+            $scope.deleteItem = function(todo){
+                    $scope.todolist.splice($scope.todolist.indexOf(todo), 1);
+                    localStorage.message=JSON.stringify($scope.todolist);
+            };
+            function maxid(){
+                var id=0;
+                var tempid=0;
+                if($scope.todolist.length==0){
+                    id=1;
+                }else{
+                    for(var i=0;i<$scope.todolist.length;i++){
+                        if($scope.todolist[i].id>tempid){
+                            tempid=$scope.todolist[i].id
+                        }
+                    }
+                    id=tempid+1;
+                }
+                return id;
+            }
+        }])
+</script>
+</body>
+</html>
