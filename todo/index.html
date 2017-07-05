@@ -89,21 +89,22 @@
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-search"></span>
                         </div>
-                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索">
+                        <input ng-model="search" type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索">
                     </div>
                 </div>
             </form>
 
             <!--已完成-->
 
-            <div class="done">
-                <span class="glyphicon glyphicon-ok"></span> 已完成 <span>10</span>
+            <div class="done" ng-click="zhuanhuan()">
+                <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{done.length}}</span>
             </div>
 
             <!--计划列表-->
 
-            <div class="list" ng-repeat="item in data track by item.id">
-                <input type="text" ng-model="item.name" ng-focus="foc(item.id,item.name,item.son)" ng-keyup="keyup(item.id,item.name)">
+            <div class="list" ng-repeat="item in temp track by item.id">
+                <!--<input type="text" ng-model="item.name" ng-focus="foc(item.id,item.name,item.son)" ng-keyup="keyup(item.id,item.name)">-->
+                <input type="text" ng-model="item.name" ng-focus="foc(item.id,item.name,item.son)" ng-blur="blur()">
                 <!--<input type="text" ng-model="item.name">-->
                 <button class="btn btn-default remove" type="submit" ng-click="del(item.id)">删除</button>
             </div>
@@ -111,37 +112,43 @@
 
             <!--添加按钮-->
 
-
             <div class="add" ng-click="add()">
                 <span class="glyphicon glyphicon-plus"></span> 添加计划
             </div>
 
-
-
-
-
         </div>
-        <div class="col-xs-8 col-sm-9 right">
+        <div class="col-xs-8 col-sm-9 right" ng-show="show==true">
             <!--右边的头部-->
             <div class="header">
                 <h3>
-                    {{uping}}
+                    {{current.name}}
                 </h3>
-                <span ng-model="titleid" class="addcon glyphicon glyphicon-plus" ng-click="addcon()">
+                <span class="addcon glyphicon glyphicon-plus" ng-click="addOpt()">
 
                     </span>
             </div>
 
             <!--右边的内容-->
             <!--<div ng-repeat="item in data[titleid]">-->
-            <div class="listcon" ng-repeat="item1 in con">
-                <div class="select">
-                </div>
-                <input type="text" ng-model="item1.name" ng-keyup="listkeyup(item1.id,item1.name)">
-
-                <button class="btn btn-default removeCon" type="submit" ng-click="del1(item1.id)">删除</button>
+            <div class="listcon" ng-repeat="item in current.son track by item.id">
+                <div class="select" ng-click="success(item.id)"></div>
+                <input type="text" ng-model="item.name" ng-blur="blur()">
+                <button class="btn btn-default removeCon" type="submit" ng-click="del1(item.id)">删除</button>
             </div>
             <!--</div>-->
+        </div>
+        <div class="col-xs-8 col-sm-9 right" ng-show="show==false">
+            <!--右边的头部-->
+            <div class="header">
+                <h3>已完成事项</h3>
+            </div>
+
+            <!--右边的内容-->
+            <div class="listcon" ng-repeat="item in done track by item.id">
+                <input type="text" ng-model="item.name">
+                <input type="text" ng-model="item.opt">
+                <button class="btn btn-default removeCon" type="submit" ng-click="delDone(item.id)">删除</button>
+            </div>
         </div>
     </div>
 </div>
