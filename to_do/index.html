@@ -6,32 +6,67 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script src="../node_modules/angular/angular.min.js"></script>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="node_modules/angular/angular.min.js"></script>
     <script src="to_do.js"></script>
     <style>
         html,body{
             width:100%;height:100%;
+            background: #f0efea;
+            margin: 0;
+            padding: 0;
+            font-family: 微软雅黑;
         }
-        .container-fluid, .container-fluid .row{
+        .title{
+            width: 100%;
+            /*background: red;*/
+        }
+        .title h1{
+            text-align: center;
+            line-height: 100px;
+            font-size: 50px;
+            font-family: 华文彩云;
+            margin: 0;
+            padding: 0;
+            letter-spacing: 30px;
+        }
+        .container-fluid{
+            width: 100%;
             height:100%;
+            overflow: hidden;
+        }
+        .container-fluid .row{
+              height:100%;
+            overflow: hidden;
         }
         .container-fluid .left,.container-fluid .right{
-            height:100%;position: relative;
+            height:100%;
+            /*position: relative;*/
         }
         .container-fluid .left{
-            background: #eee;
+            background: #cfd4ce;
+        }
+        .container-fluid .right{
+            /*background: #00b7ee;*/
+            background-image: url(4.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
         }
         .search{
             margin-top: 10px;
         }
         .done{
             margin-top: 10px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 23px;
         }
         input{
-            border:none;
+            border: none;
             background: rgba(0,0,0,0);
-
+            height: 35px;
+            font-size: 18px;
+            line-height: 35px;
         }
         input:focus{
             outline: none;
@@ -39,6 +74,9 @@
         .remove{
             opacity: 0;
             transition: opacity .5s ease;
+            float: right;
+            position: absolute;
+            right: 10px;
         }
         .list:hover .remove{
             opacity: 1;
@@ -46,13 +84,21 @@
 
         .add{
             position: absolute;
-
-            bottom: 10px;cursor: pointer;
+            top: 62px;
+            right: 10px;
+            cursor: pointer;
+            width: 90px;
+            height: 30px;
+            border: 1px solid#fafafb;
+            box-shadow: 0 0 2px 2px #b5a2a2;
+            text-align: center;
+            line-height: 30px;
         }
         .header{
             height:50px;border-bottom: 1px solid #000;display: flex;
             justify-content: space-between;
-
+            background: rgba(0,0,0,.5);
+            color: #fff;
         }
         .header .addcon{
             line-height: 50px;
@@ -61,6 +107,8 @@
             border-bottom: 1px solid #ccc;
             position: relative;
             padding:5px 0;
+            background: rgba(0,0,0,.5);
+            color: #fff;
         }
         .listcon input{
          margin-left:30px;
@@ -81,11 +129,12 @@
 </head>
 <body ng-app="myapp">
    <div class="container-fluid" ng-controller="todo">
+       <div class="title">
+           <h1>待 办 事 项</h1>
+       </div>
         <div class="row">
             <div class="col-xs-4 col-sm-3 left">
-                <!--
-                 搜索
-                -->
+                <!-- 搜索 -->
                 <form class="form-inline search">
                     <div class="form-group">
                         <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
@@ -107,10 +156,9 @@
                 <!--计划列表-->
 
                 <div class="list" ng-repeat="item in data track by item.id">
-                    <input type="text" ng-model="item.name">
-                    <button class="btn btn-default remove" type="submit">删除</button>
+                    <input type="text" ng-model="item.name"  ng-blur="change()" clss="name">
+                    <button class="btn btn-danger remove" type="submit" ng-click="del(item.id)">删除</button>
                 </div>
-
 
                 <!--添加按钮-->
 
@@ -126,11 +174,11 @@
             </div>
             <div class="col-xs-8 col-sm-9 right">
                 <!--右边的头部-->
-                <div class="header">
-                    <h3>
-                        计划列表的标题
+                <div class="header" ng-repeat="item in data">
+                    <h3 style="margin-left: 15px">
+                        {{item.name}}
                     </h3>
-                    <span class="addcon glyphicon glyphicon-plus">
+                    <span class="addcon glyphicon glyphicon-plus" style="margin-right: 15px">
 
                     </span>
                 </div>
