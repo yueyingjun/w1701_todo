@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>记事本</title>
+    <script src="../jquery.js"></script>
+    <script src="../angular.min.js"></script>
+    <link rel="stylesheet" href="../bootstrap.min.css">
+    <link rel="stylesheet" href="note.css">
+    <script src="../bootstrap.min.js"></script>
+</head>
+<body ng-app="myapp">
+    <header>
+        <h3>The Notepad</h3>
+    </header>
+    <main ng-controller="ctrl">
+        <div class="left">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for..." ng-model="search">
+                <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+                </span>
+            </div>
+            <div class="alert alert-success" ng-click="view=!view"  role="alert">已经完成的便签<span>{{son.length}}</span></div>
+            <div class='mot' ng-repeat="item in data | filter:{name:search}  track by item.id  ">
+                <input type="text"  ng-model="item.name" ng-focus="focus(item.id)" ng-blur="loseFocus()">
+                <button class="btn btn-danger btn-xs" type="submit" ng-click="del(item.id)">删除</button>
+            </div>
+            <button class="btn btn-primary btn-xs add" ng-click='add()' type="button">新建便签</button>
+        </div>
+        <div class="right">
+            <!--正在显示的便签，默认显示-->
+            <div class="header" ng-show="view">
+                <h1>{{current.name}}</h1>
+                <span class="addcon glyphicon glyphicon-plus" ng-click="addSon()"></span>
+            </div>
+            <div class="listcon" ng-repeat="item in current.son track by item.id" ng-show="view">
+                <input class="btn btn-default btn-xs" type="button" value="点击完成" ng-click="done(item.id)">
+                <input type="text" ng-model="item.name" ng-blur="loseFocus()">
+                <button class="btn btn-default removeCon" type="submit" ng-click="delSon(item.id)">删除</button>
+            </div>
+            <!--已经完成的便签，默认隐藏-->
+            <div class="header" ng-hide="view">
+                <h1>已经完成的便签</h1>
+                <span class="addcon glyphicon glyphicon-plus" ng-click="addSon()"></span>
+            </div>
+            <div class="done" ng-repeat="item in son " ng-hide="view">
+                <input type="text" ng-model="item[0].name">
+                <button class="btn btn-default removeCon" type="submit" ng-click="delSon(item[0].id)">删除</button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+<script>
+    angular.module('myapp',[]).controller('ctrl',["$scope",function($scope){
+        $scope.view=true;
+        $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
+        /*添加列表*/
+        $scope.currentIndex=$scope.data.length-1;
+        $scope.current=$scope.data[$scope.currentIndex];
+        $scope.add=function(){
+            let obj={};
+            obj.id=maxid();
+            obj.name="新建便签"+obj.id;
+            obj.son=[];
+            $scope.data.push(obj);
+            $scope.currentIndex=getId($scope.data,obj.id);
+            $scope.current=$scope.data[$scope.currentIndex];
+            localStorage.message=JSON.stringify($scope.data);
+        };
+        //新建便签的子便签
+        $scope.addSon=function(){
+            let obj={};
+            obj.id=maxid($scope.current.son);
+            obj.name='新建便签'+obj.id;
+            $scope.current.son.push(obj);
+            localStorage.message=JSON.stringify($scope.data);
+        };
+        //删除子便签
+        $scope.delSon=function(id){
+            cid=getId($scope.current.son,id);
+            $scope.current.son.splice(cid,1);
+            localStorage.message=JSON.stringify($scope.data);
+        }
+
+        //点击完成便签
+        $scope.son=localStorage.sonData?JSON.parse(localStorage.sonData):[];
+        $scope.done=function(id){
+            cid=getId($scope.current.son,id);
+            crr=$scope.current.son.splice(cid,1);
+
+            $scope.son.push(crr);
+            localStorage.message=JSON.stringify($scope.data);
+            localStorage.sonData=JSON.stringify($scope.son);
+        }
+
+
+        //删除便签
+        $scope.del=function(id){
+            cid=getId($scope.data,id);
+            $scope.data.splice(cid,1);
+            localStorage.message=JSON.stringify($scope.data);
+            if(cid>$scope.data.length-1){
+                cid=0;
+            }
+            $scope.currentIndex=cid;
+            $scope.current=$scope.data[$scope.currentIndex];
+        }
+        //便签获取焦点时
+        $scope.focus=function(id){
+            cid=getId($scope.data,id);
+            $scope.currentIndex=cid;
+            $scope.current=$scope.data[$scope.currentIndex];
+
+        };
+        //便签失去焦点
+        $scope.loseFocus=function(){
+            localStorage.message=JSON.stringify($scope.data);
+        };
+
+        //点击新建便签获取id
+        function getId(arr,id){
+            for(let i=0;i<arr.length;i++){
+                if(arr[i].id==id){
+                    return i;
+                }
+            }
+        }
+        //获取最大的id,唯一的id
+        function maxid(brr){
+            let arr=brr||$scope.data;
+            let id=0;
+            let tempid=0;
+            if(arr.length==0){
+                id=1;
+            }else{
+                for(let i=0;i<arr.length;i++){
+                    if(arr[i].id>tempid){
+                        tempid=arr[i].id
+                    }
+                }
+                id=tempid+1;
+            }
+            return id;
+        }
+    }])
+</script>
