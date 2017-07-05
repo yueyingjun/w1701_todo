@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/jishi.css">
     <script src="js/angular.min.js"></script>
+    <script src="js/iscroll.js"></script>
     <script src="js/jishi.js"></script>
 </head>
 <body ng-app="myapp">
@@ -17,42 +18,76 @@
         <div class="col-xs-4 col-sm-3 left">
 
             <div class="searchbox">
-                <input type="text" class="search" placeholder="请搜索">
+                <input type="text" class="search" placeholder="请搜索" ng-model="search">
                 <span class="glyphicon glyphicon-search"></span>
             </div>
 
-            <div class="done">
-                <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{listnum}}</span>
+            <div class="done" ng-click="changedone()">
+                <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{done.length}}</span>
             </div>
-
-            <div class="list" ng-repeat="item in data track by item.id">
-                <input type="text" ng-model="item.name" ng-change="change(item.id)" ng-click="addid(item.id)">
-                <button class="btn btn-default remove" type="submit" ng-click="dellist(item.id)">删除</button>
-            </div>
+			<div id="wrapper">
+				<div class="listbox">
+					<div class="list" ng-repeat="item in data | filter:{name:search} track by item.id">
+		                <input type="text" ng-model="item.name" ng-blur="blur()" ng-focus="focus(item.id)">
+		                <button class="btn btn-default remove" type="submit" ng-click="dellist(item.id)">删除</button>
+		            </div>
+				</div>
+			</div>
+            
 
             <div class="add" ng-click="add()">
                 <span class="glyphicon glyphicon-plus"></span> 添加计划
             </div>
 
         </div>
-        <div class="col-xs-8 col-sm-9 right">
-            <div class="header" ng-repeat="item in data | filter:{id:selectid}">
+        <div class="col-xs-8 col-sm-9 right" ng-show="show==true">
+            <div class="header">
                 <h3>
-                    {{item.son[0]}}
+                    	已完成列表
                 </h3>
-                <span class="addcon glyphicon glyphicon-plus"></span>
+            </div>
+            <div class="listcon" ng-repeat="item in done track by item.id">
+                <span>
+                	{{item.time | date:"yyyy-MM-dd HH:mm:ss"}}
+                </span>
+                <span>
+                	{{item.name}}
+                </span>
+                <span>
+                	{{item.con}}
+                </span>
+                <button class="btn btn-default removeCon" type="submit" ng-click="deldone(item.id)">删除</button>
+            </div>
+        </div>
+        <div class="col-xs-8 col-sm-9 right" ng-show="show==false">
+            <div class="header">
+                <h3>
+                    {{select.name}}
+                </h3>
+                <span class="time">
+                	{{select.time | date:"yyyy-MM-dd HH:mm:ss" }}
+                </span>
+                <span class="addcon glyphicon glyphicon-plus" ng-click="addcon()"></span>
             </div>
 
-            <div class="listcon"  ng-repeat="item in data.son | filter:{id:selectid}">
-                <div class="select">
-
+            <div class="listcon" ng-repeat="item in select.son track by item.id">
+                <div class="select" ng-click="selectcon(item.id)">
                 </div>
-                <input type="text">
-
-                <button class="btn btn-default removeCon" type="submit">删除</button>
+                <input type="text"ng-model="item.name" ng-blur="blur()">
+                <button class="btn btn-default removeCon" type="submit" ng-click="delcon(item.id)">删除</button>
             </div>
         </div>
     </div>
 </div>
 </body>
+<script>
+	var myScroll = new IScroll('#wrapper', { 
+		mouseWheel:true,     //鼠标能否滚动
+		scrollbars:true,      //是否有滚动条
+		bounce:true,    //是否反弹，默认为true
+		click:true,   //是否可以点击。默认为false
+		fadeScrollbars:true,
+		interactiveScrollbars:true,	
+	});
+</script>
 </html>

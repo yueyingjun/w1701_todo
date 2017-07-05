@@ -46,6 +46,18 @@ html,body{
 .done > span:nth-child(2){
 	color:cornflowerblue;
 }
+#wrapper{
+	position:absolute;
+	left:0;
+	right:0;
+	top:80px;
+	bottom:30px;
+	overflow: hidden;
+}
+.listbox{
+	width:100%;
+	height:auto;
+}
 .list{
 	width:100%;
 	padding:10px;
@@ -88,8 +100,16 @@ input:focus{
 
 }
 .header > h3{
+	padding:0;
+	margin:0;
+	line-height:50px;
 	color:royalblue;
 	font-weight: normal;
+}
+.header .time{
+	line-height:50px;
+	color:#333;
+	font-size:12px;
 }
 .header .addcon{
     line-height: 50px;
