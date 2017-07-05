@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>我的笔记本</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/md.css"/>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/md.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/iscroll.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body ng-app="myapp">
+		<div class="container" ng-controller="md">
+			<div class="row">
+				<section class="_left col-lg-3 col-md-4 col-sm-5 col-xs-5">
+					<!--搜索框-->
+					<div class="_search">
+						<div class="input-group">
+						    <input type="text" ng-model="search" class="form-control input-lg"><span class="input-group-addon btn btn-primary">搜索</span>
+						</div>
+					</div>
+					<div class="_wrapper">
+						<div class="_iscroller">
+							<ul class="_lists">
+								<li ng-repeat="$data in data |filter:{name:search}">
+									<input type="text" ng-model="$data.name" ng-focus="focus($data.id)" ng-blur="blur()" />
+									<button type="button" ng-click="del($index)" class="btn btn-danger">删除</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!--新笔记-->
+					<div class="_add">
+						<button ng-click="add()" type="button" class="btn btn-default glyphicon glyphicon-plus"></button>
+					</div>
+				</section>
+				<section class="_right col-lg-9 col-md-8 col-sm-7 col-xs-7">
+					<div class="_title">
+						<input type="text" ng-model="current.name" ng-blur="blur()"  />
+					</div>
+					<div class="_con">
+						<textarea ng-model="current.con" ng-blur="blur()" ></textarea>
+					</div>
+				</section>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var myscroll;
+		function loaded(){
+			setTimeout(function(){
+				myscroll=new IScroll("._wrapper");
+			},100);
+		}
+		window.addEventListener("load",loaded,false);
+	</script>
+</html>
