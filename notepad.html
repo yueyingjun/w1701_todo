@@ -6,8 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="bootstrap.css">
-    <script src="angular.min.js"></script>
+    <link rel="stylesheet" href="../bootstrap.css">
+    <script src="../angular.min.js"></script>
     <script src="notepad.js"></script>
 </head>
 <style>
@@ -85,6 +85,17 @@
         font-size: 28px;
         font-weight: 600;
         color: #888;
+        position: relative;
+    }
+    h2 span{
+        width: 32px;
+        height: 32px;
+        background: url(tu.png)no-repeat;
+        background-size: cover;
+        cursor: pointer;
+        position: absolute;
+        right:0;
+        top:0;
     }
     li{
         width: 100%;
@@ -126,14 +137,28 @@
     .select{
         position: relative;
     }
-    .dianji{
-        position: absolute;
-        width: 15px;
-        height: 100%;
+    .select input{
+        padding-left: 20px;
+    }
+    .select:hover .removeson{
+        opacity: 1;
+    }
+    .removeson{
         opacity: 0;
         transition: opacity .5s ease;
     }
-    .select:hover .dianji{
+    .yuan{
+        width: 15px;
+        height: 15px;
+        opacity: 0;
+        transition: opacity .5s ease;
+        position: absolute;
+        top: 50%;
+        margin-top: -8px;
+        border: 2px solid #ccc;
+        border-radius: 50%;
+    }
+    .select:hover .yuan{
         opacity: 1;
     }
 </style>
@@ -149,13 +174,15 @@
                                 <div class="input-group-addon">搜索</div>
                                 <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索你需要的" ng-model="search">
                             </div>
-                            <p style="margin: 0">已经完成 <span>0</span> 个任务</p>
+                            <div class="es" ng-click="com()">
+                                <p style="margin: 0;cursor: pointer;">已经完成 <span>{{complete.length}}</span> 个任务</p>
+                            </div>
                         </div>
                     </form>
                     <!--列表-->
-                    <ul ng-repeat=" item in data | filter:search">
-                        <li class="list" ng-repeat="item in data track by item.id ">
-                            <input type="text" ng-model="item.name">
+                    <ul>
+                        <li class="list" ng-repeat="item in data | filter:{name:search} track by item.id">
+                            <input type="text" ng-model="item.name" ng-blur="blur()" ng-change="change()" ng-focus="active(item.id)"  ng-class="item.id==currentList.id?'active':''"  ng-keyup="update()">
                             <button type="button" class="remove btn btn-danger" ng-click="remove(item.id)">删除</button>
                         </li>
                     </ul>
@@ -166,17 +193,40 @@
                 </div>
                 <div class="ben-right"></div>
                 <div class="ben-right1"></div>
-                <div class="ben-right2">
-                    <h2>前方的路在等你走</h2>
-                    <!--<ul>-->
-                        <!--<li class="list">-->
-                            <!--<div class="select">-->
-                                <!--<input type="checkbox" class="dianji">-->
-                                <!--<input type="text" class="sele">-->
-                                <!--<button type="button" class="remove btn btn-danger" ng-click="remove()">删除</button>-->
-                            <!--</div>-->
-                        <!--</li>-->
-                    <!--</ul>-->
+
+                <!--右边开头-->
+                <div class="ben-right2" ng-show="flag==true">
+                    <div class="title">
+                        <h2>
+                            {{currentList.name}}
+                            <span ng-click="addCon()"></span>
+                        </h2>
+                    </div>
+                    <!--右边内容-->
+                    <div ng-repeat="json in currentList.son track by json.id" class="select">
+                        <div  ng-click="completeCon(json.id)" class="yuan">
+
+                        </div>
+                        <input type="text" ng-model="json.content" ng-keyup="update()">
+                        <button type="button" class="removeson btn btn-danger" ng-click="removeCon(json.id)">删除</button>
+                    </div>
+                </div>
+
+                <!--完成的-->
+                <div class="ben-right2" ng-show="flag==false">
+                    <div class="title">
+                        <h2>
+                            已完成任务
+                        </h2>
+                    </div>
+                    <!--右边内容-->
+                    <div ng-repeat="json in complete track by json.id" class="select">
+                        <span>
+                            {{json.title}}
+                            <span>{{json.content}}</span>
+                        </span>
+                        <button type="button" class="removeson btn btn-danger" ng-click="delCom(json.id)">删除</button>
+                    </div>
                 </div>
             </div>
         </div>
