@@ -20,6 +20,9 @@
         width: 100%;
         height: 100%;
     }
+    .over{
+        cursor: pointer;
+    }
     .col-xs-3{
         height: 100%;
         background: springgreen;
@@ -33,18 +36,36 @@
         position: absolute;
         bottom:30px;
         left:20px;
+        cursor:pointer;
     }
     .search{
         margin-top: 20px;
     }
     .del input{
-        width: 70%;
+        width: 60%;
         background: #C6E746;
         border:0;
         color:#FFF;
+        margin-right: 20px;
+    }
+    .title{
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .title .plus{
+        display: block;
+        width: 40px;
+        height: 40px;
+        font-size: 25px;
+        position:absolute;
+        right:0;
+        cursor:pointer;
     }
     .col-xs-9 h5{
         margin-top: 20px;
+        width: 100%;
+        height: 30px;
     }
     .col-xs-9 .content{
         width: 100%;
@@ -55,10 +76,31 @@
     .col-xs-9 .content input{
         width: 80%;
         height: 35px;
+        margin-top: 10px;
+        border:0;
+        background: rgba(255,255,255,0.3);
+        text-indent: 50px;
     }
     .col-xs-9 .content .btn{
         position:absolute;
         right:0;
+    }
+    .col-xs-9 .content .select{
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border:1px solid #ccc;
+        border-radius: 50%;
+        margin-right: 10px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    .show1{
+        padding-top: 60px;
+        cursor:pointer;
+    }
+    .delBtn{
+        margin-top: 10px;
     }
 </style>
 <body ng-app="myNote">
@@ -70,12 +112,17 @@
                 <div class="form-group">
                     <label class="sr-only" for="exampleInputAmount"></label>
                     <div class="input-group">
-                        <input type="text" class="form-control search" id="exampleInputAmount" placeholder="搜索" ng-model="search">
+                        <input type="text" class="form-control search" id="exampleInputAmount" placeholder="搜索" ng-model="search" autocomplete="off">
                     </div>
                 </div>
             </form>
-            <div  class='del' ng-repeat="item in data track by item.id">
-                <input class='val' type="text" ng-model="item.name" ng-blur="blur()">
+            <div ng-click="over()" class="over">
+                <span>已完成</span>
+                <span>{{done.length}}</span>
+                <span>条</span>
+            </div>
+            <div  class='del' ng-repeat="item in data | filter:{name:search} track by item.id">
+                <input class='val' type="text" ng-model="item.name" ng-focus="focus(item.id)" ng-blur="blur()">
                 <button class="btn btn-default" ng-click="del(item.id)">删除</button>
             </div>
             <div class="add" ng-click="add()">
@@ -84,11 +131,23 @@
         </div>
 
         <!--右侧-->
-        <div class="col-xs-9">
-            <h5>日程安排</h5>
-            <div class="content" ng-repeat="item in data track by item.id">
+        <div class="col-xs-9" ng-show="show">
+            <div class="title">
+                <h5>{{current.name}}</h5>
+                <span class="addcon glyphicon glyphicon-plus plus" ng-click="addListCon()"></span>
+            </div>
+            <div class="content" ng-repeat="item in current.son track by item.id">
+                <div class="select" ng-click="select(item)"></div>
                 <input type="text" ng-model="item.name" ng-blur="blur()">
-                <button class="btn btn-default" ng-click="del(item.id)">删除</button>
+                <button class="btn btn-default delBtn" ng-click="delListCon(item.id)">删除</button>
+            </div>
+        </div>
+
+        <!--已完成-->
+        <div class="col-xs-9 show1" ng-show="show1" >
+            <div class="content" ng-repeat="item in done  track by $index">
+                <input type="text" ng-model="item.name">
+                <button class="btn btn-default" ng-click="delDoneCon(item.id)">删除</button>
             </div>
         </div>
     </div>
@@ -96,27 +155,45 @@
 </body>
 </html>
 <script>
-    angular.module('myNote',[]).controller('note',['$scope',function($scope){
+    angular.module('myNote',[]).controller('note',['$scope','$filter',function($scope,$filter){
         $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
-        console.log($scope.data);
+        $scope.done=localStorage.messagedone?JSON.parse(localStorage.messagedone):[];
+//        console.log($scope.data);
+//        console.log($scope.done);
+        $scope.show=true;
+        $scope.show1=false;
+        //        默认显示的标题
+        if($scope.data.length){
+            $scope.current=$scope.data[0];
+        }else{
+            let current={};
+            current.name='列表标题';
+            $scope.current=current;
+        }
+//      点击添加标题列表
         $scope.add=function(){
+            $scope.show=true;
+            $scope.show1=false;
             let obj={};
             obj.id=maxid();
-            obj.name="";
+            obj.name="新建列表"+obj.id;
             obj.son=[];
             $scope.data.push(obj);
+            $scope.currentIndex=getIndex($scope.data,obj.id);
+            $scope.current=$scope.data[$scope.currentIndex];
             localStorage.message=JSON.stringify($scope.data);
         };
-
-        function maxid(){
+//      获取最大的id
+        function maxid(arr){
+            let arrs=arr || $scope.data;
             let id=0;
             let tempid=0;
-            if($scope.data.length==0){
+            if(arrs.length==0){
                 id=1;
             }else{
-                for(let i=0;i<$scope.data.length;i++){
-                    if($scope.data[i].id>tempid){
-                        tempid=$scope.data[i].id
+                for(let i=0;i<arrs.length;i++){
+                    if(arrs[i].id>tempid){
+                        tempid=arrs[i].id
 
                     }
                 }
@@ -124,27 +201,101 @@
             }
             return id;
         }
+//      获取数组下标
+        function getIndex(arr,id){
+            for(let i=0;i<arr.length;i++){
+                if(arr[i].id==id){
+                    return i;
+                }
+            }
+        }
+//      删除一条数据
         $scope.del=function(id){
             for(let i=0;i<$scope.data.length;i++){
                 if(id==$scope.data[i].id){
+                    let index=getIndex($scope.data,id);
+                    if(index==$scope.data.length-1){
+                        $scope.currentIndex=index-1;
+                        $scope.current=$scope.data[$scope.currentIndex];
+                    }else{
+                        $scope.currentIndex=index+1;
+                        $scope.current=$scope.data[$scope.currentIndex];
+                    }
                     $scope.data.splice(i,1);
                 }
             }
-            localStorage.message=JSON.stringify($scope.data);
-        }
-        $scope.blur=function(){
-            let val=document.querySelector('.val').value;
-            let tempid=0;
             if($scope.data.length==0){
-                $scope.data[0].name=val;
-            }else{
-//                let obj={};
-//                obj.id=$scope.data.length+1;
-//                obj.name=val;
-//                obj.son=[];
-//                $scope.data.push(obj);
+                let current={};
+                current.name='列表标题';
+                $scope.current=current;
             }
             localStorage.message=JSON.stringify($scope.data);
+        }
+//      获取焦点
+        $scope.focus=function(id){
+            $scope.show=true;
+            $scope.show1=false;
+            $scope.currentIndex=getIndex($scope.data,id);
+            $scope.current=$scope.data[$scope.currentIndex];
+        }
+//      失去焦点
+        $scope.blur=function(){
+            localStorage.message=JSON.stringify($scope.data);
         };
+
+//        给列表添加的内容
+        $scope.addListCon=function(){
+            $scope.show=true;
+            $scope.show1=false;
+            let obj={};
+            obj.id=maxid($scope.current.son);
+            obj.name="新建子列表"+obj.id;
+            $scope.current.son.push(obj);
+            localStorage.message=JSON.stringify($scope.data);
+        }
+//        删除列表的内容
+        $scope.delListCon=function(id){
+            angular.forEach($scope.current.son,function(obj,index){
+                if(id==$scope.current.son[index].id) {
+                    $scope.current.son.splice(index,1);
+                }
+            })
+            localStorage.message=JSON.stringify($scope.data);
+        }
+
+//        已完成
+        $scope.select=function(obj){
+            if(JSON.stringify($scope.done).indexOf(JSON.stringify(obj))!=-1){
+//                console.log(JSON.stringify($scope.done).indexOf(JSON.stringify(obj)));
+                return;
+            }else{
+                $scope.done.push(obj);
+            }
+            localStorage.messagedone=JSON.stringify($scope.done);
+        };
+
+//        显示已完成
+        $scope.over=function(){
+            $scope.show=false;
+            $scope.show1=true;
+        }
+
+        //      删除已完成的内容
+        $scope.delDoneCon=function(id){
+            angular.forEach($scope.done,function(obj,index){
+                if(id==$scope.done[index].id) {
+                    $scope.done.splice(index,1);
+                }
+            });
+            localStorage.messagedone=JSON.stringify($scope.done);
+        };
+
+//        搜索
+       let watch=$scope.$watch('search',function(a,b){
+            let searchArr=$filter('filter')($scope.data,$scope.search);
+//            console.log(searchArr);
+            $scope.current=searchArr[0];
+        })
+
     }]);
 </script>
