@@ -1,31 +1,36 @@
 angular.module("myapp",[])
-    .controller("todo",["$scope",function($scope){
+    .controller("todo",["$scope","$filter",function($scope,$filter){
         $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
+
+        $scope.complete=localStorage.complete?JSON.parse(localStorage.complete):[];
         // 当前显示的下标
         $scope.currentIndex=$scope.data.length-1;
         // 当前显示的列表
         $scope.currentList=$scope.data[$scope.currentIndex];
 
-        // 已完成计数
-        $scope.comNum=0;
-        for(let i=0;i<$scope.data.length;i++){
-            for (let j=0;j<$scope.data[i].son.length;j++){
-                if($scope.data[i].son[j].status==1){
-                    $scope.comNum++;
-                }
-            }
-        }
+        // 开关
+        $scope.flag=true;
+
+        $scope.search=''
+        // 搜索
+        $scope.$watch("search",function (news) {
+            console.log(news)
+            console.log($filter("filter")($scope.data,news))
+        })
+
+
 
         /*添加列表*/
         $scope.now=0;
         $scope.add=function(){
+            $scope.flag=true;
             var obj={};
             obj.id=maxid();
-            obj.name="新建列表";
+            obj.name="新建列表"+obj.id;
             obj.son=[];
+            $scope.data.push(obj);
             $scope.currentIndex=getIndex($scope.data,obj.id);
             $scope.currentList=$scope.data[$scope.currentIndex];
-            $scope.data.push(obj);
             localStorage.message=JSON.stringify($scope.data);
         }
 
@@ -39,7 +44,8 @@ angular.module("myapp",[])
         }
 
         // 更新左边列表信息
-        $scope.update=function (id) {
+        $scope.update=function () {
+            $scope.flag=true;
             localStorage.message=JSON.stringify($scope.data);
         }
         // 删除左边列表
@@ -47,100 +53,82 @@ angular.module("myapp",[])
             for (let i=0;i<$scope.data.length;i++){
                 if ($scope.data[i].id==id){
                     $scope.data.splice(i,1);
-                    localStorage.message=JSON.stringify($scope.data);
                 }
             }
+            let currin=getIndex($scope.data,id)
+            if(currin==$scope.data.length-1){
+                $scope.currentIndex=currin-1;
+                $scope.currentList=$scope.data[$scope.currentIndex];
+            }else {
+                $scope.currentIndex=$scope.data.length-1;
+                $scope.currentList=$scope.data[$scope.currentIndex];
+            }
+            localStorage.message=JSON.stringify($scope.data);
         }
 
         // 当前选中的显示在右边视图
         $scope.active=function (id) {
+            $scope.flag=true;
             $scope.currentIndex=getIndex($scope.data,id);
             $scope.currentList=$scope.data[$scope.currentIndex];
         }
 
         // 右边 添加一条内容
-        $scope.addCon=function (id) {
-            var j=0;
-            for (let i=0;i<$scope.data.length;i++){
-                if($scope.data[i].id==id){
-                    j=i;
-                }
-            }
+        $scope.addCon=function () {
             let obj={}
-            obj.cid=cid(j);
-            obj.content="";
+            obj.id=maxid($scope.currentList.son);
+            obj.content=""+obj.id;
             obj.status=0;
-            $scope.data[j].son.push(obj)
+            $scope.currentList.son.push(obj)
             localStorage.message=JSON.stringify($scope.data);
         }
 
-        // 右边的修改内容
-        $scope.updateCon=function () {
-            localStorage.message=JSON.stringify($scope.data);
-        }
 
         // 右边 删除
-        $scope.delCon=function (pid,cid) {
-            for(let i=0;i<$scope.data.length;i++){
-                if($scope.data[i].id==pid){
-                    for (let j=0;j<$scope.data[i].son.length;j++){
-                        if($scope.data[i].son[j].cid==cid){
-                            $scope.data[i].son.splice(j,1)
-                            localStorage.message=JSON.stringify($scope.data);
-                        }
-                    }
-                }
-            }
+        $scope.delCon=function (id) {
+            let ind=getIndex($scope.currentList.son,id);
+            $scope.currentList.son.splice(ind,1)
+            localStorage.message=JSON.stringify($scope.data);
         }
 
 
         // 完成
-        $scope.complete=function (pid,cid) {
-            for(let i=0;i<$scope.data.length;i++){
-                if($scope.data[i].id==pid){
-                    for (let j=0;j<$scope.data[i].son.length;j++){
-                        if($scope.data[i].son[j].cid==cid){
-                            $scope.data[i].son[j].status=1;
-                            $scope.comNum++;
-                            localStorage.message=JSON.stringify($scope.data);
-                        }
-                    }
-                }
-            }
+        $scope.completeCon=function (id) {
+            let ind=getIndex($scope.currentList.son,id);
+            let arr=$scope.currentList.son.splice(ind,1);
+            let obj={};
+            obj.id=maxid($scope.complete);
+            obj.title=$scope.currentList.name;
+            obj.content=arr[0].content;
+            $scope.complete.push(obj);
+            localStorage.message=JSON.stringify($scope.data);
+            localStorage.complete=JSON.stringify($scope.complete);
         }
 
 
-
-        function cid(pid){
-            var cid=0;
-            var tempid=0;
-            if($scope.data[pid].son.length==0){
-                cid=1;
-            }else{
-
-                for(var i=0;i<$scope.data[pid].son.length;i++){
-                    if($scope.data[pid].son[i].cid>tempid){
-                        tempid=$scope.data[pid].son[i].cid
-
-                    }
-                }
-
-                cid=tempid+1;
-            }
-            return cid;
+        // 已完成
+        $scope.com=function () {
+            $scope.flag=false;
+        }
+        // 删除已完成
+        $scope.delCom=function (id) {
+            let ind=getIndex($scope.complete,id);
+            $scope.complete.splice(ind,1);
+            localStorage.complete=JSON.stringify($scope.complete);
         }
 
 
-        function maxid(){
+        function maxid(arr){
+            arr=arr||$scope.data;
             var id=0;
             var tempid=0;
-            if($scope.data.length==0){
+            if(arr.length==0){
                     id=1;
             }else{
 
-                  for(var i=0;i<$scope.data.length;i++){
-                    if($scope.data[i].id>tempid){
-                        tempid=$scope.data[i].id
+                  for(var i=0;i<arr.length;i++){
+                    if(arr[i].id>tempid){
+                        tempid=arr[i].id
 
                     }
                   }
