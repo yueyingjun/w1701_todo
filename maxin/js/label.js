@@ -68,13 +68,9 @@ angular.module("box",[])
             localStorage.message=JSON.stringify($scope.arr);
         }
         $scope.del_con=function (id) {
-            $scope.arr.forEach(function (value,index) {
-                if(p_id==value.id){
-                    value.son.forEach(function (value1,index1) {
-                        if(value1.id==id) {
-                            value.son.splice(index1, 1)
-                        }
-                    })
+            $scope.one.son.forEach(function (value,index) {
+                if(value.id==id) {
+                    $scope.one.son.splice(index, 1)
                 }
             })
             localStorage.message=JSON.stringify($scope.arr);
@@ -83,7 +79,7 @@ angular.module("box",[])
             $(this).next("ul").slideToggle();
             $(this).find("span").toggleClass("glyphicon glyphicon-tasks");
         })
-        $scope.do=function (p_id,id) {
+        $scope.do=function (id) {
             $scope.one.son.forEach(function (value,index) {
                 if(value.id==id) {
                     var obj={};
