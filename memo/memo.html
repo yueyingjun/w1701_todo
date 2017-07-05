@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
     <script src="angular/angular.min.js"></script>
     <script src="memo.js"></script>
+
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../node_modules/angular/angular.min.js"></script>
+    <script src="memo.js"></script>
 </head>
 <style>
     html,body{
@@ -42,6 +46,12 @@
     }
     .search{
         margin-top: 10px;
+    }
+    .input-group input{
+        border-radius: 5px;
+    }
+    .form-control{
+        text-align: center;
     }
     .done{
         margin-top: 10px;
@@ -104,13 +114,11 @@
                 <div class="form-group">
                     <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
                     <div class="input-group">
-                        <div class="input-group-addon">
-                            <span class="glyphicon glyphicon-search"></span>
-                        </div>
-                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索">
+                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="🔍 请搜索">
                     </div>
                 </div>
             </form>
+            <!--添加按钮-->
             <div class="add" ng-click="add()">
                 <span class="glyphicon glyphicon-plus"></span> 添加计划
             </div>
@@ -125,7 +133,7 @@
                 <input type="text" ng-model="item.name" ng-click="con(item.id)" ng-keyup="update(item.id)">
                 <button class="btn btn-default remove" type="submit">删除</button>
             </div>
-            <!--添加按钮-->
+
 
         </div>
         <div class="col-xs-8 col-sm-9 right" ng-repeat="item in data track by item.id" ng-show="now==$index">
