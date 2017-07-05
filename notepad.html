@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap.css">
+    <script src="angular.min.js"></script>
+    <script src="notepad.js"></script>
+</head>
+<style>
+    html,body{
+        width: 100%;
+        height: 100%;
+    }
+    ul,li{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .box{
+        width: 100%;
+        height: 100%;
+    }
+    .row{
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: 80%;
+        height: 80%;
+        background: #222;
+        padding: 15px 10px;
+        border-radius: 15px;
+        box-shadow: 5px -10px 20px #ccc;
+    }
+    .ben{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        position: relative;
+        border: 2px dashed rgba(240, 246, 251, 0.5);
+        border-radius: 5px;
+
+    }
+    .ben-left{
+        width: 47%;
+        height: 90%;
+        background: #fefefe;
+        padding: 40px 30px;
+        position: relative;
+    }
+    .ben-left span{
+        color: red;
+        font-weight: 600;
+    }
+    .ben-right{
+        width: 47%;
+        height: 90%;
+        background: #fefefe;
+        box-shadow: -20px 0 2px #868686;
+    }
+    .ben-right1{
+        width: 47%;
+        height: 90%;
+        position: absolute;
+        right: 16px;
+        box-shadow: -13px 0 0 #a9adaf;
+    }
+    .ben-right2{
+        width: 47%;
+        height: 90%;
+        position: absolute;
+        right: 16px;
+        box-shadow: -7px 0 0 #EAEAEA;
+        padding: 20px 30px;
+    }
+    .ben-right2 h2{
+        font-size: 28px;
+        font-weight: 600;
+        color: #888;
+    }
+    li{
+        width: 100%;
+        border-bottom: 2px solid #eee;
+        border-radius: 2px;
+        padding: 6px 10px;
+    }
+    .list{
+        height: auto;
+    }
+    input{
+        height: 30px;
+        width: 80%;
+        border: 0;
+        outline: none;
+    }
+    .sele{
+        padding-left: 20px;
+    }
+    .list:hover .remove{
+        opacity: 1;
+    }
+    .remove{
+        opacity: 0;
+        transition: opacity .5s ease;
+    }
+    .add{
+        position: absolute;
+        right: 20px;
+        bottom:20px;
+    }
+    .add .tu{
+        width: 64px;
+        height: 64px;
+        background: url("tu.png")no-repeat;
+        background-size: cover;
+        cursor: pointer;
+    }
+    .select{
+        position: relative;
+    }
+    .dianji{
+        position: absolute;
+        width: 15px;
+        height: 100%;
+        opacity: 0;
+        transition: opacity .5s ease;
+    }
+    .select:hover .dianji{
+        opacity: 1;
+    }
+</style>
+<body ng-app="myapp">
+    <div ng-controller="catr" class="box">
+        <div class="row">
+            <div class="ben">
+                <div class="ben-left">
+                    <form class="form-inline">
+                        <div class="form-group" style="display: flex;align-items: center;justify-content: space-between;">
+                            <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                            <div class="input-group">
+                                <div class="input-group-addon">搜索</div>
+                                <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索你需要的" ng-model="search">
+                            </div>
+                            <p style="margin: 0">已经完成 <span>0</span> 个任务</p>
+                        </div>
+                    </form>
+                    <!--列表-->
+                    <ul ng-repeat=" item in data | filter:search">
+                        <li class="list" ng-repeat="item in data track by item.id ">
+                            <input type="text" ng-model="item.name">
+                            <button type="button" class="remove btn btn-danger" ng-click="remove(item.id)">删除</button>
+                        </li>
+                    </ul>
+                    <!--添加-->
+                    <div class="add" ng-click="add()">
+                        <div class="tu"></div>
+                    </div>
+                </div>
+                <div class="ben-right"></div>
+                <div class="ben-right1"></div>
+                <div class="ben-right2">
+                    <h2>前方的路在等你走</h2>
+                    <!--<ul>-->
+                        <!--<li class="list">-->
+                            <!--<div class="select">-->
+                                <!--<input type="checkbox" class="dianji">-->
+                                <!--<input type="text" class="sele">-->
+                                <!--<button type="button" class="remove btn btn-danger" ng-click="remove()">删除</button>-->
+                            <!--</div>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
