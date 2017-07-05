@@ -96,4 +96,24 @@ angular.module("myapp",[])
             }
             console.log(name)
         }
+        $scope.del=function (id) {
+            for(var i=0;i<$scope.data.length;i++) {
+                if(id==$scope.data[i].id){
+                    $scope.data.splice(i,1);
+                    localStorage.wyxmessage=angular.toJson($scope.data);
+                }
+            }
+        }
+        $scope.del1=function (id) {
+            for(var i=0;i<$scope.data.length;i++) {
+                if($scope.titleid==$scope.data[i].id){
+                    for(var j=0;j<$scope.data[i].son.length;j++){
+                        if(id==$scope.data[i].son[j].id){
+                            $scope.data[i].son.splice(j,1);
+                            localStorage.wyxmessage=angular.toJson($scope.data);
+                        }
+                    }
+                }
+            }
+        }
     }]);

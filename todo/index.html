@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script src="../angular.js"></script>
     <script src="todo.js"></script>
     <!--<script src="jquery.js"></script>-->
@@ -105,7 +105,7 @@
             <div class="list" ng-repeat="item in data track by item.id">
                 <input type="text" ng-model="item.name" ng-focus="foc(item.id,item.name,item.son)" ng-keyup="keyup(item.id,item.name)">
                 <!--<input type="text" ng-model="item.name">-->
-                <button class="btn btn-default remove" type="submit">删除</button>
+                <button class="btn btn-default remove" type="submit" ng-click="del(item.id)">删除</button>
             </div>
 
 
@@ -139,7 +139,7 @@
                 </div>
                 <input type="text" ng-model="item1.name" ng-keyup="listkeyup(item1.id,item1.name)">
 
-                <button class="btn btn-default removeCon" type="submit">删除</button>
+                <button class="btn btn-default removeCon" type="submit" ng-click="del1(item1.id)">删除</button>
             </div>
             <!--</div>-->
         </div>
