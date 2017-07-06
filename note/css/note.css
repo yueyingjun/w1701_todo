@@ -49,18 +49,39 @@ input:focus{
     opacity: 0;
     transition: opacity .5s ease;
 }
+.deldone{
+    opacity: 0;
+    transition: opacity .5s ease;
+}
 .list{
     height:40px;
     width:100%;
     line-height: 40px;
     cursor: pointer;
     border-bottom:1px solid #00a0e9;
+    position: relative;
+}
+.remove{
+    position: absolute;
+    right:10px;
+    top:5px;
+}
+.lists{
+    height:48px;
+    width:100%;
+    cursor: pointer;
+    border-bottom:1px solid #00a0e9;
+    padding:0 20px;
+    position: relative;
 }
 .list input{
     padding-left:20px;
-    width:76%;
+    width:60%;
 }
 .list:hover .remove{
+    opacity: 1;
+}
+.lists:hover .deldone{
     opacity: 1;
 }
 
@@ -128,4 +149,10 @@ input:focus{
 }
 .listcon:hover .removeCon{
     opacity: 1;
+}
+
+.deldone{
+    position:absolute;
+    top:5px;
+    right:10px;
 }
