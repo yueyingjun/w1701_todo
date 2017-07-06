@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>to do list</title>
+    <link rel="stylesheet" href="dist/css/bootstrap.css">
+    <link rel="stylesheet" href="index.css">
+    <script src="js/angular.js"></script>
+    <!--<script src="js/todo.js"></script>-->
+</head>
+<body ng-app="todoapp">
+<div class="container-fluid" ng-controller="todo">
+    <div class="row">
+        <div class="left col-xs-4 col-sm-3">
+            <h3>To do list</h3>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </div>
+                    <input type="text" class="form-control" id="exampleInputAmount" ng-model="search" placeholder="搜索">
+                </div>
+            </div>
+            <div class="lists">
+                <ul>
+                    <li>
+                        <a href="">
+                            <span class="glyphicon glyphicon-time"></span>
+                            <span>已计划</span>
+                        </a>
+                    </li>
+                    <!--<div class="finsh">已完成:0项</div>-->
+                    <li ng-repeat="item in data | filter:{title:search} track by item.id" ng-click="select(item.id)">
+                        <!--<a href="">-->
+                            <span class="circle" style="background: {{item.color}}"></span>
+                            <span ng-model="item.title">{{item.title}}</span>
+                            <button class="btn btn-default remove" type="submit" ng-click="del(item.id)">删除</button>
+                        <!--</a>-->
+                    </li>
+
+                </ul>
+
+
+            </div>
+            <div class="addlist" ng-click="add()">
+                <!--<a href="">-->
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span>添加计划</span>
+                <!--</a>-->
+
+            </div>
+        </div>
+        <div class="right col-xs-8 col-sm-9">
+            <div class="header">
+                <span>待办事项</span>
+                <div type="button" class="option" ng-click="option()">选项</div>
+                <!--<span class='option' ng-click="option()">选项</span>-->
+            </div>
+            <div class="optionbox" ng-show='showFlag'>
+                <div class="box">
+                    <input type="text" ng-model='changeTitle' ng-style='{color:changeColor}'>
+                    <div class="xian">列表颜色</div>
+                    <ul>
+                        <li ng-repeat='v in colors' ng-style="{background:v,borderColor:v==changeColor?changeColor:''}" ng-click='changeC(v)'></li>
+                    </ul>
+                </div>
+                <div class="bottom">
+                    <span class='del' ng-click='delete($index)'>删除</span>
+                    <span class='quxiao' ng-click="showFlag=false">取消</span>
+                    <span class='done' ng-click='complete()'>完成</span>
+                </div>
+            </div>
+            <div class="contant">
+                <!--<h2>提醒</h2>-->
+                <h3 ng-style="{color:data[index].color}" >{{data[index].title}}</h3>
+                <ul>
+                    <li class="title">
+                        已完成
+                        {{(data[index].todo|filter:{done:'true'}).length}}
+                        项
+                    </li>
+                    <li class="con" ng-repeat="v in data[index].todo|filter:{done:'true'}" contenteditable='true' ng-blur='changeTitle($event,v)'>
+                        <span class='zhuangtai' ng-style="{background:data[index].color,borderColor:data[index].color}" ng-click='v.done=false'></span>
+                        {{v.t}}
+                        <!--<div class="delList" ng-click="delList()">×</div>-->
+                    </li>
+                </ul>
+                <ul>
+                    <li class="title">未完成
+                        {{(data[index].todo|filter:{done:'false'}).length}}
+                        项
+
+                    </li>
+                    <li class="con" ng-repeat="k in data[index].todo|filter:{done:'false'}" contenteditable='true' ng-blur='changeTitle($event,k)'>
+                        <span class='zhuangtai' ng-style="{background:transparent,borderColor:data[index].color}" ng-click='k.done=true' ></span>
+                        {{k.t}}
+                        <!--<span class="delList" ng-click="delList(item.id)">×</span>-->
+                    </li>
+                </ul>
+                <ul>
+                    <li class="newcon" ng-dblclick='newlist()'>新项目...</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+//    var data=[
+//        {
+//            id:1,
+//            title:"列表1",
+//            color:'#6DD63A',
+//            todo:[{
+//                t:'上午9点开会',done:true
+//            },{
+//                t:'中午12点开会',done:false
+//            },{
+//                t:'下午2点讲课',done:false
+//            }]
+//        },
+//        {
+//            id:2,
+//            title:"列表2",
+//            color:'#FF2D6B',
+//            todo:[{
+//                t:'上午9点检查作业',done:true
+//            },{
+//                t:'中午10点讲课',done:false
+//            },{
+//                t:'下午2点演讲',done:false
+//            }]
+//        }
+//    ];
+    var colors=['#6DD63A','#FF8710','#CA72DF','#FF2D6B','#F7C40D','#9B844E'];
+angular.module("todoapp",[])
+    .controller("todo",["$scope","$filter",function($scope,$filter){
+        $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
+        console.log($scope.data);
+            $scope.colors=colors;
+            $scope.index=0;
+            $scope.showFlag=false;
+            $scope.search="";
+            //搜索功能
+        $scope.$watch('search',function(){
+            var arr=$filter('filter')($scope.data,{name:$scope.search});//筛选
+            if(arr.length!=0){
+                data[index].title=arr[$scope.index];
+                $scope.index=arr.length-1;
+                $scope.data[index]=arr[$scope.index];
+            }
+        });
+
+        /*添加列表*/
+                $scope.add=function(){
+                var obj={};
+                obj.id=maxid();
+                obj.title='新列表'+obj.id;
+                obj.color=colors[$scope.data.length%6];
+                obj.todo=[];
+                $scope.data.push(obj);
+                localStorage.message=JSON.stringify($scope.data);
+                $scope.index=$scope.data.length-1;
+
+            };
+        //删除列表
+            $scope.del=function(id){
+                $scope.data.forEach(function(obj,index){
+                    if($scope.data[index].id==id){
+                        $scope.data.splice(index,1);
+                        localStorage.message=JSON.stringify($scope.data);
+                    }
+                })
+            };
+            $scope.select=function(id){
+                $scope.index=id-1;
+            };
+            //添加新项目
+        $scope.newlist=function(){
+            $scope.data[$scope.index].todo.push(
+                {t:'下午2时贵宾来访',done:false}
+            );
+            localStorage.message=JSON.stringify($scope.data);
+        };
+        // 点击修改文本
+        $scope.changeTitle=function(even,ev){
+            console.log(even,ev);
+            ev.t=even.target.innerText;
+            console.log(ev.done);
+
+        };
+        // 单击选项
+        $scope.option=function(){
+            $scope.changeTitle=$scope.data[$scope.index].title;
+            $scope.changeColor=$scope.data[$scope.index].color;
+            $scope.showFlag=!$scope.showFlag;
+        };
+        // 单击选项-删除
+        $scope.delete=function (i) {
+            $scope.data.splice($scope.index,1);
+            $scope.index=0;
+            $scope.showFlag=false;
+        };
+
+
+        // 单击选项-改变颜色
+        $scope.changeC=function(v){
+            $scope.changeColor=v;
+        }
+        // 单击选项-完成
+        $scope.complete=function(){
+            $scope.data[$scope.index].title=$scope.changeTitle;
+            $scope.data[$scope.index].color=$scope.changeColor;
+            $scope.showFlag=false;
+        }
+        function maxid(){
+            var id=0;
+            var tempid=0;
+            if($scope.data.length==0){
+                id=1;
+            }else{
+
+                for(var i=0;i<$scope.data.length;i++){
+                    if($scope.data[i].id>tempid){
+                        tempid=$scope.data[i].id
+
+                    }
+                }
+                id=tempid+1;
+            }
+            return id;
+        }
+
+
+
+    }])
+
+</script>
+</body>
+</html>
