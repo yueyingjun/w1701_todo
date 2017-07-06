@@ -1,0 +1,170 @@
+@import url("common.css");
+html,body{
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+.container,.row{
+	height: 100%;
+	padding: 0;
+}
+._left{
+	height: 100%;
+	background: #fff;
+	border: 1px solid #f2f2f2;
+	box-sizing: border-box;
+}
+._right{
+	height: 100%;
+	background: #f2f2f2;
+	display: flex;
+	flex-direction: column;
+}
+/*搜索*/
+._search{
+	width: 100%;
+	height: 66px;
+	background: #fff;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 10;
+}
+.input-group{
+	width: 90%;
+	padding: 20px 0 0 0;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+/*列表*/
+._wrapper{
+	width: 100%;
+	height: auto;
+	position: absolute;
+	top: 141px;
+	left: 0;
+}
+._iscroller{
+	width: 100%;
+	height: auto;
+	position: absolute;
+}
+._lists{
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+}
+._lists > li{
+	width: 100%;
+	height: auto;
+	padding: 20px 0;
+	border-bottom: 1px solid #f2f2f2;
+	text-align: center;
+	position: relative;
+	background: #fff;
+}
+._lists > li:hover{
+	background: #E0EAFA;
+}
+._lists input{
+	width: 90%;
+	height: 30px;
+	line-height: 30px;
+	padding: 8px 0;
+	box-sizing: border-box;
+	background: rgba(0,0,0,0);
+}
+._lists button{
+	height: 34px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 5%;
+	margin: auto;
+}
+/*新建*/
+._add{
+	width: 100%;
+	text-align: center;
+	border-top: 1px solid #f2f2f2;
+	border-bottom: 1px solid #f2f2f2;
+	padding: 20px 0;
+	background: #fff;
+	position: absolute;
+	top: 66px;
+	left: 0;
+}
+/*已完成*/
+._pass{
+	width: 100%;
+	height: 60px;
+	background: #3A96FF;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	box-shadow: 2px -2px 4px #aaa;
+	opacity: 0.8;
+	color: #fff;
+	text-align: center;
+	line-height: 60px;
+}
+/*title*/
+._title{
+	width: 100%;
+	height: 80px;
+	line-height: 80px;
+	box-sizing: border-box;
+	border-bottom: 1px solid #fff;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+._title input{
+	width: 90%;
+	height: 60px;
+	font-size: 20px;
+	padding: 0 30px;
+	box-sizing: border-box;
+	background: #f2f2f2;
+}
+/*内容添加按钮*/
+._conadd{
+	width: 6%;
+	height: 100%;
+	text-align: center;
+}
+/*内容列表*/
+._conbg{
+	width: 100%;
+	height: 100%;
+	background: #f2f2f2;
+}
+._conlists{
+	width: 100%;
+	height: auto;
+	background: #f2f2f2;
+}
+._conlists > li{
+	width: 100%;
+	height: 40px;
+	padding: 10px 50px;
+	box-sizing: border-box;
+	border-bottom: 1px solid #fff;
+	background: #f2f2f2;
+	display: flex;
+}
+._conlists input{
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0);
+	padding: 0 20px;
+	box-sizing: border-box;
+}
+._conlists > li:hover{
+	background: #fff;
+}
+#_checkbox{
+	width: 15px;
+	height: 15px;
+	background: #aaa;
+}

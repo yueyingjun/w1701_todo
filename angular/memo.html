@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>我的备忘录</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/memo.css"/>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/memo.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/iscroll.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body ng-app="myapp">
+		<div class="container" ng-controller="md">
+			<div class="row">
+				<section class="_left col-lg-3 col-md-4 col-sm-5 col-xs-5">
+					<!--搜索框-->
+					<div class="_search">
+						<div class="input-group">
+						    <input type="text" ng-model="search" class="form-control input-lg"><span class="input-group-addon btn btn-primary">搜索</span>
+						</div>
+					</div>
+					<div class="_wrapper">
+						<div class="_iscroller">
+							<ul class="_lists">
+								<li ng-repeat="$data in data |filter:{name:search}">
+									<input type="text" ng-model="$data.name" ng-focus="focus($data.id)" ng-blur="blur()" />
+									<button type="button" ng-click="del($index)" class="btn btn-danger">删除</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!--新事件-->
+					<div class="_add">
+						<button ng-click="add()" type="button" class="btn btn-default glyphicon glyphicon-plus"></button>
+					</div>
+					<!--已完成-->
+					<div class="_pass">
+						<span class="glyphicon glyphicon-ok"></span>
+						<span>已完成<span>xxx</span>个计划</span>
+					</div>
+				</section>
+				<section class="_right col-lg-9 col-md-8 col-sm-7 col-xs-7">
+					<div class="_title">
+						<input type="text" ng-model="current.name" ng-blur="blur()"  />
+						<div class="_conadd">
+							<button ng-click="addcon()" type="button" class="btn btn-default glyphicon glyphicon-plus"></button>
+						</div>
+					</div>
+					<div class="_conbg">
+						<ul class="_conlists">
+							<li ng-hide="pass($index)" ng-repeat=" $current in curconlists">
+								<span ng-class="state[$index]" ng-click="changestate($index)" id="_checkbox"></span>
+								<input type="text" ng-blur="blur()" ng-model="$current.lists" />
+								<span ng-click="condel($index)" class="_condel glyphicon glyphicon-trash"></span>
+							</li>
+						</ul>
+					</div>
+				</section>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var myscroll;
+		function loaded(){
+			setTimeout(function(){
+				myscroll=new IScroll("._wrapper");
+			},100);
+		}
+		window.addEventListener("load",loaded,false);
+	</script>
+</html>
