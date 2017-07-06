@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<script src="angular.min.js"></script>
+	<script src="todo.js"></script>
+	<link rel="stylesheet" href="bootstrap.css" />
+	<link rel="stylesheet" href="beiwang.css" />
+	<body ng-app="myapp">
+		<section class="container" ng-controller="todo">
+			<section class="left col-xs-3">
+				<!--搜索-->
+				<div class="input-group">
+				    <input type="text" class="form-control search" ng-model="search" placeholder="Search...">
+				</div>
+				<!--已完成-->
+				<div class="success">
+					<span ng-click="showhtml()">目标完成</span>
+					<span>{{num()}}</span>
+				</div>
+				
+				<!--新建列表-->
+				<ul class="list">
+					<li ng-repeat="item in arr | filter:{name:search} track by item.id">
+						<input type="text" ng-model="item.name" ng-focus="focus(item.id)" ng-change="edit(item.id)"/>
+						<button class="cha" type="button" ng-click="del(item.id)">×</button>
+					</li>
+				</ul>
+				
+				<!--添加内容-->
+				<button type="button" class="btn btn-info add newcon" ng-click="add()">新建内容+</button>
+			</section>
+			<section class="right col-xs-9" ng-show="flag">
+				<div class="right_head">
+					{{current.name}}
+				</div>
+				<button type="button" class="btn btn-info add newcom" ng-click="addplay()">添加备忘+</button>
+				<ul class="col-xs-12">
+					<li ng-repeat="item in current.son track by item.id">
+						<div class="success" ng-click="show(item.id)"></div>
+						<input type="text" ng-model="item.name" ng-change="editplay(item.id)"/>
+						<button type="button" class="btn btn-default" ng-click="delplay(item.id)">del</button>
+					</li>
+				</ul>
+			</section>
+			<section class="right showhtml col-xs-9" ng-hide="flag">
+				<div class="right_head">
+					已完成
+				</div>
+				<ul class="col-xs-12">
+					<li ng-repeat="item in done track by item.name">
+						<div class="father">father：{{item.list}}</div>
+						<input type="text" ng-model="item.name"/>
+						<button type="button" class="btn btn-default" ng-click="delhtml(item.onlyid)">del</button>
+					</li>
+				</ul>
+			</section>	
+		</section>
+		
+	</body>
+</html>
