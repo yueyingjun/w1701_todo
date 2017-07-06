@@ -1,0 +1,114 @@
+html,body{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+input{
+    background: rgba(0,0,0,0);
+    border: 0;
+    outline: none;
+    width: 50%;
+}
+.container-fluid,.row{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.row>.top{
+    width: 100%;
+    height: 50px;
+    background:#CAE8FF ;
+    color: #fff;
+    font-size: 24px;
+    box-sizing: border-box;
+    position: absolute;
+    padding: 0 20px;
+    line-height: 50px;
+    z-index: 100;
+}
+.row>.left,.row>.right{
+    height: 100%;
+    padding-top:50px ;
+    box-sizing: border-box;
+    overflow: scroll;
+}
+.row>.left{
+    background:#EDF7FF ;
+}
+.left>h4,.right>h4,.right>ul>li{
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    color: #333;
+    cursor: pointer;
+}
+.left>h4>span:last-child,.right>h4>span:last-child,.right>ul>li>span:last-child{
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    font-size: 18px;
+    line-height: 30px;
+}
+.left>ul{
+    border-bottom: 1px solid #ccc;
+    padding-bottom:20px;
+}
+.left>ul>li{
+    height: 30px;
+    box-sizing: border-box;
+    line-height: 30px;
+    border-bottom: 1px dashed #ccc;
+   position: relative;
+    cursor: pointer;
+}
+.left>ul>li>span:last-child{
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    line-height: 30px;
+    opacity: 0;
+    transition: opacity .5s linear;
+}
+.left>ul>li:hover span:last-child{
+    opacity: 1;
+}
+.add{
+    padding:5px 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    cursor: pointer;
+}
+.all{
+    width: 100%;
+    display: flex;
+    height: 40px;
+}
+.checkbox{
+    font-size: 18px;
+    height: 100%;
+    display: flex;
+    line-height: 40px;
+    cursor:pointer;
+}
+.checkbox>.dian{
+    width: 20px;
+    height: 20px;
+    border: 1px solid #00b3ee;
+    border-radius: 50%;
+    margin-top: 10px;
+    display: block;
+}
+.checkbox>span.active{
+    background: #00b3ee;
+}
+.all button{
+    margin-left: 50px;
+    height: 30px;
+    margin-top: 16px;
+}

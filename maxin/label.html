@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/label.css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/label.js"></script>
+</head>
+<body>
+    <div class="container-fluid" ng-app="box">
+        <div class="row" ng-controller="boxs">
+            <div class="top">
+                <div class="title">
+                    <span class="glyphicon glyphicon-tag"></span>
+                    我的便签
+                </div>
+            </div>
+            <div class="left col-xs-4 col-sm-3">
+                <div class="input-group " style="margin-top: 20px" >
+                    <input type="text" class="form-control" placeholder="Search for..." ng-model="search">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                </div>
+                <h4>已完成 <b  class="badge" style="">{{do_arr.length}}</b> <span></span></h4>
+                <ul>
+                   <li ng-repeat="item in do_arr track by item.id " style="list-style: none">
+                       <span class="glyphicon glyphicon-ok"></span>
+                       {{item.list}}------{{item.value}}
+                       <span class="glyphicon glyphicon-trash" ng-click="del_do(item.id)">
+                       </span>
+                   </li>
+                </ul>
+                <h4>未完成 <span ></span></h4>
+                <ul>
+                    <li  ng-repeat="item in arr | filter: {name:search} track by item.id  ">
+                        <input type="text" ng-class={"focus":item.id==1} ng-model="item.name" ng-focus="display(item.id)" ng-keyup="up()">
+                        <span class="glyphicon glyphicon-trash" ng-click="del(item.id)"></span>
+                    </li>
+                </ul>
+                <div class="add label label-info" ng-click="add()">
+                    <span class="glyphicon glyphicon-plus">
+                    </span>
+                </div>
+            </div>
+            <div class="right col-xs-8 col-sm-9">
+                    <h4>
+                        <input type="text" ng-model="one.name" ng-keyup="up()">
+                        <span style="font-size: 14px">
+                           创建时间： {{one.time | date:"yyyy-MM-dd HH:mm:ss"}}
+                        </span>
+                        <span class="glyphicon glyphicon-pencil" ng-click="add_con(one.id)"></span>
+                    </h4>
+                    <div class="form-group" style="width: 40%;margin-left: 40px" >
+                        <input type="text" class="form-control" placeholder="Search content" ng-model="search_con">
+                    </div>
+                    <ul>
+                        <li ng-repeat="item1 in one.son | filter:{value:search_con} track by $index" style="list-style: none;border-bottom: 1px solid #eee">
+                            <span title="点击之后默认完成" ng-class="{true: 'glyphicon glyphicon-send', false: 'glyphicon  glyphicon-record'}[checked=='取消全选']" ng-click="do(item1.id)" style="margin-right: 10px"></span>
+                            <input type="text" ng-model="item1.value"  ng-keyup="up()">
+                            <span class="glyphicon glyphicon-trash" ng-click="del_con(item1.id)"></span>
+                        </li>
+                    </ul>
+                    <div class="all">
+                        <div class="checkbox" ng-click="all_checked()">
+                                <span class="dian"  ng-class="{'active':checked=='取消全选'}"></span>
+                                <span style="margin-left: 10px">{{checked}}</span>
+                        </div>
+                        <button type="button" ng-show="checked=='取消全选'" class="btn btn-xs btn-primary" ng-click="all_do(one.id)">全部完成</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
