@@ -38,6 +38,7 @@
                 obj.title="新建列表"+i;
                 obj.todo=[];
                 $scope.data.push(obj);
+                $scope.data[index].title=obj.title;
                 localStorage.message=JSON.stringify($scope.data);
             }
             function maxid(){
