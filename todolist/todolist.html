@@ -5,6 +5,7 @@
     <title>Title</title>
     <script src="angular.min.js"></script>
     <link rel="stylesheet" href="bootstrap.css"/>
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_ffq0nkk5kaz6w29.css">
     <style>
         html,body{
             width:100%;
@@ -14,6 +15,8 @@
             padding: 0;
             margin: 0;
         }
+        body
+        {font-family:San Francisco Display;}
         ul,li{
             list-style: none;
         }
@@ -116,99 +119,199 @@
 <div class="container-fluid" ng-controller="ctrl">
     <div  class="row">
         <div class="col-xs-4 col-sm-3 left">
+            <!-- 搜索 -->
             <div class="input-group">
-                <input type="text" id="keyword" class="form-control" placeholder="请输入关键字"/>
+                <input type="text" id="keyword" class="form-control" placeholder="请输入关键字" ng-model="search"/>
                 <span class="input-group-btn">
                     <button class="btn btn-default">
                         <span>搜索</span>
                     </button>
                 </span>
             </div>
+            <!-- 搜索 -->
+            <div class="rank-line" ng-click="zhuanhuan()" style="background:#FFEC8B;color:#333">
+                <i class="iconfont icon-duigou-copy"></i>
+                <span>已完成</span>
+                <span>{{done.length}}</span>
+            </div>
+            <!-- 添加任务 -->
             <div class="rank-line">
                 <span>任务</span>
                 <i ng-click="add()">+</i>
             </div>
-            <ul class="ul-task">
-                <li class="list" ng-repeat="item in todolist track by item.id">
-                    <input type="text" ng-model="item.name" ng-change="change(item.id)" ng-click="show(item.id)">
-                    <i ng-click="deleteItem(item.id)">×</i>
+            <!-- 添加任务 -->
+            <!-- 任务列表 -->
+            <ul class="ul-task" ng-repeat="item in temp track by item.id">
+                <li class="list">
+                    <input type="text" ng-model="item.name" ng-focus="focus(item.id,item.name,item.son)" ng-blur="blur()">
+                    <i ng-click="del(item.id)">×</i>
                 </li>
             </ul>
+            <!-- 任务列表 -->
         </div>
-        <div class="col-xs-8 col-sm-9 right">
-            <ul class="ul-title"  ng-repeat="item in todolist | filter:{id:selectid}">
+        <div class="col-xs-8 col-sm-9 right" ng-show="show==true">
+            <ul class="ul-title">
+                <!-- 标题 -->
                 <li class="list">
                     <span>
-                        {{item.son[0]}}
+                        {{current.name}}
                     </span>
-                    <i>+</i>
+                    <i ng-click="addOpt()">+</i>
                 </li>
+                <!-- 标题 -->
+                <!-- 内容 -->
                 <ul class="list-group" style="padding-top:12px;">
-                    <li class="list-group-item">
+                    <li class="list-group-item" ng-repeat="item in current.son track by item.id">
                         <div class="checkboxFive">
-                            <input type="checkbox" value="1" id="checkboxFiveInput" name="" />
+                            <input type="checkbox" value="1" id="checkboxFiveInput" name=""  ng-click="success(item.id)"/>
                             <label for="checkboxFiveInput"></label>
                         </div>
-                        <input type="text">
+                        <input type="text" ng-model="item.name" ng-blur="blur()">
+                        <button class="btn btn-default removeCon" type="submit" ng-click="delCon(item.id)">删除</button>
                     </li>
                 </ul>
-                <button type="button" class="btn btn-info">保存</button>
+                <!-- 内容 -->
             </ul>
+        </div>
+        <div class="col-xs-8 col-sm-19 right" ng-show="show==false">
+            <!--右边的头部-->
+            <div class="header">
+                <div class="header">
+                    <h3>已完成事项</h3>
+                </div>
+                <span class="addcon glyphicon glyphicon-plus" ng-click="addOpt()"></span>
+            </div>
+            <!--右边的内容-->
+            <div class="listcon" ng-repeat="item in done track by item.id">
+                <input type="text" ng-model="item.name">
+                <input type="text" ng-model="item.opt">
+                <button class="btn btn-default removeCon" type="submit" ng-click="delDone(item.id)">删除</button>
+            </div>
         </div>
     </div>
 </div>
 <script>
     angular.module("myapp",[])
-        .controller("ctrl",["$scope", function ($scope) {
-            $scope.todolist=localStorage.message?JSON.parse(localStorage.message):[];
-            $scope.add=function(){
-                var obj={};
-                obj.id=maxid();
-                obj.name="新建任务";
-                obj.son=[];
-                obj.son[0]=obj.name;
-                $scope.num++;
-                $scope.todolist.push(obj);
-                localStorage.message=JSON.stringify($scope.todolist);
-            };
-            $scope.num=$scope.todolist.length;
-            $scope.deleteItem=function(id){
-                $scope.num--;
-                for (var i = 0; i < $scope.todolist.length; i++) {
-                    if (id==$scope.todolist[i].id) {
-                        $scope.todolist.splice(i,1);
-                        localStorage.message=JSON.stringify($scope.todolist);
-                    };
-                };
-            }
-            function maxid(){
-                var id=0;
-                var tempid=0;
-                if($scope.todolist.length==0){
-                    id=1;
-                }else{
-                    for(var i=0;i<$scope.todolist.length;i++){
-                        if($scope.todolist[i].id>tempid){
-                            tempid=$scope.todolist[i].id
-                        }
-                    }
-                    id=tempid+1;
-                }
-                return id;
-            };
-            $scope.selectid=$scope.todolist.length==0?"":1;
-            $scope.show=function(id){   
-               $scope.selectid=id;
-            }
-            $scope.change=function(id){
-                for(i=0;i<$scope.todolist.length;i++){
-                    if($scope.todolist[i].id==id){
-                        $scope.todolist[i].son[0]=$scope.todolist[i].name;
-                        localStorage.message=JSON.stringify($scope.todolist);
+    .controller("ctrl",["$scope","$filter",function($scope,$filter){
+        $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
+        $scope.currentIndex=0;
+        $scope.current=$scope.data[$scope.currentIndex];
+        $scope.done=localStorage.done?JSON.parse(localStorage.done):[];
+
+        $scope.show=true;
+        /*添加列表*/
+        $scope.add=function(){
+            $scope.show=true;
+            $scope.search="";
+            var obj={};
+            obj.id=maxid();
+            obj.name="新建列表"+obj.id;
+            obj.son=[];
+            $scope.temp=$scope.data;
+            $scope.temp.push(obj);
+            localStorage.message=JSON.stringify($scope.temp);
+            $scope.currentIndex=getindex($scope.temp,obj.id);
+            $scope.current=$scope.temp[$scope.currentIndex];
+        }
+        function maxid(arr){
+            var arr=arr||$scope.data;
+            var id=0;
+            var tempid=0;
+            if(arr.length==0){
+                id=1;
+            }else{
+                for(var i=0;i<arr.length;i++){
+                    if(arr[i].id>tempid){
+                        tempid=arr[i].id
                     }
                 }
-            }  
-        }])
+                id=tempid+1;
+            }
+            return id;
+        }
+
+        function getindex(arr,id) {
+            for(var i=0;i<arr.length;i++){
+                if(arr[i].id==id){
+                    return i;
+                }
+            }
+        }
+
+        $scope.focus=function (id,up,son){
+            $scope.show=true;
+            $scope.currentIndex=getindex($scope.data,id);
+            $scope.current=$scope.data[$scope.currentIndex];
+        }
+        $scope.blur=function () {
+            localStorage.message=JSON.stringify($scope.data);
+        }
+        $scope.addOpt=function () {
+            var obj={};
+            obj.id=maxid($scope.current.son);
+            obj.name="新建条目"+obj.id;
+            $scope.current.son.push(obj);
+            localStorage.message=JSON.stringify($scope.data);
+        }
+
+        //删除左侧列表
+        $scope.del=function (id) {
+            var ind=getindex($scope.data,id);
+            angular.forEach($scope.data,function (obj,index) {
+                if(id==obj.id) {
+                    if (ind == $scope.data.length - 1) {
+                        $scope.currentIndex = ind - 1;
+                        $scope.current = $scope.data[$scope.currentIndex];
+                        $scope.data.splice(ind, 1);
+                        localStorage.message = JSON.stringify($scope.data);
+                    } else {
+                        $scope.currentIndex = $scope.data.length - 1;
+                        $scope.current = $scope.data[$scope.currentIndex];
+                        $scope.data.splice(ind, 1);
+                        localStorage.message = JSON.stringify($scope.data);
+                    }
+                }
+            })
+        }
+        //删除右侧列表内容
+        $scope.delCon=function (id) {
+            angular.forEach($scope.current.son,function (obj,index) {
+                if(obj.id==id){
+                    $scope.current.son.splice(index,1);
+                    localStorage.message = JSON.stringify($scope.data);
+                }
+            })
+        }
+
+        $scope.success=function (id) {
+            var index=$scope.currentIndex;
+            var obj={};
+            obj.id=maxid($scope.done);
+            obj.name=$scope.data[index].name;
+            obj.opt=$scope.current.son[getindex($scope.current.son,id)].name;
+            $scope.done.push(obj);
+            localStorage.done = JSON.stringify($scope.done);
+            $scope.current.son.splice(getindex($scope.current.son,id),1);
+            localStorage.message = JSON.stringify($scope.data);
+        }
+        $scope.delDone=function (id) {
+            angular.forEach($scope.done,function (obj,index) {
+                if(id==obj.id){
+                    $scope.done.splice(index,1);
+                    localStorage.done = JSON.stringify($scope.done);
+                }
+            })
+        }
+        $scope.zhuanhuan=function () {
+            $scope.show=false;
+        }
+        $scope.temp=$scope.data;
+        $scope.$watch('search',function (n,o) {
+            $scope.temp = $filter('filter')($scope.data,n);
+            $scope.currentIndex=0;
+            $scope.current=$scope.temp[$scope.currentIndex];
+        })
+    }]);
 </script>
 </body>
 </html>
