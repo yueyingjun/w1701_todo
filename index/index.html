@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="index.css">
+    <script src="angular.min.js"></script>
+    <script src="index.js"></script>
+</head>
+<body ng-app="myapp">
+    <div class="container-fluid" ng-controller="todo">
+        <div class="row">
+            <div class="left col-xs-4 col-sm-3">
+                <!--搜索框-->
+                <form class="form-inline">
+                    <input ng-model="search" type="text" class="form-control" id="exampleInputAmount">
+                    <button type="submit" class="btn btn-primary glyphicon glyphicon-search"></button>
+                </form>
+                <!--已经完成的事项-->
+                <div class="down" ng-click="show()">
+                    <p class="glyphicon glyphicon-ok"> 已完成<span>{{do_arr.length}}</span></p>
+                </div>
+                <!--左侧列表-->
+                <div class="list" ng-repeat="item in date| filter: {name:search} track by item.id">
+                    <ul>
+                        <li>
+                            <input ng-focus="focus(item.id)" ng-blur="blur()" type="text" ng-model="item.name">
+                            <button ng-click="del(item.id)" type="button" class="btn btn-danger">删除</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="add" ng-click="add()">
+                    <span class="glyphicon glyphicon-plus"> 新建标题</span>
+                </div>
+            </div>
+            <div ng-show="flag==true" class="right col-xs-8 col-sm-9">
+                <div class="top">
+                    <input  readonly class="title" type="text" ng-model="current.name">
+                </div>
+                <div class="list" ng-repeat="item in current.son">
+                    <input type="checkbox" ng-click="do(current.id,item.id)">
+                    <input class="peng" type="text" ng-model="item.name"  ng-keyup="up()">
+                    <button class="btn btn-danger" ng-click="remove(current.id,item.id)">删除记录</button>
+                </div>
+                <button ng-click="add_con(current.id)" style="display:block;margin: auto" class="glyphicon glyphicon-plus btn btn-success"></button>
+            </div>
+            <div ng-show="flag==false"  class="right col-xs-8 col-sm-9">
+                <div class="top">
+                    已完成事项
+                </div>
+                <div class="list" ng-repeat="item in do_arr">
+                    <input type="checkbox" ng-click="do(current.id,item.id)">
+                    <input type="text" ng-model="item.name">
+                    <button class="btn btn-danger" ng-click="del_do(item.id)">删除记录</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+
+
