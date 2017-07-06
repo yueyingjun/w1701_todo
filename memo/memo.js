@@ -1,50 +1,30 @@
 angular.module("myapp",[])
     .controller("todo",["$scope","$filter",function($scope,$filter){
         $scope.data=localStorage.message?JSON.parse(localStorage.message):[];
-        $scope.now=0;
         $scope.currentIndex=0;
         $scope.current=$scope.data[$scope.currentIndex];
-        // 添加
+        $scope.done=localStorage.done?JSON.parse(localStorage.done):[];
+        $scope.flag=false;
+        // console.log($scope.data);
+        /*添加列表*/
         $scope.add=function(){
+            $scope.flag=false;
             var obj={};
             obj.id=maxid();
-            obj.name="新建列表";
+            obj.name="新建列表"+obj.id;
             obj.son=[];
             $scope.data.push(obj);
+            $scope.current=$scope.data[$scope.getIndex($scope.data,obj.id)];
             localStorage.message=JSON.stringify($scope.data);
-        }
-        function maxid(){
-            var id=0;
-            var tempid=0;
-            if($scope.data.length==0){
-                id=1;
-            }else{
-
-                for(var i=0;i<$scope.data.length;i++){
-                    if($scope.data[i].id>tempid){
-                        tempid=$scope.data[i].id
-
-                    }
-                }
-                id=tempid+1;
-            }
-            return id;
-        }
-
-        $scope.fn=function (n) {
-            $scope.now = n;
-        }
-        // 左边修改
-        $scope.update=function (id) {
-            for (let i=0;i<$scope.data.length;i++){
-                if($scope.data[i].id==id){
-                    let ss=JSON.parse(localStorage.message);
-                    ss[i].name=$scope.data[i].name;
-                    localStorage.message=JSON.stringify(ss);
-                }
-            }
         };
-
+        $scope.addCon=function () {
+            $scope.flag=false;
+            var obj={};
+            obj.id=maxid($scope.current.son);
+            obj.name="新建足迹"+obj.id;
+            $scope.current.son.push(obj);
+            localStorage.message=JSON.stringify($scope.data);
+        };
         $scope.getIndex=function(arr,id){
             for(var i=0;i<arr.length;i++){
                 if(arr[i].id==id){
@@ -60,109 +40,79 @@ angular.module("myapp",[])
         $scope.blur=function(){
             localStorage.message=JSON.stringify($scope.data);
         }
+        function maxid(arr){
+            var arr=arr||$scope.data;
+            var id=0;
+            var tempid=0;
+            if(arr.length==0){
+                id=1;
+            }else{
 
-        // 左边删除
-        $scope.ldel=function(id){
-            // for (let i=0;i<$scope.data.length;i++){
-            //     if($scope.data[i].id==id){
-            //         let arr=JSON.parse(localStorage.getItem('message'));
-            //         arr.splice(i,1);
-            //         localStorage.message=JSON.stringify(arr);
-            //     }
-            // }
+                for(var i=0;i<arr.length;i++){
+                    if(arr[i].id>tempid){
+                        tempid=arr[i].id
 
+                    }
+                }
+
+                id=tempid+1;
+            }
+            return id;
+        }
+
+        $scope.delCon=function(id){
             angular.forEach($scope.current.son,function(obj,index){
                 if(obj.id==id){
                     $scope.current.son.splice(index,1);
                     localStorage.message=JSON.stringify($scope.data);
-                    console.log(localStorage.message)
                 }
             })
         };
-        // 已完成
-        $scope.finish=function (id,sid) {
-            angular.forEach(JSON.parse(localStorage.message),function (val,index) {
-                if(val.id==id){
-                    angular.forEach(val.son,function(val1,index1){
-                        if(val1.sid==sid){
-                            let f=JSON.parse(localStorage.getItem('message'));
-                            let done=[];
-                            done.push(f[index].son[index1]);
-                            f[index].son.splice(index1,1);
-                            $scope.done=done;
-                            localStorage.message=JSON.stringify(f);
-                            localStorage.done=JSON.stringify(done);
-                        }
-                    })
-                }
-            })
-        };
-
-
-        function maxsid(id){
-            for (let i=0;i<$scope.data.length;i++){
-                if($scope.data[i].id==id){
-                    var sid=0;
-                    var tempid=0;
-                    if($scope.data[i].son.length==0){
-                        sid=1;
-                    }else{
-                        for(var j=0;j<$scope.data[i].son.length;j++){
-                            if($scope.data[i].son[j].sid>tempid){
-                                tempid=$scope.data[i].son[j].sid;
-                            }
-                        }
-                        sid=tempid+1;
-                    }
-                }
-            }
-            return sid;
-        }
-        // 右边添加
-        $scope.addCon=function (id) {
-            for (let i=0;i<$scope.data.length;i++){
-                if($scope.data[i].id==id){
-                    var obj1={};
-                    obj1.sid=maxsid(id);
-                    obj1.lon="123";
-                    $scope.data[i].son.push(obj1);
+        $scope.del=function(id){
+            angular.forEach($scope.data,function(obj,index){
+                if(obj.id==id){
+                    $scope.data.splice(index,1);
                     localStorage.message=JSON.stringify($scope.data);
+                    var int=$scope.data.length-1;
+                    if(int==index){
+                        $scope.current=$scope.data[index-1];
+                    }else{
+                        $scope.current=$scope.data[int];
+                    }
                 }
+            })
+        };
+
+        $scope.addDone=function(id){
+            var obj={};
+            obj.id=maxid($scope.done);
+            obj.title=$scope.current.name;
+            obj.con=$scope.current.son[$scope.getIndex($scope.current.son,id)].name;
+            $scope.done.push(obj);
+            localStorage.done=JSON.stringify($scope.done);
+            $scope.current.son.splice($scope.getIndex($scope.current.son,id),1);
+            localStorage.message=JSON.stringify($scope.data);
+        };
+
+        $scope.show=function(){
+            if($scope.flag==false){
+                $scope.flag=true;
+            }else{
+                $scope.flag=false;
             }
         };
-        // 右边修改
-        $scope.updateCon=function (id,sid){
-            for (let i=0;i<$scope.data.length;i++){
-                if($scope.data[i].id==id){
-                    for(var j=0;j<$scope.data[i].son.length;j++){
-                        if(sid==$scope.data[i].son[j].sid){
-                            let up=JSON.parse(localStorage.message);
-                            up[i].son[j].lon=$scope.data[i].son[j].lon;
-                            localStorage.message=JSON.stringify(up);
-                        }
-                    }
+        $scope.delDone=function(id){
+            angular.forEach($scope.done,function(obj,index){
+                if(obj.id==id){
+                    $scope.done.splice(index,1);
+                    localStorage.done=JSON.stringify($scope.done);
                 }
-            }
+            })
         }
-        // 右边删除
-        $scope.rdel=function (id,sid) {
-            for (let i=0;i<$scope.data.length;i++){
-                if($scope.data[i].id==id){
-                    for(var j=0;j<$scope.data[i].son.length;j++){
-                        if(sid==$scope.data[i].son[j].sid){
-                            let arr=JSON.parse(localStorage.getItem('message'));
-                            arr[i].son[j].lon=$scope.data[i].son[j].lon;
-                            arr[i].son.splice(j,1);
-                            localStorage.message=JSON.stringify(arr);
-                        }
-                    }
-                }
-            }
-        }
-
         $scope.search="";
         $scope.$watch("search",function (news) {
             $arr=$filter("filter")($scope.data,{name:news})
             $scope.current=$arr[0];
         })
+
     }])

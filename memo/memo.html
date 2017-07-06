@@ -97,52 +97,95 @@
     }
 </style>
 <body ng-app="myapp">
-<div class="container-fluid" ng-controller="todo">
-    <div class="row">
-        <div class="col-xs-12 top">
-            <h3>备忘录</h3>
-        </div>
+<div class="container-fluid" ng-controller="todo" >
+    <div class="row" >
         <div class="col-xs-4 col-sm-3 left">
+            <!--
+             搜索
+            -->
             <form class="form-inline search">
                 <div class="form-group">
                     <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="🔍 请搜索" ng-model="search">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </div>
+                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="请搜索" ng-model="search">
                     </div>
                 </div>
             </form>
+
+            <!--已完成-->
+
+            <div class="done">
+                <span class="glyphicon glyphicon-ok" ng-click="show()"></span> 已完成 <span>{{done.length}}</span>
+            </div>
+
+            <!--计划列表-->
+
+            <div class="list" ng-repeat="item in data | filter:{name:search} track by item.id " >
+                <input type="text" ng-model="item.name" ng-focus="focus(item.id)" ng-blur="blur()">
+                <button class="btn btn-default remove" type="submit" ng-click="del(item.id)">删除</button>
+            </div>
+
+
             <!--添加按钮-->
+
+
             <div class="add" ng-click="add()">
                 <span class="glyphicon glyphicon-plus"></span> 添加计划
             </div>
 
-            <!--已完成-->
-            <div class="done">
-                <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{done.length}}</span>
-            </div>
 
-            <!--计划列表-->
-            <div ng-repeat="item in data track by item.id"  class="list" ng-click="fn($index)">
-                <input type="text" ng-model="item.name" ng-click="con(item.id)" ng-keyup="update(item.id)">
-                <button class="btn btn-default remove" type="submit" ng-click="ldel(item.id)">删除</button>
-            </div>
+
+
 
         </div>
-        <div class="col-xs-8 col-sm-9 right" ng-repeat="item in data track by item.id" ng-show="now==$index">
+        <div class="col-xs-8 col-sm-9 right" ng-show="flag==false">
             <!--右边的头部-->
             <div class="header">
                 <h3>
-                    {{item.name}}
+                    {{current.name}}
                 </h3>
-                <span class="addcon glyphicon glyphicon-plus" ng-click="addCon(item.id)"></span>
+                <span class="addcon glyphicon glyphicon-plus" ng-click="addCon()">
+
+                    </span>
             </div>
 
             <!--右边的内容-->
-            <div class="listcon"  ng-repeat="list in item.son track by list.sid">
-                <input type="checkbox" class="select" ng-click="finish(item.id,list.sid)">
-                <input type="text" ng-model="list.lon" ng-keyup="updateCon(item.id,list.sid)">
-                <button class="btn btn-default removeCon" type="submit" ng-click="rdel(item.id,list.sid)">删除</button>
+
+            <div class="listcon" ng-repeat="item in current.son track by item.id" >
+                <div class="select" ng-click="addDone(item.id)">
+
+                </div>
+                <input type="text" ng-model="item.name" ng-blur="blur()">
+
+                <button class="btn btn-default removeCon" type="submit" ng-click="delCon(item.id)">删除</button>
             </div>
+
+        </div>
+
+        <div class="col-xs-8 col-sm-9 right" ng-show="flag==true">
+            <!--右边的头部-->
+            <div class="header">
+                <h3>
+                    已完成的工作
+                </h3>
+
+                </span>
+            </div>
+
+            <!--右边的内容-->
+
+            <div class="listcon" ng-repeat="item in done track by item.id" >
+                <div class="select">
+
+                </div>
+                <input type="text" ng-model="item.title" >
+                <input type="text" ng-model="item.con" >
+                <button class="btn btn-default removeCon" type="submit" ng-click="delDone(item.id)">删除</button>
+            </div>
+
         </div>
     </div>
 </div>
