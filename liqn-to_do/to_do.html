@@ -19,7 +19,7 @@
           body {
             /*display: flex;*/
             flex-direction: column;
-            background: url(img/1.jpg) ;
+            /*background: url(img/1.jpg) ;*/
             background-repeat: no-repeat;
             background-size: cover;
         }
@@ -103,9 +103,11 @@
         }
 
         .add{
-            position: absolute;
-            color:red;
-            bottom: 10px;cursor: pointer;
+           position: absolute;
+            color: red;
+            bottom: 150px;
+            cursor: pointer;
+            left: 33px;
         }
         .header{
             height:50px;border-bottom: 1px solid #000;display: flex;
@@ -169,7 +171,8 @@
                 <!--已完成-->
 
                 <div class="done">
-                   <span class="glyphicon glyphicon-ok" ng-click="show()">已完成</span>  <span>{{done.length}}</span>
+                   <span class="glyphicon glyphicon-ok" ng-click="show()">已完成</span>  
+                   <span>{{done.length}}</span>
                 </div>
 
                 <!--计划列表-->
@@ -178,11 +181,7 @@
                     <input class="input1" type="text" ng-model="item.name" ng-focus="focus(item.id)" ng-blur="blur()">
                     <div class="iconfont icon-shanchu remove" type="submit" ng-click="del(item.id)"></div>
                 </div>
-
-
                 <!--添加按钮-->
-
-
                 <div class="add" ng-click="add()">
                     <span class="glyphicon glyphicon-plus"></span> 添加计划
                 </div>
@@ -232,7 +231,7 @@
                     </div>
                     <input type="text" ng-model="item.title" >
                     <input type="text" ng-model="item.con">
-                    <button class="btn btn-danger removeCon" type="submit" ng-click="delDone(item.id)">删除</button>
+                    <div class="iconfont icon-shanchu removeCon" type="submit" ng-click="delDone(item.id)"></div>
                 </div>
             </div>
         </div>
