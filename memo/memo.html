@@ -6,10 +6,6 @@
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
     <script src="angular/angular.min.js"></script>
     <script src="memo.js"></script>
-
-    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script src="../node_modules/angular/angular.min.js"></script>
-    <script src="memo.js"></script>
 </head>
 <style>
     html,body{
@@ -46,9 +42,6 @@
     }
     .search{
         margin-top: 10px;
-    }
-    .input-group input{
-        border-radius: 5px;
     }
     .form-control{
         text-align: center;
@@ -114,7 +107,7 @@
                 <div class="form-group">
                     <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="🔍 请搜索">
+                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="🔍 请搜索" ng-model="search">
                     </div>
                 </div>
             </form>
@@ -125,15 +118,14 @@
 
             <!--已完成-->
             <div class="done">
-                <span class="glyphicon glyphicon-ok"></span> 已完成 <span>10</span>
+                <span class="glyphicon glyphicon-ok"></span> 已完成 <span>{{done.length}}</span>
             </div>
-            <!--计划列表-->
 
+            <!--计划列表-->
             <div ng-repeat="item in data track by item.id"  class="list" ng-click="fn($index)">
                 <input type="text" ng-model="item.name" ng-click="con(item.id)" ng-keyup="update(item.id)">
-                <button class="btn btn-default remove" type="submit">删除</button>
+                <button class="btn btn-default remove" type="submit" ng-click="ldel(item.id)">删除</button>
             </div>
-
 
         </div>
         <div class="col-xs-8 col-sm-9 right" ng-repeat="item in data track by item.id" ng-show="now==$index">
@@ -146,11 +138,10 @@
             </div>
 
             <!--右边的内容-->
-
             <div class="listcon"  ng-repeat="list in item.son track by list.sid">
-                <input type="checkbox" class="select">
+                <input type="checkbox" class="select" ng-click="finish(item.id,list.sid)">
                 <input type="text" ng-model="list.lon" ng-keyup="updateCon(item.id,list.sid)">
-                <button class="btn btn-default removeCon" type="submit">删除</button>
+                <button class="btn btn-default removeCon" type="submit" ng-click="rdel(item.id,list.sid)">删除</button>
             </div>
         </div>
     </div>
