@@ -115,6 +115,30 @@
     .back{
         background: red;
     }
+    .right h6{
+        width:100%;
+        height:60px;
+        text-align: center;
+        line-height: 60px;
+        margin-top:20px;
+        font-size:24px;
+    }
+    .over{
+        width:100%;
+    }
+    .over li{
+        width:100%;
+        height:40px;
+        font-size: 16px;
+        line-height:40px;
+        color:#222;
+        border-bottom:1px solid #e4e4e4;;
+        padding-left:20px;
+        box-sizing: border-box;
+    }
+    .over li:nth-child(1){
+        border-top:1px solid #e4e4e4;
+    }
 </style>
 <body ng-app="note">
 <div class="container-fluid" ng-controller="ctrl">
@@ -130,13 +154,14 @@
                 </div>
             </form>
             <!--完成任务-->
-            <div class="ok">
-                <span class="glyphicon glyphicon-ok"></span> 已完成<span>{{all}}</span>项
+            <div class="ok" ng-click="ok()">
+                <span class="glyphicon glyphicon-ok"></span> 已完成<span>{{down.length}}</span>项
             </div>
             <!--任务列表-->
             <ul class="pars">
-                <li class="par" ng-repeat="item in data track by item.id" class="{{now==$index?'active':''}}" ng-click="fn($index)">
-                    <input type="text" class="title-x" ng-model="item.name" ng-keyup="gaibian(item.id)">
+                <!--track by 用自己的识别代码-->
+                <li class="par" ng-repeat="item in data | filter:{name:sou} track by item.id" ng-click="fn(item.id)">
+                    <input type="text" class="title-x" ng-model="item.name" ng-keyup="change()">
                     <h1 class="time">{{item.time | date:"yyyy-MM-dd HH:mm:ss"}}</h1>
                     <button type="button" class="btn btn-default del" ng-click="del(item.id)">删除</button>
                 </li>
@@ -146,14 +171,22 @@
                 <button type="button" class="btn btn-primary">新建任务</button>
             </div>
         </div>
-        <div class="col-xs-6 col-md-7 right" ng-repeat="item in data track by item.id" ng-show="now==$index">
-            <h3>{{item.name}}</h3>
-            <button type="button" class="btn btn-default glyphicon glyphicon-plus add" ng-click="addson(item.id)"></button>
+        <div class="col-xs-6 col-md-7 right" ng-show="flag">
+            <h3>{{currentData.name}}</h3>
+            <button type="button" class="btn btn-default glyphicon glyphicon-plus add" ng-click="addson()"></button>
             <ul class="sons">
-                <li class="son" ng-repeat="value in item.son">
-                    <div class="cir" ng-class={"back":value.ok} ng-click="backson(item.id,value.id)"></div>
-                    <input type="text" class="soncon" ng-model="value.con" ng-keyup="gaibianson(item.id,value.id)">
-                    <button type="button" class="btn btn-default sondel" ng-click="delson(item.id,value.id)">删除</button>
+                <li class="son" ng-repeat="value in currentData.son track by value.id">
+                    <div class="cir" ng-class={"back":value.ok} ng-click="over(value.id)"></div>
+                    <input type="text" class="soncon" ng-model="value.con" ng-keyup="change()" ng-disabled="value.ok">
+                    <button type="button" class="btn btn-default sondel" ng-click="delson(value.id)">删除</button>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-6 col-md-7 right" ng-hide="flag">
+            <h6>已完成事件</h6>
+            <ul class="over">
+                <li ng-repeat="val in down track by val.id">
+                    <span>{{val.con}}</span>
                 </li>
             </ul>
         </div>
