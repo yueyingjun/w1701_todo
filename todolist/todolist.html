@@ -15,8 +15,6 @@
             padding: 0;
             margin: 0;
         }
-        body
-        {font-family:San Francisco Display;}
         ul,li{
             list-style: none;
         }
@@ -175,18 +173,21 @@
         </div>
         <div class="col-xs-8 col-sm-19 right" ng-show="show==false">
             <!--右边的头部-->
-            <div class="header">
-                <div class="header">
-                    <h3>已完成事项</h3>
-                </div>
-                <span class="addcon glyphicon glyphicon-plus" ng-click="addOpt()"></span>
-            </div>
-            <!--右边的内容-->
-            <div class="listcon" ng-repeat="item in done track by item.id">
-                <input type="text" ng-model="item.name">
-                <input type="text" ng-model="item.opt">
-                <button class="btn btn-default removeCon" type="submit" ng-click="delDone(item.id)">删除</button>
-            </div>
+            <ul class="ul-title">
+                <li class="list">
+                    <span>
+                        已完成事项
+                    </span>
+                    <i ng-click="addOpt()">+</i>
+                </li>
+                <ul class="list-group" style="padding-top:12px;">
+                    <li class="list-group-item" ng-repeat="item in done track by item.id">
+                        <input type="text" ng-model="item.name">
+                    <input type="text" ng-model="item.opt">
+                    <button class="btn btn-default removeCon" type="submit" ng-click="delDone(item.id)">删除</button>
+                    </li>
+                </ul>
+            </ul>
         </div>
     </div>
 </div>
