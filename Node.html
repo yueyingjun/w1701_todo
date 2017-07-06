@@ -37,7 +37,7 @@
                         <div class="glyphicon glyphicon-pencil pan">快来让它帮你记忆！</div>
                     </div>
                     <ul>
-                        <li ng-repeat="item in data | filter:search track by item.id ">
+                        <li ng-repeat="item in data | filter:{name:search} track by item.id ">
                             <input type="text" ng-model="item.name" ng-focus="focus()" ng-blur="blur()">
                             <span class="glyphicon glyphicon-trash" ng-click="del()"></span>
                         </li>

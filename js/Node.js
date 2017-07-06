@@ -6,6 +6,7 @@ angular.module("myapp",[])
         $scope.data = localStorage.message ? JSON.parse(localStorage.message) : [];
         $scope.completeArr = localStorage.done ? JSON.parse(localStorage.done) : [];
         $scope.flag = true;
+        $scope.currentObj=$scope.data[0];
         $scope.add = function () {
             var obj = {};
             obj.id = maxid($scope.data);
@@ -19,16 +20,14 @@ angular.module("myapp",[])
         //删除 列表
         $scope.del = function () {
             var currentIndex = getIndex($scope.data, this.item.id);
-            $scope.data.splice(currentIndex, 1);
-            if ($scope.data.length == 0) {
-                $scope.currentObj = [];
-            }else if(this.item.id+1){
-                $scope.currentIndex = getIndex($scope.data, $scope.data.length+1);
-                $scope.currentObj = $scope.data[$scope.currentIndex];
+
+            if( currentIndex +1<$scope.data.length){
+                // $scope.currentIndex = getIndex($scope.data, $scope.data.length+1);
+                $scope.currentObj = $scope.data[ currentIndex +1];
             }else {
-                // $scope.currentIndex = getIndex($scope.data, $scope.data.length);
-                $scope.currentObj = $scope.data[0];
+                $scope.currentObj = $scope.data[$scope.data.length-2];
             }
+            $scope.data.splice(currentIndex, 1);
 
             localStorage.message = JSON.stringify($scope.data);
         }
@@ -47,9 +46,6 @@ angular.module("myapp",[])
             localStorage.done=JSON.stringify($scope.completeArr);
         }
 
-        //让一开始的时候页面显示左后一个的内容
-        $scope.currentIndex=getIndex($scope.data,$scope.data.length);
-        $scope.currentObj=$scope.data[$scope.currentIndex];
 
         //获取焦点
        $scope.focus=function () {
@@ -77,7 +73,6 @@ angular.module("myapp",[])
            $scope.currentSon.push($scope.sonObj);
            localStorage.message=JSON.stringify($scope.data);
        }
-
        //完成内容
        //  $scope.completeArr=[];
         $scope.completeCon=function () {
@@ -98,11 +93,9 @@ angular.module("myapp",[])
         // 搜索
         $scope.search="";
         $scope.$watch("search",function () {
-            $scope.searchArr=$filter("filter","search")($scope.data,{name:$scope.search});
+            $scope.searchArr=$filter("filter")($scope.data,{name:$scope.search});
             $scope.searchlen=$scope.searchArr.length;
-            console.log($scope.searchlen);
-            $scope.currentIndex=getIndex($scope.data,$scope.searchlen+1);
-            $scope.currentObj=$scope.data[$scope.currentIndex];
+            $scope.currentObj=$scope.searchArr[0];
         });
         $scope.showcom=function () {
            if($scope.flag==true){
