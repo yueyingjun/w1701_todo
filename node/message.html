@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>留言板</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="message.js"></script>
+</head>
+<style>
+    *{
+        padding:0;
+        margin:0;
+        list-style: none;
+    }
+    body,html{
+        width:100%;
+        height:100%;
+    }
+    .container-fluid,.row,.right{
+        height:100%;
+    }
+    .form-inline{
+        display: block;
+        float:left;
+    }
+    .left{
+        height:100%;
+        background: #ccc;
+        padding:10px 10px;
+        box-sizing: border-box;
+    }
+    .ok{
+        float:right;
+        line-height: 34px;
+        font-size: 16px;
+    }
+    .pars{
+        width:100%;
+        margin-top:50px;
+    }
+    .par{
+        width:30%;
+        height:200px;
+        border:1px solid #e4e4e4;
+        float:left;
+        margin-right:10px;
+        margin-bottom:10px;
+    }
+    .new{
+        position:absolute;
+        bottom:20px;
+        left:20px;
+    }
+    .title-x{
+        width:80%;
+        display: block;
+        margin:20px auto;
+        text-align:center;
+        background: rgba(0,0,0,0);
+        border: none;
+    }
+    .time{
+        font-size: 12px;
+        text-align: center;
+        height:50px;
+        line-height: 50px;
+    }
+    .del{
+        display:block;
+        width:40%;
+        margin:0 auto;
+        opacity: 0;
+        transition:opacity 0.25s linear;
+    }
+    .par:hover > .del{
+        opacity: 1;
+    }
+    h3{
+        float:left;
+    }
+    .add{
+        margin-top:20px;
+        float:right;
+    }
+    .sons{
+        width:100%;
+        margin-top:70px;
+    }
+    .son{
+        width:100%;
+        height:60px;
+        border-bottom:1px solid #bbb;
+        padding-top:20px;
+        padding-left:20px;
+        box-sizing: border-box;
+    }
+    .son:nth-child(1){
+        border-top:1px solid #bbb;
+    }
+    .cir{
+        border:2px solid blue;
+        width:20px;
+        height:20px;
+        border-radius: 50%;
+        float: left;
+    }
+    .soncon{
+        background: rgba(0,0,0,0);
+        border: none;
+    }
+    .sondel{
+        float: right;
+    }
+    .back{
+        background: red;
+    }
+    .right h6{
+        width:100%;
+        height:60px;
+        text-align: center;
+        line-height: 60px;
+        margin-top:20px;
+        font-size:24px;
+    }
+    .over{
+        width:100%;
+    }
+    .over li{
+        width:100%;
+        height:40px;
+        font-size: 16px;
+        line-height:40px;
+        color:#222;
+        border-bottom:1px solid #e4e4e4;;
+        padding-left:20px;
+        box-sizing: border-box;
+    }
+    .over li:nth-child(1){
+        border-top:1px solid #e4e4e4;
+    }
+</style>
+<body ng-app="note">
+<div class="container-fluid" ng-controller="ctrl">
+    <div class="row">
+        <div class="col-xs-6 col-md-5 left">
+            <!--搜索-->
+            <form class="form-inline">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="exampleInputAmount" ng-model="sou">
+                        <div class="input-group-addon">搜索</div>
+                    </div>
+                </div>
+            </form>
+            <!--完成任务-->
+            <div class="ok" ng-click="ok()">
+                <span class="glyphicon glyphicon-ok"></span> 已完成<span>{{down.length}}</span>项
+            </div>
+            <!--任务列表-->
+            <ul class="pars">
+                <!--track by 用自己的识别代码-->
+                <li class="par" ng-repeat="item in data | filter:{name:sou} track by item.id" ng-click="fn(item.id)">
+                    <input type="text" class="title-x" ng-model="item.name" ng-keyup="change()">
+                    <h1 class="time">{{item.time | date:"yyyy-MM-dd HH:mm:ss"}}</h1>
+                    <button type="button" class="btn btn-default del" ng-click="del(item.id)">删除</button>
+                </li>
+            </ul>
+            <!--新建任务-->
+            <div class="new" ng-click="add()">
+                <button type="button" class="btn btn-primary">新建任务</button>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-7 right" ng-show="flag">
+            <h3>{{currentData.name}}</h3>
+            <button type="button" class="btn btn-default glyphicon glyphicon-plus add" ng-click="addson()"></button>
+            <ul class="sons">
+                <li class="son" ng-repeat="value in currentData.son track by value.id">
+                    <div class="cir" ng-class={"back":value.ok} ng-click="over(value.id)"></div>
+                    <input type="text" class="soncon" ng-model="value.con" ng-keyup="change()" ng-disabled="value.ok">
+                    <button type="button" class="btn btn-default sondel" ng-click="delson(value.id)">删除</button>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-6 col-md-7 right" ng-hide="flag">
+            <h6>已完成事件</h6>
+            <ul class="over">
+                <li ng-repeat="val in down track by val.id">
+                    <span>{{val.con}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
