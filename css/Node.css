@@ -1,0 +1,108 @@
+*{
+    margin:0;
+    padding:0;
+}
+a{
+    text-align: center;
+}
+html,body,.ctrl{
+    width:100%;height:100%;
+}
+header,header .row{
+    height:80px;
+    background:#9AE9E4;
+    line-height: 80px;
+}
+header p{
+    float:left;
+    color:#fff;
+    line-height: 80px;
+    font-size: 24px;
+}
+header div.close{
+    float:right;
+    margin-top: 10px;
+    margin-right: 5px;
+}
+header form{
+    float:right;
+    margin-right: 100px;
+}
+/*内容部分*/
+main,main .row{
+    height:100%;
+}
+/*左侧*/
+.left{
+    height:auto;
+    overflow: hidden;
+    border:1px solid #9AE9E4;
+}
+.left .pan{
+    color:#5D5F5F;
+    font-size: 12px;
+}
+.left ul{
+    margin-left: 20px;
+    margin-top: 15px;
+    font-size: 16px;
+}
+.left ul li{
+    position: relative;
+    width:90%;
+    margin:10px auto 0;
+    border-bottom: 1px solid #eee;
+}
+.left ul li span{
+    display:none;
+}
+.left ul li:hover span{
+    display:block;
+    position: absolute;
+    right:0;
+    top:5px;
+    color:#ccc;
+    font-size: 12px;
+}
+.left ul li input{
+    width:90%;
+    border: 0;
+    outline: none;
+}
+/*右侧内容*/
+.right{
+    height:100%;
+    box-shadow: 0 0 5px #ccc;
+    margin-left: 20px;
+}
+.right .header{
+   border-bottom: 1px solid #eee;
+    position: relative;
+}
+.right .header span{
+   position:absolute;
+    right:10px;
+    top:10px;
+}
+.right .con{
+    padding:5px 0;
+    position: relative;
+}
+.right .con input.coninput{
+    border:0;
+    outline: none;
+    width:80%;
+    margin-left: 10px;
+}
+.right .con span.del{
+    position: absolute;
+    right: 10px;
+    top:0;
+    margin-top: 10px;
+    font-size: 12px;
+    color:#ccc;
+}
+.right .con span.conname{
+    font-size: 12px;
+    color:#999;
+}
