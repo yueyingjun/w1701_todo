@@ -11,7 +11,7 @@ angular.module("myapp",[])
             $scope.flag=false;
             var obj={};
             obj.id=maxid();
-            obj.name="新建列表"+obj.id;
+            obj.name="新建目录"+obj.id;
             obj.son=[];
             $scope.data.push(obj);
             $scope.current=$scope.data[$scope.getIndex($scope.data,obj.id)];
@@ -21,7 +21,7 @@ angular.module("myapp",[])
             $scope.flag=false;
             var obj={};
             obj.id=maxid($scope.current.son);
-            obj.name="新建足迹"+obj.id;
+            obj.name="新建计划"+obj.id;
             $scope.current.son.push(obj);
             localStorage.message=JSON.stringify($scope.data);
         };
